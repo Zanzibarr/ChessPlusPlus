@@ -7,9 +7,9 @@
 class illegal_move_exception {
     public:
         std::string message {"[ILLEGAL MOVE EXCEPTION]"};
-        illegal_move_exception(std::string message_ = "") { what(message_); }
-        void what(std::string message_) {
-            message += ": " + message_ + "\n";
+        illegal_move_exception(std::string _message = "") { what(_message); }
+        void what(std::string _message) {
+            message += ": " + _message + "\n";
             std::cout << message;
         }
 };
@@ -17,9 +17,9 @@ class illegal_move_exception {
 class out_of_bounds_exception {
     public:
         std::string message {"[OUT OF BOUNDS EXCEPTION]"};
-        out_of_bounds_exception(std::string message_ = "") { what(message_); }
-        void what(std::string message_) {
-            message += ": " + message_ + "\n";
+        out_of_bounds_exception(std::string _message = "") { what(_message); }
+        void what(std::string _message) {
+            message += ": " + _message + "\n";
             std::cout << message;
         }
 };

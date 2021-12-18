@@ -1,24 +1,37 @@
-#include "../lib/Piece.h"
-
 /*
  * Object describing King piece of chess from Piece.
  * @author: Riccardo Modolo 2009667
  */
-class King : public piece {
- 
+
+#include "../lib/piece.h"
+
+class king : public piece {
+
+	private:
+		bool first_move;
+
+		bool legal_move(const std::pair<char, int> &cur, const std::pair<char, int> &aim) const {
+
+			int rowDistance = cur.first - aim.first;
+			int colDistance = cur.second - aim.second;
+
+			return (std::abs(rowDistance) == 1 && std::abs(colDistance) == 1);
+
+		}
 
 	public:
-		King(void) { side = set::Black; }
-		King(side _side) { currentSide = _side; }
-		~King(void) {}
+		king(set _side = set::Black) : first_move { true } { side = _side; }
 
 		//A valid Move for king is one space in any Direction
-		bool isValidMove(char let, int num) const { 
-			int letDistance = let - coordinate.first;
-			int numDistance = num - coordinate.second;
+		bool is_valid_move(const board b, const std::pair<char, int> &cur, const std::pair<char, int> &aim) const {
 
-			return ((letDistance == 1 || letDistance == -1) && (numDistance == 1 || numDistance == -1));
+			if (b.is_reachable(side, aim)) return false;
+
+			bool valid = false;
+			valid |= legal_move(cur, aim);
+			valid |= 
+
 		}
-		void moved() { firstMove = false; }
+		void moved() { first_move = false; }
 
 };

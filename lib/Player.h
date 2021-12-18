@@ -7,14 +7,14 @@
 class player {
 
 	private:
-        //Nome del giocatore
+    //Nome del giocatore
 		std::string name;
 
     public:
         /*
          *Funzione virtuale da implementare nelle rispettive sottoclassi per muovere una pedina
          */
-        virtual void make_move(const std::pair<char, int> cur, const std::pair<char, int> aim) const = 0;
+        virtual void make_move(const std::pair<char, int> &_cur, const std::pair<char, int> &_aim) const = 0;
 
 };
 
