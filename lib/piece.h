@@ -8,10 +8,11 @@
 
 #include <utility>
 #include "board.h"
+#include "set.h"
+
 class piece {
 
 	protected:
-		enum class set {White, Black};
         //Fazione del pezzo
 		set side;
 
@@ -24,7 +25,7 @@ class piece {
          * @param cur_row cur_col : Le coordinate iniziali del pezzo
          * @param row col : Le coordinate finali del pezzo
          */
-		virtual bool is_valid_move(const board b, const std::pair<char, int> &_cur, const std::pair<char, int> &_aim) const = 0;
+		virtual bool is_valid_move(const std::pair<char, int> &_cur, const std::pair<char, int> &_aim) const = 0;
 		
 };
 
