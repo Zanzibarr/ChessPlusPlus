@@ -5,7 +5,6 @@
 class board {
 
 	public:
-		class OutOfChessboardException{};
 		board();
 		~board();
 
