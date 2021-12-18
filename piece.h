@@ -6,17 +6,25 @@
  * @author: Riccardo Modolo 2009667
  */
 
-class Piece {
+#include <utility>
+
+class piece {
 
 	protected:
-		enum class side {Black, White};
-		side currentSide; 
-		bool firstMove;
+		enum class set {White, Black};
+        //Fazione del pezzo
+		set side;
 
 	public:
-		virtual bool isValidMove(char curLet, int curNum, char let, int num) const =0;
-		virtual void moved() =0;
+
+        /*
+         * Funzione virtuale da implementare nelle rispettive sottoclassi per controllare se una mossa è legale
+         * 
+         * @param cur_row cur_col : Le coordinate iniziali del pezzo
+         * @param row col : Le coordinate finali del pezzo
+         */
+		virtual bool is_valid_move(const std::pair<char, int> &cur, const std::pair<char, int> &aim) const = 0;
 		
 };
 
-#endif //PIECE_H
+#endif
