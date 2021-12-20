@@ -7,7 +7,6 @@
  */
 
 #include <stdlib.h>
-#include "chessboard.h"
 #include "detail.h"
 class piece {
 
