@@ -7,19 +7,18 @@
  */
 
 #include <utility>
-#include "board.h"
-#include "set.h"
-#include "path.h"
-
+#include <stdlib.h>
+#include "chessboard.h"
+#include "detail.h"
 class piece {
 
 	protected:
                 set side; //Fazione del pezzo
-                char alias; //the letter represent piece (R for Re ecc...)
                 path valid_path[3]; //max length (diagonal, vertical, Horizontal)
 
 	public:
 
+                piece(set _side  = set::Black); 
         /*
          * Funzione virtuale da implementare nelle rispettive sottoclassi per controllare se una mossa è legale
          * 
@@ -27,9 +26,8 @@ class piece {
          * @param cur_row cur_col : Le coordinate iniziali del pezzo
          * @param row col : Le coordinate finali del pezzo
          */
-		virtual bool is_valid_move(const std::pair<char, int> &_cur, const std::pair<char, int> &_aim) const = 0;
+		virtual bool is_valid_move(path _path, int _path_length) const = 0;
                 virtual set get_side() const = 0;
-                virtual char get_alias() const = 0;
 		
 };
 
