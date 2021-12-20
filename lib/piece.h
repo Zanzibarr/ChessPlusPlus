@@ -9,6 +9,7 @@
 #include <utility>
 #include "board.h"
 #include "set.h"
+#include "path.h"
 
 class piece {
 
