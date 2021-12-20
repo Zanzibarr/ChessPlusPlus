@@ -13,8 +13,9 @@
 class piece {
 
 	protected:
-                //Fazione del pezzo
-                set side;
+                set side; //Fazione del pezzo
+                char alias; //the letter represent piece (R for Re ecc...)
+                path valid_path[3]; //max length (diagonal, vertical, Horizontal)
 
 	public:
 
@@ -26,6 +27,8 @@ class piece {
          * @param row col : Le coordinate finali del pezzo
          */
 		virtual bool is_valid_move(const std::pair<char, int> &_cur, const std::pair<char, int> &_aim) const = 0;
+                virtual set get_side() const = 0;
+                virtual char get_alias() const = 0;
 		
 };
 
