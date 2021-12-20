@@ -57,7 +57,7 @@ class king : public piece {
 
 			bool valid = false;
 			valid |= legal_move(_cur, _aim);
-			valid |= castling(_cur, _aim);
+			valid |= castling(_b, _cur, _aim);
 
 			return valid;
 
