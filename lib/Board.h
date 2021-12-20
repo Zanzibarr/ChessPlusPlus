@@ -8,7 +8,7 @@ class board {
 
 	public:
 
-		std::pair<piece, bool> matrix[8][8];
+		char matrix[8][8];
 
 		board();
 
