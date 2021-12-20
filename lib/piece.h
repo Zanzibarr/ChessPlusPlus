@@ -6,7 +6,6 @@
  * @author: Riccardo Modolo 2009667
  */
 
-#include <utility>
 #include <stdlib.h>
 #include "chessboard.h"
 #include "detail.h"

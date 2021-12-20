@@ -38,7 +38,7 @@ std::string chessboard::print_chessboard() const {
         if ((i + 1)%8 == 0) std::cout << std::endl;
     }
 }
-bool chessboard::in_chessboard(const std::pair<int, int> &_position) {
+bool chessboard::on_chessboard(const std::pair<int, int> &_position) const {
     return _position.first >= 0 && _position.first <= 7 && _position.second >= 0 && _position.second <= 7;
 }
 

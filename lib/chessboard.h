@@ -18,7 +18,7 @@ class chessboard {
 		chessboard();
 
 		std::string print_chessboard() const;
-		bool in_chessboard(const std::pair<int, int> &position) const;
+		bool on_chessboard(const std::pair<int, int> &position) const;
 
 
 		//return piece
@@ -34,7 +34,5 @@ class chessboard {
 		bool is_path_legit(path _path, const std::pair<int, int> current,const std::pair<int, int> destination);
 
 };
-
-int path_length (const std::pair<int, int> current,const std::pair<int, int> destination);
 
 #endif
