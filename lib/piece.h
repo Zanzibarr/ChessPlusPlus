@@ -13,8 +13,8 @@
 class piece {
 
 	protected:
-        //Fazione del pezzo
-		set side;
+                //Fazione del pezzo
+                set side;
 
 	public:
 
