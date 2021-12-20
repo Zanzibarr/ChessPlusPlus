@@ -19,6 +19,7 @@ class piece {
 
 	public:
 
+<<<<<<< HEAD
         /*
          * Funzione virtuale da implementare nelle rispettive sottoclassi per controllare se una mossa è legale
          * 
@@ -29,6 +30,16 @@ class piece {
 		virtual bool is_valid_move(const std::pair<char, int> &_cur, const std::pair<char, int> &_aim) const = 0;
                 virtual set get_side() const = 0;
                 virtual char get_alias() const = 0;
+=======
+            /*
+            * Funzione virtuale da implementare nelle rispettive sottoclassi per controllare se una mossa è legale
+            * 
+            * @param b : board to view for special condition
+            * @param cur_row cur_col : Le coordinate iniziali del pezzo
+            * @param row col : Le coordinate finali del pezzo
+            */
+            virtual bool is_valid_move(const std::pair<char, int> &_cur, const std::pair<char, int> &_aim) const = 0;
+>>>>>>> a8f0646cb2204069851f1fa546089635bc01759a
 		
 };
 
