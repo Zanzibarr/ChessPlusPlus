@@ -3,7 +3,6 @@
  *
  * @author: Riccardo Modolo 2009667
  */
-
 #include "../lib/Piece.h"
 using namespace std;
 class pedestrian : public piece {
@@ -25,10 +24,8 @@ class pedestrian : public piece {
 		pedestrian(set _side = set::Black) : piece(_side){
 			valid_path[1] = path::Vertical;
 		}
-
 		//A valid Move for king is one space in any Direction
 		bool is_valid_move(chessboard b, path _path, int _path_length) const {
 			return (is_generic_valid(_path, _path_length) || is_eatable(b, _path, _path_length)); 
 		}
-
 };
