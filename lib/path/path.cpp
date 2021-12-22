@@ -1,5 +1,10 @@
 #include "path.h"
 
+/*
+ * implementation of path.h
+ * @author Riccardo Modolo 2009667
+ */
+
 bool is_Horizontal(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
 	int x_distance = _destination.first - _current_position.first;

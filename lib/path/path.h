@@ -6,11 +6,11 @@ using namespace std;
 
 /*
  * path.h is a library from operation between 2 point in a chessboard
+ * the goal of this library is separate piece from board.
  * @author Riccardo Modolo 2009667
  */
 
 enum class path {Horizontal, Vertical, Diagonal, L};
-
 class illegal_path_exception {};
 
 path get_path(const pair<int, int> &_current_position, const pair<int,int> &_destination);
