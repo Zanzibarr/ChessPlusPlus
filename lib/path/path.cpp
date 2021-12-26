@@ -51,12 +51,12 @@ path get_path(const pair<int, int> &_current_position, const pair<int,int> &_des
 	throw illegal_path_exception();
 }
 
-int get_distance(const path _path, const pair<int, int> &_current_position, const pair<int,int> &_destination) {
+int get_distance(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	if(_path == path::Horizontal) return _destination.first - _current_position.first;
-	if(_path == path::Vertical) return _destination.second - _current_position.second;
-	if(_path == path::Diagonal) return _destination.first - _current_position.first; //for diagonal movement one of coordinate is acceptable
-	if(_path == path::L) return 3;
+	if(is_Horizontal(_current_position, _destination)) return _destination.first - _current_position.first;
+	if(is_Vertical(_current_position, _destination)) return _destination.second - _current_position.second;
+	if(is_Diagonal(_current_position, _destination)) return _destination.first - _current_position.first; //for diagonal movement one of coordinate is acceptable
+	if(is_L(_current_position, _destination)) return 3;
 
 	throw illegal_path_exception();
 }
