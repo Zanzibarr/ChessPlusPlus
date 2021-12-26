@@ -84,8 +84,4 @@ bool chessboard::pawn_eat(const path &_p, const std::pair<unsigned int, unsigned
 
 bool chessboard::move(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) {
 
-    if(castling(_start, _end)) {
-        
-    }
-
 }
