@@ -53,8 +53,8 @@ path get_path(const pair<int, int> &_current_position, const pair<int,int> &_des
 
 int get_distance(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	if(is_Horizontal(_current_position, _destination)) return _destination.first - _current_position.first;
-	if(is_Vertical(_current_position, _destination)) return _destination.second - _current_position.second;
+	if(is_Horizontal(_current_position, _destination)) return _destination.second - _current_position.second;
+	if(is_Vertical(_current_position, _destination)) return _destination.first - _current_position.first;
 	if(is_Diagonal(_current_position, _destination)) return _destination.first - _current_position.first; //for diagonal movement one of coordinate is acceptable
 	if(is_L(_current_position, _destination)) return 3;
 
