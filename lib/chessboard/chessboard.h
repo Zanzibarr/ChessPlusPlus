@@ -17,6 +17,7 @@
 #include "../piece/pieces/horse.cpp"
 #include "../piece/pieces/tower.cpp"
 #include "../piece/pieces/pawn.cpp"
+#include "../path/path.h"
 #include <vector>
 
 class chessboard {
@@ -26,17 +27,19 @@ class chessboard {
 
         std::vector<std::pair<unsigned int , unsigned int>> get_moves(const std::pair<unsigned int, unsigned int> &_pos) const;
 
+        bool is_promotion(const std::pair<unsigned int, unsigned int> &_pos) const;
         void promote(const std::pair<unsigned int, unsigned int> &_pos, const char piece);
 
-        bool pawn_eat(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
+        bool pawn_eat(const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
         bool enpassant(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
-        bool castling(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
+        bool castling((const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
 
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
 
     public:
         chessboard(void);
+        ~chessboard(void);
 
         piece get(const std::pair<unsigned int, unsigned int> &_pos) const;
         std::pair<int, int> find(const char _piece) const;
@@ -45,5 +48,11 @@ class chessboard {
         void print() const;
 
 };
+
+template< typename Type, typename DataType >
+bool is( const DataType& data ) {
+	if( &data == NULL ) return false;
+    return typeid( data ) == typeid( Type );
+}
 
 #endif
