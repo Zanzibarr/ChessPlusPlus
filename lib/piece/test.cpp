@@ -3,7 +3,7 @@
 #include "pieces/king.cpp"
 #include "pieces/queen.cpp"
 #include "pieces/tower.cpp"
-#include "pieces/pedestrian.cpp"
+#include "pieces/pawn.cpp"
 #include "pieces/bishop.cpp"
 #include "pieces/horse.cpp"
 using namespace std;
@@ -22,7 +22,7 @@ int main (void) {
 	piece *p = new king(set::Black);
 	piece *p1 = new queen(set::White);
 	piece *p2 = new tower(set::Black);
-	piece *p3 = new pedestrian(set::White);
+	piece *p3 = new pawn(set::White);
 	piece *p4 = new bishop(set::Black);
 	piece *p5 = new horse(set::White);
 

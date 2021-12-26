@@ -1,9 +1,9 @@
 #include "../piece.h"
 
-class pedestrian : public piece {
+class pawn : public piece {
 
 	public:
-		pedestrian(set _set) : piece(_set) {
+		pawn(set _set) : piece(_set) {
 			alias = 'P';
 			valid_path.push_back(path::Vertical);
 		}
