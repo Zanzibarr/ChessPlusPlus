@@ -32,7 +32,7 @@ class chessboard {
 
         bool pawn_eat(const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
         bool enpassant(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
-        bool castling((const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
+        bool castling(const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
 
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
