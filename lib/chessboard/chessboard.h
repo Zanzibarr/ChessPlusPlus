@@ -20,19 +20,26 @@
 #include "../path/path.h"
 #include <vector>
 
+typedef std::pair<unsigned int, unsigned int> coords;
+
 class chessboard {
 
     private:
         piece *board[8][8];
+        std::pair<coords, coords> last_move;
 
-        std::vector<std::pair<unsigned int , unsigned int>> get_moves(const std::pair<unsigned int, unsigned int> &_pos) const;
+        std::vector<coords> get_moves(const coords &_pos) const;
 
-        bool is_promotion(const std::pair<unsigned int, unsigned int> &_pos) const;
-        void promote(const std::pair<unsigned int, unsigned int> &_pos, const char piece);
+        bool is_promotion(const coords &_pos) const;
+        void promote(const coords &_pos, const char piece);
 
-        bool pawn_eat(const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
-        bool enpassant(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
-        bool castling(const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const;
+        bool is_pawn_eat(const path &_p, const coords &_start, const coords &_end) const;
+        std::pair<bool, coords> is_enpassant(const path &_p, const coords &_start, const coords &_end) const;
+        std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
+
+        void pawn_eat(const coords &_start, const coords &_end);
+        void enpassant(const coords &_eat, const coords &_start, const coords &_end);
+        void castling(const coords &_tower, const coords &_start, const coords &_end);
 
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
@@ -41,10 +48,10 @@ class chessboard {
         chessboard(void);
         ~chessboard(void);
 
-        piece get(const std::pair<unsigned int, unsigned int> &_pos) const;
-        std::pair<int, int> find(const char _piece) const;
+        piece get(const coords &_pos) const;
+        coords find(const char _piece) const;
         bool check_path(const path _path, unsigned int const _dist) const;
-        bool move(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end);
+        bool move(const coords &_start, const coords &_end);
         void print() const;
 
 };

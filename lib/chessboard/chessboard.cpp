@@ -48,7 +48,7 @@ chessboard::~chessboard(void) {
 
 }
 
-bool chessboard::is_promotion(const std::pair<unsigned int, unsigned int> &_pos) const {
+bool chessboard::is_promotion(const coords &_pos) const {
 
     if (is<pawn>(board[_pos.first][_pos.second])) {
         piece *p = board[_pos.first][_pos.second];
@@ -59,7 +59,7 @@ bool chessboard::is_promotion(const std::pair<unsigned int, unsigned int> &_pos)
 
 }
 
-void chessboard::promote(const std::pair<unsigned int, unsigned int> &_pos, const char piece) {
+void chessboard::promote(const coords &_pos, const char piece) {
 
     set side = (_pos.first == 7) ? set::White : set::Black;
 
@@ -76,12 +76,60 @@ void chessboard::promote(const std::pair<unsigned int, unsigned int> &_pos, cons
 
 }
 
-bool chessboard::pawn_eat(const path &_p, const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) const {
+bool chessboard::is_pawn_eat(const path &_p, const coords &_start, const coords &_end) const {
 
-    return _p==path::Diagonal && get_distance(_start, _end) == 1 && board[_end.first][_end.second]->get_side() == opposite_of(board[_start.first][_start.second]->get_side());
+    int direction = 0;
+
+    if (board[_start.first][_start.second]->get_side() == set::White) {
+        direction = 1;
+    } else  {
+        direction = -1;
+    }
+
+    return _p==path::Diagonal && get_distance(_start, _end) == direction && board[_end.first][_end.second]->get_side() == opposite_of(board[_start.first][_start.second]->get_side());
+    
+}
+
+std::pair<bool, coords> chessboard::is_enpassant(const path &_p, const coords &_start, const coords &_end) const {
+
+    int direction = 0;
+
+    if (board[_start.first][_start.second]->get_side() == set::White) {
+        direction = 1;
+    } else  {
+        direction = -1;
+    }
+
+    if (is<pawn>(get(last_move.second)) && std::abs((int)(last_move.second.first - last_move.first.first)) == 2) {
+        if (_p==path::Diagonal && get_distance(_start, _end) == direction && last_move.first.second == _end.second && std::min(last_move.first.first, last_move.first.second) + 1 == _end.first) {
+            return std::make_pair(true, std::make_pair(std::min(last_move.first.first, last_move.first.second) + 1, _end.second));
+        }
+    }
+
+    return std::make_pair(false, std::make_pair(0, 0));
 
 }
 
-bool chessboard::move(const std::pair<unsigned int, unsigned int> &_start, const std::pair<unsigned int, unsigned int> &_end) {
+std::pair<bool, coords> chessboard::is_castling(const path &_p, const coords &_start, const coords &_end) const {
+
+    if (_p==path::Horizontal && get_distance(_start, _end) == -2) {
+        if (is<tower>(board[_start.first][0]) && board[_start.first][_start.second]->is_first_move() && board[_start.first][0]->is_first_move()) {
+            return std::make_pair(true, std::make_pair(_start.first, 2));
+        }
+    } else if (_p==path::Horizontal && get_distance(_start, _end) == 2) {
+        if (is<tower>(board[_start.first][7]) && board[_start.first][_start.second]->is_first_move() && board[_start.first][7]->is_first_move()) {
+            return std::make_pair(true, std::make_pair(_start.first, 4));
+        }
+    }
+
+    return std::make_pair(false, std::make_pair(0, 0));
+    
+}
+
+bool chessboard::move(const coords &_start, const coords &_end) {
+
+    delete board[_end.first][_end.second];
+    board[_end.first][_end.second] = board[_start.first][_start.second];
+    board[_start.first][_start.second] = nullptr;
 
 }
