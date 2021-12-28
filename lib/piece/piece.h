@@ -1,7 +1,7 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-#include "../path/path.cpp"
+#include "../path/path.h"
 #include <vector>
 #include <cctype>
 

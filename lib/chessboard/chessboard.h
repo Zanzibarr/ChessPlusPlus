@@ -10,14 +10,14 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
-#include "../piece/piece.h"
 #include "../piece/pieces/queen.cpp"
 #include "../piece/pieces/king.cpp"
 #include "../piece/pieces/bishop.cpp"
 #include "../piece/pieces/horse.cpp"
 #include "../piece/pieces/tower.cpp"
 #include "../piece/pieces/pawn.cpp"
-#include "../path/path.h"
+#include "../piece/pieces/empty_tile.cpp"
+#include <iostream>
 #include <vector>
 
 typedef std::pair<unsigned int, unsigned int> coords;
@@ -46,7 +46,7 @@ class chessboard {
 
     public:
         chessboard(void);
-        ~chessboard(void);
+        ~chessboard();
 
         piece get(const coords &_pos) const;
         coords find(const char _piece) const;

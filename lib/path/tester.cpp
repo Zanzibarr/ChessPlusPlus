@@ -2,7 +2,7 @@
 #include "path.cpp"
 #include <utility>
 using namespace std;
-
+/*
 int main (void) {
 
 	pair<int,int> start {0,0};
@@ -29,3 +29,4 @@ int main (void) {
 
 	return 0;
 }
+*/

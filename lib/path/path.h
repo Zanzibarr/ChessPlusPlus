@@ -1,5 +1,6 @@
 #ifndef PATH_H
 #define PATH_H
+
 #include <utility>
 #include <stdlib.h>
 using namespace std;
@@ -21,6 +22,5 @@ bool is_Horizontal(const pair<int, int> &_current_position, const pair<int,int> 
 bool is_Vertical(const pair<int, int> &_current_position, const pair<int,int> &_destination);
 bool is_Diagonal(const pair<int, int> &_current_position, const pair<int,int> &_destination);
 bool is_L(const pair<int, int> &_current_position, const pair<int,int> &_destination);
-
 
 #endif

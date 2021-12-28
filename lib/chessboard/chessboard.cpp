@@ -35,7 +35,7 @@ chessboard::chessboard(void) {
     board[0][7] = new tower(set::Black);
 
     for (unsigned int i = 2; i < 6; i++) for (unsigned int j = 0; j < 8; j++) {
-        board[i][j] = nullptr;
+        board[i][j] = new empty_tile();
     }
 
 }
@@ -47,7 +47,7 @@ chessboard::~chessboard(void) {
     }
 
 }
-
+/*
 bool chessboard::is_promotion(const coords &_pos) const {
 
     if (is<pawn>(board[_pos.first][_pos.second])) {
@@ -131,5 +131,16 @@ bool chessboard::move(const coords &_start, const coords &_end) {
     delete board[_end.first][_end.second];
     board[_end.first][_end.second] = board[_start.first][_start.second];
     board[_start.first][_start.second] = nullptr;
+
+}
+*/
+void chessboard::print() const {
+
+    for (unsigned int i = 7; i >= 0; i--) {
+        std::cout << std::endl;
+        for (unsigned int j = 0; j < 8; j++) {
+            std::cout << board[i][j]->get_alias() << " ";
+        }
+    }
 
 }

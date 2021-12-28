@@ -4,7 +4,7 @@ class queen : public piece {
 
 	public:
 		queen(set _set) : piece(_set) {
-			alias = 'R';
+			alias = 'D';
 
 			valid_path.push_back(path::Vertical);
 			valid_path.push_back(path::Horizontal);
