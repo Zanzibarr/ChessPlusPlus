@@ -25,14 +25,14 @@ chessboard::chessboard(void) {
         board[1][i] = new pawn(set::White);
     }
 
-    board[0][0] = new tower(set::Black);
-    board[0][1] = new horse(set::Black);
-    board[0][2] = new bishop(set::Black);
-    board[0][3] = new king(set::Black);
-    board[0][4] = new queen(set::Black);
-    board[0][5] = new bishop(set::Black);
-    board[0][6] = new horse(set::Black);
-    board[0][7] = new tower(set::Black);
+    board[0][0] = new tower(set::White);
+    board[0][1] = new horse(set::White);
+    board[0][2] = new bishop(set::White);
+    board[0][3] = new king(set::White);
+    board[0][4] = new queen(set::White);
+    board[0][5] = new bishop(set::White);
+    board[0][6] = new horse(set::White);
+    board[0][7] = new tower(set::White);
 
     for (unsigned int i = 2; i < 6; i++) for (unsigned int j = 0; j < 8; j++) {
         board[i][j] = new empty_tile();
