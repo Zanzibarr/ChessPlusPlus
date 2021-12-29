@@ -20,7 +20,7 @@
 #include <iostream>
 #include <vector>
 
-typedef std::pair<unsigned int, unsigned int> coords;
+typedef std::pair<int, int> coords;
 
 class chessboard {
 
@@ -28,7 +28,8 @@ class chessboard {
         piece *board[8][8];
         std::pair<coords, coords> last_move;
 
-        std::vector<coords> get_moves(const coords &_pos) const;
+        piece& piece_at_pos(const coords &_pos) const;
+        piece& piece_at_pos(const int i, const int j) const;
 
         bool is_promotion(const coords &_pos) const;
         void promote(const coords &_pos, const char piece);
@@ -37,7 +38,6 @@ class chessboard {
         std::pair<bool, coords> is_enpassant(const path &_p, const coords &_start, const coords &_end) const;
         std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
 
-        void pawn_eat(const coords &_start, const coords &_end);
         void enpassant(const coords &_eat, const coords &_start, const coords &_end);
         void castling(const coords &_tower, const coords &_start, const coords &_end);
 
@@ -48,11 +48,13 @@ class chessboard {
         chessboard(void);
         ~chessboard();
 
-        piece get(const coords &_pos) const;
+        std::vector<coords> get_moves(const coords &_pos) const;
+
         coords find(const char _piece) const;
         bool check_path(const path _path, unsigned int const _dist) const;
         bool move(const coords &_start, const coords &_end);
         void print() const;
+        void pawn_eat(const coords &_start, const coords &_end);
 
 };
 
