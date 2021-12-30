@@ -98,7 +98,7 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
         if (v_u) v_u = _pos.first + counter< 8;
         if (v_d) v_d = _pos.second - counter >= 0;
 
-        //horizontal
+        //add horizontal move if needed
         if (piece1.is_legit_move(path::Horizontal, distance /*????*/)) {
 
             //left
@@ -108,7 +108,7 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
         }
 
-        //vertical
+        //add vertical move if needed
         if (piece1.is_legit_move(path::Vertical, distance /*????*/)) {
 
             //left
@@ -118,7 +118,7 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
         }
 
-        //diagonal
+        //add diagonal move if needed
         if (piece1.is_legit_move(path::Diagonal, distance/*????*/)) {
 
             //up left
@@ -130,6 +130,8 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
             //down left
             if (d_4) insert_if_legit(ret, _pos, std::make_pair(-counter, -counter), d_4);
         }
+
+        counter++;
 
     }
     
