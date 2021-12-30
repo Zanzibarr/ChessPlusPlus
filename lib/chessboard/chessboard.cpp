@@ -53,7 +53,7 @@ bool chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos,
     coords pos_check{_pos.first + _offset.first, _pos.second + _offset.second};
     bool ret;
 
-    if (is<empty_tile>(piece_at_pos(pos_check)))
+    if ((piece_at_pos(pos_check)).get_alias() == ' ')
         _moves.push_back(pos_check);
     else
         ret = false;
@@ -90,7 +90,12 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
     int counter = 1;
 
-    while (counter <= piece1.get_max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d)) {
+    if (is('p', piece1)) {
+
+        insert_if_legit(ret, _pos, std::make_pair(1, -1));
+        insert_if_legit(ret, _pos, std::make_pair(1, 1));
+
+    } else while (counter <= piece1.get_max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d)) {
 
         if (h_l) h_l = _pos.second - counter >= 0;
         if (h_r) h_r = _pos.second + counter < 8;
@@ -192,7 +197,7 @@ bool chessboard::is_promotion(const coords &_pos) const {
     piece p = piece_at_pos(_pos);
     set side = p.get_side();
 
-    if (is<pawn>(p) && ( _pos.first == 0 && side == set::Black || _pos.first == 7 && side == set::White) )
+    if (is('p', p) && ( _pos.first == 0 && side == set::Black || _pos.first == 7 && side == set::White) )
         return true;
 
     return false;
@@ -271,7 +276,7 @@ std::pair<bool, coords> chessboard::is_enpassant(const path &_path, const coords
     }
 
     //if the last move was an opposite pawn moving by 2
-    if (is<pawn>(oth_piece) && std::abs(get_distance(last_move.first, last_move.second)) == 2) {
+    if (is('p', oth_piece) && std::abs(get_distance(last_move.first, last_move.second)) == 2) {
 
         int mid = (last_move.first.first + last_move.first.second)/2;
 
@@ -310,7 +315,7 @@ std::pair<bool, coords> chessboard::is_castling(const path &_path, const coords 
         piece oth_piece = piece_at_pos(_start.first, col);
         
         //if the oth_piece is a tower
-        if (is<tower>(oth_piece)) {
+        if (is('t', oth_piece)) {
 
             //if it's the first move for both
             if (king.is_first_move() && oth_piece.is_first_move())
@@ -376,4 +381,8 @@ void chessboard::print() const {
         }
     }
 
+}
+
+bool chessboard::is(const char _c, const piece &_p) const{
+    return tolower(_p.get_alias()) == tolower(_c);
 }

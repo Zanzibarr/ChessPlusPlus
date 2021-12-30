@@ -46,6 +46,8 @@ class chessboard {
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
 
+        bool is(const char _c, const piece &_p) const;
+
     public:
         chessboard(void);
         ~chessboard();
@@ -58,11 +60,5 @@ class chessboard {
         void print() const;
         void pawn_eat(const coords &_start, const coords &_end);
 };
-
-template< typename Type, typename DataType >
-bool is( const DataType& data ) {
-	if( &data == NULL ) return false;
-    return typeid( data ) == typeid( Type );
-}
 
 #endif
