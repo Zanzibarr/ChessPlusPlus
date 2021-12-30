@@ -28,7 +28,7 @@ class chessboard {
         piece *board[8][8];
         std::pair<coords, coords> last_move;
         
-        void chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos, std::pair<int, int> _offset, bool &_check) const;
+        bool insert_if_legit(std::vector<coords> &_moves, const coords _pos, const std::pair<int, int> _offset) const;
 
         piece &piece_at_pos(const coords &_pos) const;
         piece &piece_at_pos(const int i, const int j) const;
@@ -46,18 +46,18 @@ class chessboard {
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
 
-        public:
-            chessboard(void);
-            ~chessboard();
+    public:
+        chessboard(void);
+        ~chessboard();
 
-            std::vector<coords> get_moves(const coords &_pos) const;
+        std::vector<coords> get_moves(const coords &_pos) const;
 
-            coords find(const char _piece) const;
-            bool check_path(const path _path, unsigned int const _dist) const;
-            bool move(const coords &_start, const coords &_end);
-            void print() const;
-            void pawn_eat(const coords &_start, const coords &_end);
-        };
+        coords find(const char _piece) const;
+        bool check_path(const path _path, unsigned int const _dist) const;
+        bool move(const coords &_start, const coords &_end);
+        void print() const;
+        void pawn_eat(const coords &_start, const coords &_end);
+};
 
 template< typename Type, typename DataType >
 bool is( const DataType& data ) {

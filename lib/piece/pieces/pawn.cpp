@@ -5,6 +5,7 @@ class pawn : public piece {
 	public:
 		pawn(set _set) : piece(_set) {
 			alias = 'P';
+			max_distance = 1;
 			valid_path.push_back(path::Vertical);
 		}
 

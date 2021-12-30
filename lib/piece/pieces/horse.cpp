@@ -5,7 +5,7 @@ class horse : public piece {
 	public:
 		horse(set _set) : piece(_set) {
 			alias = 'C';
-
+			max_distance = 3;
 			valid_path.push_back(path::L);
 		}
 		
@@ -17,4 +17,5 @@ class horse : public piece {
 
 			return false;
 		}
+
 };

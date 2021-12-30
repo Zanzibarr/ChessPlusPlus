@@ -14,6 +14,7 @@ class piece {
 	protected:
 		char alias;
 		bool first_move;
+		int max_distance;
 		std::vector<path> valid_path;
 		set side;
 		
@@ -23,6 +24,7 @@ class piece {
 
 		char get_alias() const;
 		set get_side() const;
+		int get_max_distance() const;
 		bool is_first_move() const;
 		void moved();
 

@@ -28,11 +28,14 @@ char piece::get_alias() const {
 	
 	switch (side) {
 		case set::White : return tolower(alias);
-		case set::Black : return toupper(alias); 	
+		case set::Black : return toupper(alias);
+		case set::Empty : return alias;	
 	} 
 
 	throw invalid_set_exception();
 }
+
+int piece::get_max_distance() const { return max_distance; }
 set piece::get_side() const { return side; }
 bool piece::is_first_move() const { return first_move; }
 void piece::moved() { first_move = false; }
