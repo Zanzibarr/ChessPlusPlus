@@ -68,8 +68,7 @@ void chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos,
  * @param _pos 
  * @return std::vector<coords> 
  */
-    std::vector<coords> chessboard::get_moves(const coords &_pos) const
-{
+std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
     piece piece1 = piece_at_pos(_pos);
     
@@ -87,8 +86,7 @@ void chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos,
 
     int counter = 1;
 
-    while (counter <= piece1.max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d))
-    {
+    while (counter <= piece1.max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d)) {
 
         if (h_l) h_l = _pos.second - counter >= 0;
         if (h_r) h_r = _pos.second + counter < 8;
@@ -97,8 +95,7 @@ void chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos,
         if (d_3) d_3 = _pos.first - counter >= 0 && _pos.second + counter < 8;
         if (d_4) d_4 = _pos.first - counter >= 0 && _pos.second - counter >= 0;
         if (v_u) v_u = _pos.first + counter< 8;
-        if (v_d)
-            v_d = _pos.second - counter >= 0;
+        if (v_d) v_d = _pos.second - counter >= 0;
 
         //horizontal
         if (piece1.is_legit_move(path::Horizontal, distance /*????*/)) {
