@@ -83,6 +83,7 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
     bool d_4 = true;
     bool v_u = true;
     bool v_d = true;
+    bool h = true;
 
     int counter = 1;
 
@@ -120,10 +121,13 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
         //diagonal
         if (piece1.is_legit_move(path::Diagonal, distance/*????*/)) {
 
-            //up right
+            //up left
             if (d_1) insert_if_legit(ret, _pos, std::make_pair(counter, -counter), d_1);
+            //up right
             if (d_2) insert_if_legit(ret, _pos, std::make_pair(counter, counter), d_2);
+            //down right
             if (d_3) insert_if_legit(ret, _pos, std::make_pair(-counter, counter), d_3);
+            //down left
             if (d_4) insert_if_legit(ret, _pos, std::make_pair(-counter, -counter), d_4);
         }
 
@@ -132,18 +136,14 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
     //add the L moves if needed
     if (piece1.is_legit_move(path::L, distance)) {
 
-        coords pos_check[8] {
-                                std::make_pair(_pos.first + 2, _pos.second + 1), std::make_pair(_pos.first + 2, _pos.second - 1),
-                                std::make_pair(_pos.first + 1, _pos.second + 2), std::make_pair(_pos.first - 1, _pos.second + 2),
-                                std::make_pair(_pos.first - 2, _pos.second + 1), std::make_pair(_pos.first - 2, _pos.second - 1),
-                                std::make_pair(_pos.first + 1, _pos.second - 2), std::make_pair(_pos.first - 1, _pos.second - 2),
-                            };
-        
-        for (unsigned int i = 0; i < 8; i++) {
-            if (is<empty_tile>(piece_at_pos(pos_check[i])) || piece_at_pos(pos_check[i]).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check[i]);
-            }
-        }
+        insert_if_legit(ret, _pos, std::make_pair(2, 1), h);
+        insert_if_legit(ret, _pos, std::make_pair(2, -1), h);
+        insert_if_legit(ret, _pos, std::make_pair(1, 2), h);
+        insert_if_legit(ret, _pos, std::make_pair(-1, 2), h);
+        insert_if_legit(ret, _pos, std::make_pair(-2, 1), h);
+        insert_if_legit(ret, _pos, std::make_pair(-2, -1), h);
+        insert_if_legit(ret, _pos, std::make_pair(1, -2), h);
+        insert_if_legit(ret, _pos, std::make_pair(-1, -2), h);
 
     }
 
