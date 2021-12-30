@@ -48,113 +48,91 @@ chessboard::~chessboard(void) {
 
 }
 
-std::vector<coords> chessboard::get_moves(const coords &_pos) const {
+void chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos, std::pair<int, int> _offset, bool &_check) const {
+
+    coords pos_check{_pos.first + _offset.first, _pos.second + _offset.second};
+
+    if (is<empty_tile>(piece_at_pos(pos_check)))
+        _moves.push_back(pos_check);
+    else
+        _check = false;
+
+    if (piece_at_pos(pos_check).get_side() == opposite_of(piece_at_pos(_pos).get_side()))
+        _moves.push_back(pos_check);
+
+}
+
+    /**
+ * @brief Method that returns all the legal move a piece can do based on his legal paths
+ * 
+ * @param _pos 
+ * @return std::vector<coords> 
+ */
+    std::vector<coords> chessboard::get_moves(const coords &_pos) const
+{
 
     piece piece1 = piece_at_pos(_pos);
     
     std::vector<coords> ret;
     int distance = 0;
 
-    if (piece1.is_legit_move(path::Horizontal, distance)) {
+    bool h_l = true;
+    bool h_r = true;
+    bool d_1 = true;
+    bool d_2 = true;
+    bool d_3 = true;
+    bool d_4 = true;
+    bool v_u = true;
+    bool v_d = true;
 
-        for (int i = 1; i < 8; i++) {
-            if (_pos.second + i >= 8) break; 
-            coords pos_check {_pos.first, _pos.second + i};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
+    int counter = 1;
+
+    while (counter <= piece1.max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d))
+    {
+
+        if (h_l) h_l = _pos.second - counter >= 0;
+        if (h_r) h_r = _pos.second + counter < 8;
+        if (d_1) d_1 = _pos.first + counter < 8 && _pos.second - counter >= 0;
+        if (d_2) d_2 = _pos.first + counter < 8 && _pos.second + counter < 8;
+        if (d_3) d_3 = _pos.first - counter >= 0 && _pos.second + counter < 8;
+        if (d_4) d_4 = _pos.first - counter >= 0 && _pos.second - counter >= 0;
+        if (v_u) v_u = _pos.first + counter< 8;
+        if (v_d)
+            v_d = _pos.second - counter >= 0;
+
+        //horizontal
+        if (piece1.is_legit_move(path::Horizontal, distance /*????*/)) {
+
+            //left
+            if (h_l) insert_if_legit(ret, _pos, std::make_pair(0, -counter), h_l);
+            //right
+            if (h_r) insert_if_legit(ret, _pos, std::make_pair(0, counter), h_r);
+
         }
 
-        for (int i = 1; i < 8; i++) {
-            if (_pos.second - i < 0) break; 
-            coords pos_check {_pos.first, _pos.second - i};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
+        //vertical
+        if (piece1.is_legit_move(path::Vertical, distance /*????*/)) {
+
+            //left
+            if (v_u) insert_if_legit(ret, _pos, std::make_pair(counter, 0), v_u);
+            //right
+            if (v_d) insert_if_legit(ret, _pos, std::make_pair(-counter, 0), v_d);
+
         }
 
-    }
-    
-    if (piece1.is_legit_move(path::Vertical, distance)) {
+        //diagonal
+        if (piece1.is_legit_move(path::Diagonal, distance/*????*/)) {
 
-        for (int i = 1; i < 8; i++) {
-            if (_pos.first + i >= 8) break; 
-            coords pos_check {_pos.first + i, _pos.second};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
-        }
-
-        for (int i = 1; i < 8; i++) {
-            if (_pos.first - i < 0) break; 
-            coords pos_check {_pos.first - i, _pos.second};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
-        }
-
-    }
-    
-    if (piece1.is_legit_move(path::Diagonal, distance)) {
-
-        for (int i = 1; i < 8; i++) {
-            if (_pos.first + i >= 8 || _pos.second + i >= 8) break; 
-            coords pos_check {_pos.first + i, _pos.second + i};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
-        }
-
-        for (int i = 1; i < 8; i++) {
-            if (_pos.first + i >= 8 || _pos.second - i < 0) break;
-            coords pos_check {_pos.first + i, _pos.second - i};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
-        }
-
-        for (int i = 1; i < 8; i++) {
-            if (_pos.first - i < 0 || _pos.second + i >= 8) { break; std::cout << "out"; }
-            coords pos_check {_pos.first - i, _pos.second + i};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
-        }
-
-        for (int i = 1; i < 8; i++) {
-            if (_pos.first - i < 0 || _pos.second - i < 0) break;
-            coords pos_check {_pos.first - i, _pos.second - i};
-            if (is<empty_tile>(piece_at_pos(pos_check))) {
-                ret.push_back(pos_check);
-            } else if (piece_at_pos(pos_check).get_side() == opposite_of(piece1.get_side())) {
-                ret.push_back(pos_check);
-                break;
-            } else break;
+            //up right
+            if (d_1) insert_if_legit(ret, _pos, std::make_pair(counter, -counter), d_1);
+            if (d_2) insert_if_legit(ret, _pos, std::make_pair(counter, counter), d_2);
+            if (d_3) insert_if_legit(ret, _pos, std::make_pair(-counter, counter), d_3);
+            if (d_4) insert_if_legit(ret, _pos, std::make_pair(-counter, -counter), d_4);
         }
 
     }
     
+    //add the L moves if needed
     if (piece1.is_legit_move(path::L, distance)) {
 
         coords pos_check[8] {
@@ -176,18 +154,38 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
 }
 
+/**
+ * @brief Returns a reference to the piece in _pos position
+ * 
+ * @param _pos The position of the object
+ * @return piece& The reference to the piece found
+ */
 piece& chessboard::piece_at_pos(const coords &_pos) const {
 
     return *board[_pos.first][_pos.second];
 
 }
 
+/**
+ * @brief Returns a reference to the piece in [i][j] position
+ * 
+ * @param i The row index of the object
+ * @param j The col index of the object
+ * @return piece& The reference to the piece found
+ */
 piece& chessboard::piece_at_pos(const int i, const int j) const {
 
     return *board[i][j];
 
 }
 
+/**
+ * @brief Checks if a pawn is in promotion position
+ * 
+ * @param _pos The position in which to search
+ * @return true If the piece in _pos is a pawn that needs to be promoted
+ * @return false If the piece in _pos is not a pawn or the position is not a promotion position
+ */
 bool chessboard::is_promotion(const coords &_pos) const {
 
     piece p = piece_at_pos(_pos);
@@ -200,6 +198,12 @@ bool chessboard::is_promotion(const coords &_pos) const {
 
 }
 
+/**
+ * @brief Method to promote a pawn to a choosen piece
+ * 
+ * @param _pos The position of the pawn to promote
+ * @param _piece The alias of the piece to promote
+ */
 void chessboard::promote(const coords &_pos, const char _piece) {
 
     set side = piece_at_pos(_pos).get_side();
@@ -220,6 +224,15 @@ void chessboard::promote(const coords &_pos, const char _piece) {
 
 }
 
+/**
+ * @brief Checks if the move is a pawn eating move
+ * 
+ * @param _path The path of the move
+ * @param _start The initiali position of the piece to move
+ * @param _end The final position of the piece to move
+ * @return true If it's a pawn eating move
+ * @return false If it's not a pawn eating move of if it's an illegal move for the pawn
+ */
 bool chessboard::is_pawn_eat(const path &_path, const coords &_start, const coords &_end) const {
 
     piece pawn = piece_at_pos(_start);
