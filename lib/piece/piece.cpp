@@ -1,10 +1,12 @@
 #include "piece.h"
+#include <iostream>
 
 set opposite_of(const set _set){
 	
 	switch (_set) {
 		case set::Black: return set::White;
 		case set::White: return set::Black;
+		case set::Empty: return set::Empty;
 	}
 
 	throw invalid_set_exception();
@@ -12,7 +14,7 @@ set opposite_of(const set _set){
 
 piece::piece(set _side) {
 	side = _side;
-	alias = 'X';
+	alias = ' ';
 }
 
 bool piece::is_legit_move(path _path, int distance) const {
@@ -29,7 +31,7 @@ char piece::get_alias() const {
 	switch (side) {
 		case set::White : return tolower(alias);
 		case set::Black : return toupper(alias);
-		case set::Empty : return alias;	
+		case set::Empty : return ' ';	
 	} 
 
 	throw invalid_set_exception();

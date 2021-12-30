@@ -50,7 +50,8 @@ chessboard::~chessboard(void) {
 
 bool chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos, const std::pair<int, int> _offset) const {
 
-    coords pos_check{_pos.first + _offset.first, _pos.second + _offset.second};
+    coords pos_check = std::make_pair(_pos.first + _offset.first, _pos.second + _offset.second);
+    if (pos_check.first < 0 || pos_check.first >= 8 || pos_check.second < 0 || pos_check.second >= 8) return false;
     bool ret;
 
     if ((piece_at_pos(pos_check)).get_alias() == ' ')
