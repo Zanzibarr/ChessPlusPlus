@@ -7,8 +7,8 @@
 
 bool is_Horizontal(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.first - _current_position.first;
-	int y_distance = _destination.second - _current_position.second;
+	int x_distance = _destination.second - _current_position.second;
+	int y_distance = _destination.first - _current_position.first;
 
 	return (y_distance == 0 && x_distance != 0);
 
@@ -16,8 +16,8 @@ bool is_Horizontal(const pair<int, int> &_current_position, const pair<int,int> 
 
 bool is_Vertical(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.first - _current_position.first;
-	int y_distance = _destination.second - _current_position.second;
+	int x_distance = _destination.second - _current_position.second;
+	int y_distance = _destination.first - _current_position.first;
 
 	return (x_distance == 0 && y_distance != 0);
 
@@ -25,18 +25,18 @@ bool is_Vertical(const pair<int, int> &_current_position, const pair<int,int> &_
 
 bool is_Diagonal(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.first - _current_position.first;
-	int y_distance = _destination.second - _current_position.second;
+	int x_distance = _destination.second - _current_position.second;
+	int y_distance = _destination.first - _current_position.first;
 
-	return ((x_distance != 0  && y_distance != 0 ) && x_distance == y_distance);
+	return ((x_distance != 0 && y_distance != 0 ) && std::abs(x_distance) == std::abs(y_distance));
 }
 
 bool is_L(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.first - _current_position.first;
-	int y_distance = _destination.second - _current_position.second;
+	int x_distance = _destination.second - _current_position.second;
+	int y_distance = _destination.first - _current_position.first;
 
-	return ((x_distance == abs(1) && y_distance == abs(2)) || (x_distance == abs(2) && y_distance == abs(1)));
+	return (std::abs(x_distance) == 1 && (std::abs(y_distance) == 2) || (std::abs(x_distance) == 2 && std::abs(y_distance) == 1));
 
 }
 

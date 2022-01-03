@@ -13,6 +13,7 @@ set opposite_of(const set _set){
 }
 
 piece::piece(set _side) {
+	first_move = true;
 	side = _side;
 	alias = ' ';
 }

@@ -28,8 +28,6 @@ class chessboard {
         piece *board[8][8];
         std::pair<coords, coords> last_move;
         
-        chessboard(const chessboard &_board);
-        
         /**
          * @brief Insert in _moves a pair of coordinates if the tile isn't occupied
          * 
@@ -47,8 +45,8 @@ class chessboard {
          * @param _pos or (i, j) The position of the object
          * @return piece& The reference to the piece found
          */
-        piece &piece_at_pos(const coords &_pos) const;
-        piece &piece_at_pos(const int i, const int j) const;
+        piece* piece_at_pos(const coords &_pos) const;
+        piece* piece_at_pos(const int i, const int j) const;
 
         /**
          * @brief Checks if a pawn is in promotion position
@@ -95,7 +93,7 @@ class chessboard {
          * @param _start The initial position of the piece to move
          * @param _end The final position of the piece to move
          */
-        void enpassant(const coords &_eat, const coords &_start, const coords &_end);
+        void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
         
         /**
          * @brief Checks if the move is a castling
@@ -114,7 +112,7 @@ class chessboard {
          * @param _start The initial position of the piece to move
          * @param _end The final position of the piece to move
          */
-        void castling(const coords &_tower, const coords &_start, const coords &_end);
+        void do_castling(const coords &_tower, const coords &_start, const coords &_end);
 
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
