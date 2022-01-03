@@ -20,7 +20,7 @@ piece::piece(set _side) {
 bool piece::is_legit_move(path _path, int distance) const {
 	
 	for(int i = 0; i < valid_path.size(); i++) {
-		if(valid_path[i] == _path) return true;
+		if(valid_path[i] == _path && std::abs(distance) <= max_distance) return true;
 	}
 
 	return false;

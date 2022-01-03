@@ -28,19 +28,92 @@ class chessboard {
         piece *board[8][8];
         std::pair<coords, coords> last_move;
         
+        chessboard(const chessboard &_board);
+        
+        /**
+         * @brief Insert in _moves a pair of coordinates if the tile isn't occupied
+         * 
+         * @param _moves The vector to fill
+         * @param _pos The intial position
+         * @param _offset The distance traveled from the initial position
+         * @return true If it's possible to keep expanding through this direction
+         * @return false If there is an obstacle in this position
+         */
         bool insert_if_legit(std::vector<coords> &_moves, const coords _pos, const std::pair<int, int> _offset) const;
 
+        /**
+         * @brief Returns a reference to the piece in _pos position
+         * 
+         * @param _pos or (i, j) The position of the object
+         * @return piece& The reference to the piece found
+         */
         piece &piece_at_pos(const coords &_pos) const;
         piece &piece_at_pos(const int i, const int j) const;
 
+        /**
+         * @brief Checks if a pawn is in promotion position
+         * 
+         * @param _pos The position in which to search
+         * @return true If the piece in _pos is a pawn that needs to be promoted
+         * @return false If the piece in _pos is not a pawn or the position is not a promotion position
+         */
         bool is_promotion(const coords &_pos) const;
+        
+        /**
+         * @brief Method to promote a pawn to a choosen piece
+         * 
+         * @param _pos The position of the pawn to promote
+         * @param _piece The alias of the piece to promote
+         */
         void promote(const coords &_pos, const char piece);
 
+        /**
+         * @brief Checks if the move is a pawn eating move
+         * 
+         * @param _path The path of the move
+         * @param _start The initiali position of the piece to move
+         * @param _end The final position of the piece to move
+         * @return true If it's a pawn eating move
+         * @return false If it's not a pawn eating move of if it's an illegal move for the pawn
+         */
         bool is_pawn_eat(const path &_p, const coords &_start, const coords &_end) const;
+        
+        /**
+         * @brief Checks if the move is an enpassant
+         * 
+         * @param _path The path of the move
+         * @param _start The initial position of the piece to move
+         * @param _end The final position of the piece to move
+         * @return std::pair<bool, coords> A pair containing true/false based on if it's or not an enpassant and a pair of coordinates of the pawn that has been eaten
+         */
         std::pair<bool, coords> is_enpassant(const path &_p, const coords &_start, const coords &_end) const;
+        
+        /**
+         * @brief Method to attempt an enpassant
+         * 
+         * @param _eat The pawn to eat
+         * @param _start The initial position of the piece to move
+         * @param _end The final position of the piece to move
+         */
+        void enpassant(const coords &_eat, const coords &_start, const coords &_end);
+        
+        /**
+         * @brief Checks if the move is a castling
+         * 
+         * @param _path The path of the move
+         * @param _start The initial position of the piece to move
+         * @param _end The final position of the piece to move
+         * @return std::pair<bool, coords> A pair containing true/false based on if it's or not a castling and a pair of coordinates of the tower to move
+         */
         std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
 
-        void enpassant(const coords &_eat, const coords &_start, const coords &_end);
+        /**
+         * @brief Method to attempt a castling
+         * 
+         * @param _tower The coordinates of the tower to move
+         * @param _start The initial position of the piece to move
+         * @param _end The final position of the piece to move
+         */
         void castling(const coords &_tower, const coords &_start, const coords &_end);
 
         bool check(const set &_side) const;
@@ -51,14 +124,38 @@ class chessboard {
     public:
         chessboard(void);
         ~chessboard();
-
+        
+        /**
+         * @brief Method that returns all the legal move a piece can do based on his legal paths
+         * 
+         * @param _pos 
+         * @return std::vector<coords> 
+         */
         std::vector<coords> get_moves(const coords &_pos) const;
 
         coords find(const char _piece) const;
-        bool check_path(const path _path, unsigned int const _dist) const;
         bool move(const coords &_start, const coords &_end);
+        
+        /**
+         * @brief Method to print the chessboard
+         * 
+         */
         void print() const;
-        void pawn_eat(const coords &_start, const coords &_end);
 };
+
+template<typename Type>
+bool is_type(const piece &data) {
+	if( &data == NULL ) return false;
+    
+    if (typeid(Type) == typeid(tower)) return tolower(data.get_alias()) == 't';
+    if (typeid(Type) == typeid(horse)) return tolower(data.get_alias()) == 'c';
+    if (typeid(Type) == typeid(bishop)) return tolower(data.get_alias()) == 'a';
+    if (typeid(Type) == typeid(king)) return tolower(data.get_alias()) == 'r';
+    if (typeid(Type) == typeid(queen)) return tolower(data.get_alias()) == 'd';
+    if (typeid(Type) == typeid(pawn)) return tolower(data.get_alias()) == 'p';
+    if (typeid(Type) == typeid(empty_tile)) return data.get_alias() == ' ';
+
+    return false;
+}
 
 #endif

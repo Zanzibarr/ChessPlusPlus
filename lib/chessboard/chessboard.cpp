@@ -39,6 +39,17 @@ chessboard::chessboard(void) {
     }
 
 }
+
+chessboard::chessboard(const chessboard &_board) {
+
+    for (unsigned int i = 0; i < 8; i++) {
+        for (unsigned int j = 0; j < 8; j++) {
+            board[i][j] = _board.board[i][j];
+        }
+    }
+
+}
+
 chessboard::~chessboard(void) {
 
     for (unsigned int i = 0; i < 8; i++) for (unsigned int j = 0; j < 8; j++) {
@@ -47,16 +58,15 @@ chessboard::~chessboard(void) {
 
 }
 
-bool chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos, const std::pair<int, int> _offset) const {
+bool chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos, coords _offset) const {
 
     coords pos_check = std::make_pair(_pos.first + _offset.first, _pos.second + _offset.second);
     if (pos_check.first < 0 || pos_check.first >= 8 || pos_check.second < 0 || pos_check.second >= 8) return false;
-    bool ret;
+    bool ret = true;
 
     if ((piece_at_pos(pos_check)).get_alias() == ' ')
         _moves.push_back(pos_check);
-    else
-        ret = false;
+    else ret = false;
 
     if (piece_at_pos(pos_check).get_side() == opposite_of(piece_at_pos(_pos).get_side()))
         _moves.push_back(pos_check);
@@ -65,18 +75,11 @@ bool chessboard::insert_if_legit(std::vector<coords> &_moves, const coords _pos,
 
 }
 
-/**
- * @brief Method that returns all the legal move a piece can do based on his legal paths
- * 
- * @param _pos 
- * @return std::vector<coords> 
- */
 std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
     piece piece1 = piece_at_pos(_pos);
     
     std::vector<coords> ret;
-    int distance = 0;
 
     bool h_l = true;
     bool h_r = true;
@@ -90,60 +93,63 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
     int counter = 1;
 
-    if (is('p', piece1)) {
+    if (is_type<pawn>(piece1)) {
 
         insert_if_legit(ret, _pos, std::make_pair(1, -1));
         insert_if_legit(ret, _pos, std::make_pair(1, 1));
 
-    } else while (counter <= piece1.get_max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d)) {
+    } else {
+        
+        while (counter <= piece1.get_max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d)) {
 
-        if (h_l) h_l = _pos.second - counter >= 0;
-        if (h_r) h_r = _pos.second + counter < 8;
-        if (d_1) d_1 = _pos.first + counter < 8 && _pos.second - counter >= 0;
-        if (d_2) d_2 = _pos.first + counter < 8 && _pos.second + counter < 8;
-        if (d_3) d_3 = _pos.first - counter >= 0 && _pos.second + counter < 8;
-        if (d_4) d_4 = _pos.first - counter >= 0 && _pos.second - counter >= 0;
-        if (v_u) v_u = _pos.first + counter< 8;
-        if (v_d) v_d = _pos.first - counter >= 0;
+            if (h_l) h_l = _pos.second - counter >= 0;
+            if (h_r) h_r = _pos.second + counter < 8;
+            if (d_1) d_1 = _pos.first + counter < 8 && _pos.second - counter >= 0;
+            if (d_2) d_2 = _pos.first + counter < 8 && _pos.second + counter < 8;
+            if (d_3) d_3 = _pos.first - counter >= 0 && _pos.second + counter < 8;
+            if (d_4) d_4 = _pos.first - counter >= 0 && _pos.second - counter >= 0;
+            if (v_u) v_u = _pos.first + counter < 8;
+            if (v_d) v_d = _pos.first - counter >= 0;
 
-        //add horizontal move if needed
-        if (piece1.is_legit_move(path::Horizontal, distance)) {
+            //add horizontal move if needed
+            if (piece1.is_legit_move(path::Horizontal, counter)) {
 
-            //left
-            if (h_l) h_l = insert_if_legit(ret, _pos, std::make_pair(0, -counter));
-            //right
-            if (h_r) h_r = insert_if_legit(ret, _pos, std::make_pair(0, counter));
+                //left
+                if (h_l) h_l = insert_if_legit(ret, _pos, std::make_pair(0, -counter));
+                //right
+                if (h_r) h_r = insert_if_legit(ret, _pos, std::make_pair(0, counter));
 
+            }
+
+            //add vertical move if needed
+            if (piece1.is_legit_move(path::Vertical, counter)) {
+
+                //left
+                if (v_u) v_u = insert_if_legit(ret, _pos, std::make_pair(counter, 0));
+                //right
+                if (v_d) v_d = insert_if_legit(ret, _pos, std::make_pair(-counter, 0));
+            }
+
+            //add diagonal move if needed
+            if (piece1.is_legit_move(path::Diagonal, counter)) {
+
+                //up left
+                if (d_1) d_1 = insert_if_legit(ret, _pos, std::make_pair(counter, -counter));
+                //up right
+                if (d_2) d_2 = insert_if_legit(ret, _pos, std::make_pair(counter, counter));
+                //down right
+                if (d_3) d_3 = insert_if_legit(ret, _pos, std::make_pair(-counter, counter));
+                //down left
+                if (d_4) d_4 = insert_if_legit(ret, _pos, std::make_pair(-counter, -counter));
+            }
+
+            counter++;
         }
-
-        //add vertical move if needed
-        if (piece1.is_legit_move(path::Vertical, distance)) {
-
-            //left
-            if (v_u) v_u = insert_if_legit(ret, _pos, std::make_pair(counter, 0));
-            //right
-            if (v_d) v_d = insert_if_legit(ret, _pos, std::make_pair(-counter, 0));
-        }
-
-        //add diagonal move if needed
-        if (piece1.is_legit_move(path::Diagonal, distance)) {
-
-            //up left
-            if (d_1) d_1 = insert_if_legit(ret, _pos, std::make_pair(counter, -counter));
-            //up right
-            if (d_2) d_2 = insert_if_legit(ret, _pos, std::make_pair(counter, counter));
-            //down right
-            if (d_3) d_3 = insert_if_legit(ret, _pos, std::make_pair(-counter, counter));
-            //down left
-            if (d_4) d_4 = insert_if_legit(ret, _pos, std::make_pair(-counter, -counter));
-        }
-
-        counter++;
 
     }
     
     //add the L moves if needed
-    if (piece1.is_legit_move(path::L, distance)) {
+    if (piece1.is_legit_move(path::L, 0)) {
 
         insert_if_legit(ret, _pos, std::make_pair(2, 1));
         insert_if_legit(ret, _pos, std::make_pair(2, -1));
@@ -160,56 +166,30 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
 }
 
-/**
- * @brief Returns a reference to the piece in _pos position
- * 
- * @param _pos The position of the object
- * @return piece& The reference to the piece found
- */
 piece& chessboard::piece_at_pos(const coords &_pos) const {
 
     return *board[_pos.first][_pos.second];
 
 }
 
-/**
- * @brief Returns a reference to the piece in [i][j] position
- * 
- * @param i The row index of the object
- * @param j The col index of the object
- * @return piece& The reference to the piece found
- */
 piece& chessboard::piece_at_pos(const int i, const int j) const {
 
     return *board[i][j];
 
 }
 
-/**
- * @brief Checks if a pawn is in promotion position
- * 
- * @param _pos The position in which to search
- * @return true If the piece in _pos is a pawn that needs to be promoted
- * @return false If the piece in _pos is not a pawn or the position is not a promotion position
- */
 bool chessboard::is_promotion(const coords &_pos) const {
 
     piece p = piece_at_pos(_pos);
     set side = p.get_side();
 
-    if (is('p', p) && ( _pos.first == 0 && side == set::Black || _pos.first == 7 && side == set::White) )
+    if (is_type<pawn>(p) && ( _pos.first == 0 && side == set::Black || _pos.first == 7 && side == set::White) )
         return true;
 
     return false;
 
 }
 
-/**
- * @brief Method to promote a pawn to a choosen piece
- * 
- * @param _pos The position of the pawn to promote
- * @param _piece The alias of the piece to promote
- */
 void chessboard::promote(const coords &_pos, const char _piece) {
 
     set side = piece_at_pos(_pos).get_side();
@@ -230,15 +210,6 @@ void chessboard::promote(const coords &_pos, const char _piece) {
 
 }
 
-/**
- * @brief Checks if the move is a pawn eating move
- * 
- * @param _path The path of the move
- * @param _start The initiali position of the piece to move
- * @param _end The final position of the piece to move
- * @return true If it's a pawn eating move
- * @return false If it's not a pawn eating move of if it's an illegal move for the pawn
- */
 bool chessboard::is_pawn_eat(const path &_path, const coords &_start, const coords &_end) const {
 
     piece pawn = piece_at_pos(_start);
@@ -276,7 +247,7 @@ std::pair<bool, coords> chessboard::is_enpassant(const path &_path, const coords
     }
 
     //if the last move was an opposite pawn moving by 2
-    if (is('p', oth_piece) && std::abs(get_distance(last_move.first, last_move.second)) == 2) {
+    if (is_type<pawn>(oth_piece) && std::abs(get_distance(last_move.first, last_move.second)) == 2) {
 
         int mid = (last_move.first.first + last_move.first.second)/2;
 
@@ -290,6 +261,16 @@ std::pair<bool, coords> chessboard::is_enpassant(const path &_path, const coords
     }
 
     return std::make_pair(false, std::make_pair(0, 0));
+
+}
+
+void chessboard::enpassant(const coords &_eat, const coords &_start, const coords &_end) {
+
+    //move the pieces
+    delete board[_eat.first][_eat.second];
+    board[_eat.first][_eat.second] = new empty_tile();
+    board[_end.first][_end.second] = board[_start.first][_start.second];
+    board[_start.first][_start.second] = new empty_tile();
 
 }
 
@@ -315,7 +296,7 @@ std::pair<bool, coords> chessboard::is_castling(const path &_path, const coords 
         piece oth_piece = piece_at_pos(_start.first, col);
         
         //if the oth_piece is a tower
-        if (is('t', oth_piece)) {
+        if (is_type<tower>(oth_piece)) {
 
             //if it's the first move for both
             if (king.is_first_move() && oth_piece.is_first_move())
@@ -327,24 +308,6 @@ std::pair<bool, coords> chessboard::is_castling(const path &_path, const coords 
 
     return std::make_pair(false, std::make_pair(0, 0));
     
-}
-
-void chessboard::pawn_eat(const coords &_start, const coords &_end) {
-
-    delete board[_end.first][_end.second];
-    board[_end.first][_end.second] = board[_start.first][_start.second];
-    board[_start.first][_start.second] = new empty_tile();
-
-}
-
-void chessboard::enpassant(const coords &_eat, const coords &_start, const coords &_end) {
-
-    //move the pieces
-    delete board[_eat.first][_eat.second];
-    board[_eat.first][_eat.second] = new empty_tile();
-    board[_end.first][_end.second] = board[_start.first][_start.second];
-    board[_start.first][_start.second] = new empty_tile();
-
 }
 
 void chessboard::castling(const coords &_tower, const coords &_start, const coords &_end) {
@@ -368,6 +331,58 @@ void chessboard::castling(const coords &_tower, const coords &_start, const coor
 
 bool chessboard::move(const coords &_start, const coords &_end) {
 
+    piece piece1 = piece_at_pos(_start);
+    set side = piece1.get_side();
+    std::vector<coords> moves = get_moves(_start);
+    path path1 = get_path(_start, _end);
+
+    bool legit = false;
+    bool pawn_eat = false;
+    bool promotion = false;
+    std::pair<bool, coords> enpassant = std::make_pair(false, std::make_pair(0,0));
+    std::pair<bool, coords> castling = std::make_pair(false, std::make_pair(0,0));
+
+    if (is_type<pawn>(piece1)) {
+        if (piece1.is_legit_move(path1, get_distance(_start, _end)) || (piece1.is_first_move() && piece1.is_legit_move(path1, get_distance(_start, _end))))
+            legit = true;
+    } else {
+        for (unsigned int i = 0; i < moves.size(); i++) {
+            if (_end == moves.at(i)) {
+                legit = true;
+                break;
+            }
+        }
+    }
+
+    if (is_type<pawn>(piece1)) {
+        pawn_eat = is_pawn_eat(path1, _start, _end);
+        enpassant = is_enpassant(path1, _start, _end);
+        promotion = is_promotion(_end);
+    }
+    if (is_type<king>(piece1)) {
+        castling = is_castling(path1, _start, _end);
+    }
+
+    if (legit || pawn_eat) {
+
+    }
+
+    if (enpassant.first) {
+
+    }
+
+    if (castling.first) {
+
+    }
+
+    if (promotion) {
+        
+    }
+
+    if (check(side)) {
+        if (checkmate(side)) return false;
+    }
+
     return true;
 
 }
@@ -381,8 +396,4 @@ void chessboard::print() const {
         }
     }
 
-}
-
-bool chessboard::is(const char _c, const piece &_p) const{
-    return tolower(_p.get_alias()) == tolower(_c);
 }
