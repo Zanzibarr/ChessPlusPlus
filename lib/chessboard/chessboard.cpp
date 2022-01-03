@@ -266,7 +266,7 @@ void chessboard::do_enpassant(const coords &_eat, const coords &_start, const co
 
 }
 
-//PROBLEMA: Se ne frega delle pedine che ci sono in mezzo
+//PROBLEMA: Se ne frega delle pedine che ci sono in mezzo e non controllo se è la prima mossa
 std::pair<bool, coords> chessboard::is_castling(const path &_path, const coords &_start, const coords &_end) const {
 
     piece* king = piece_at_pos(_start);
