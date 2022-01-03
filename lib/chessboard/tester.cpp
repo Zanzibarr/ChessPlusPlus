@@ -5,13 +5,14 @@ int main(void) {
 
     chessboard scacchiera {};
     scacchiera.print();
-    scacchiera.move(std::make_pair(6, 2), std::make_pair(4, 2));
+    vector<coords> mosse = scacchiera.get_moves(std::make_pair(0, 1));
+    scacchiera.move(std::make_pair(0, 1), std::make_pair(2, 0));
     scacchiera.print();
-    scacchiera.move(std::make_pair(4, 2), std::make_pair(3, 2));
+    scacchiera.move(std::make_pair(1, 1), std::make_pair(2, 1));
     scacchiera.print();
-    scacchiera.move(std::make_pair(1, 3), std::make_pair(3, 3));
+    scacchiera.move(std::make_pair(0, 2), std::make_pair(1, 1));
     scacchiera.print();
-    scacchiera.move(std::make_pair(3, 2), std::make_pair(2, 3));
+    scacchiera.move(std::make_pair(0, 3), std::make_pair(0, 1));
     scacchiera.print();
 
 }

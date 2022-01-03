@@ -139,7 +139,7 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
     }
     
     //add the L moves if needed
-    if (piece1->is_legit_move(path::L, 0)) {
+    if (piece1->is_legit_move(path::L, 3)) {
 
         insert_if_legit(ret, _pos, std::make_pair(2, 1));
         insert_if_legit(ret, _pos, std::make_pair(2, -1));
@@ -266,6 +266,7 @@ void chessboard::do_enpassant(const coords &_eat, const coords &_start, const co
 
 }
 
+//PROBLEMA: Se ne frega delle pedine che ci sono in mezzo
 std::pair<bool, coords> chessboard::is_castling(const path &_path, const coords &_start, const coords &_end) const {
 
     piece* king = piece_at_pos(_start);
@@ -359,7 +360,12 @@ bool chessboard::move(const coords &_start, const coords &_end) {
     if (legit || pawn_eat) {
 
         delete board[_end.first][_end.second];
-        board[_end.first][_end.second] = new pawn(piece_at_pos(_start)->get_side());
+        if (is_type<pawn>(*piece1)) board[_end.first][_end.second] = new pawn(piece_at_pos(_start)->get_side());
+        if (is_type<tower>(*piece1)) board[_end.first][_end.second] = new tower(piece_at_pos(_start)->get_side());
+        if (is_type<horse>(*piece1)) board[_end.first][_end.second] = new horse(piece_at_pos(_start)->get_side());
+        if (is_type<bishop>(*piece1)) board[_end.first][_end.second] = new bishop(piece_at_pos(_start)->get_side());
+        if (is_type<king>(*piece1)) board[_end.first][_end.second] = new king(piece_at_pos(_start)->get_side());
+        if (is_type<queen>(*piece1)) board[_end.first][_end.second] = new queen(piece_at_pos(_start)->get_side());
         piece_at_pos(_end)->moved();
         delete board[_start.first][_start.second];
         board[_start.first][_start.second] = new empty_tile();
