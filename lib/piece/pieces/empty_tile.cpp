@@ -3,7 +3,7 @@
 class empty_tile : public piece {
 
 	public:
-		empty_tile() : piece(set::Empty) {
+		empty_tile(set _set = set::Empty) : piece(_set) {
 			alias = ' ';
 			max_distance = 0;
 		}

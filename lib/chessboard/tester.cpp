@@ -8,22 +8,25 @@ int main(void) {
     std::cout << scacchiera.get_moves(std::make_pair(0, 1)).size();
     */
     scacchiera.print();
-    scacchiera.move(std::make_pair(6, 0), std::make_pair(4, 0));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(4, 0), std::make_pair(3, 0));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(3, 0), std::make_pair(2, 0));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(0, 1), std::make_pair(2, 0));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(1, 1), std::make_pair(2, 1));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(0, 2), std::make_pair(1, 1));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(0, 3), std::make_pair(0, 1));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(0, 4), std::make_pair(3, 4));
-    scacchiera.print();
-    scacchiera.move(std::make_pair(0, 4), std::make_pair(0, 3));
+    
+    char in;
+    do {
+
+        std::cout << "\nstart: ";
+        coords start;
+        std::cin >> start.first >> start.second;
+        std::cout << "\nend: ";
+        coords end;
+        std::cin >> end.first >> end.second;
+
+        scacchiera.move(start, end);
+        scacchiera.print();
+
+        std::cout << "\n'q' to quit (other key to keep playing): ";
+        std::cin >> in;
+        std::cout << "\n";
+
+    } while (in != 'q');
+
     scacchiera.print();
 }

@@ -18,7 +18,7 @@ class pawn : public piece {
 			else if(side == set::White) side_multiplier = 1;
 
 			bool normal_condition = (valid_path[0] == _path && _distance == (side_multiplier));
-			bool first_condition = (valid_path[0] == _path && _distance == (2*side_multiplier) && is_first_move());
+			bool first_condition = (valid_path[0] == _path && _distance == (2*side_multiplier) && first_move);
 
 			return normal_condition || first_condition;
 			

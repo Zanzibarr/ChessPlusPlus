@@ -114,11 +114,13 @@ class chessboard {
          */
         void do_castling(const coords &_tower, const coords &_start, const coords &_end);
 
+        void do_legit(const coords &_start, const coords &_end);
+
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
         bool draw() const;
         
-        void undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten, const bool _first_move);
+        void undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten);
 
     public:
         chessboard(void);
@@ -141,7 +143,7 @@ class chessboard {
          * @param _end Final position of the piece to move
          * @return std::pair<bool, bool> Pair of conditions: ([finished][made the move/won])
          *                  (false, true) if the move was successfull,
-         *                  (false, false) if the move was unsuccessfull due to check,
+         *                  (false, false) if the move was unsuccessfull due to check or illegal,
          *                  (true, false) if it's a draw
          *                  (true, true) if it's a checkmate (current player winning)
          *                  

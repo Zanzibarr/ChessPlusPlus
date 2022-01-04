@@ -1,0 +1,5 @@
+V pedone mangia gli alleati andando dritto
+V non funziona il moved
+V pedone mangia senza avere nemici
+????? sparisce un pedone
+? aggiornamento di ultima mossa (per enpassant dopo mossa illegale)

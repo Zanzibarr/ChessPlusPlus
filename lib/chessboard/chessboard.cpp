@@ -184,7 +184,7 @@ void chessboard::promote(const coords &_pos, const char _piece) {
 
     set side = piece_at_pos(_pos)->get_side();
 
-    delete board[_pos.first][_pos.second];
+    //delete board[_pos.first][_pos.second];
 
     //promote the piece based on the _piece parameter
     switch(_piece) {
@@ -324,38 +324,48 @@ void chessboard::do_castling(const coords &_tower, const coords &_start, const c
 
 }
 
-void chessboard::undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten, const bool _first_move) {
+void chessboard::do_legit(const coords &_start, const coords &_end) {
+
+        piece* piece1 = piece_at_pos(_start);
+        set side = piece1->get_side();
+        piece* eaten = piece_at_pos(_end);
+
+        if (is_type<pawn>(*piece1)) board[_end.first][_end.second] = new pawn(side);
+        if (is_type<tower>(*piece1)) board[_end.first][_end.second] = new tower(side);
+        if (is_type<horse>(*piece1)) board[_end.first][_end.second] = new horse(side);
+        if (is_type<bishop>(*piece1)) board[_end.first][_end.second] = new bishop(side);
+        if (is_type<king>(*piece1)) board[_end.first][_end.second] = new king(side);
+        if (is_type<queen>(*piece1)) board[_end.first][_end.second] = new queen(side);
+        //delete board[_start.first][_start.second];
+        board[_start.first][_start.second] = new empty_tile();
+
+}
+
+void chessboard::undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten) {
     
-    //delete board[_start.first][_start.second];
-    switch (tolower(piece_at_pos(_end)->get_alias())) {
-        case 'p': board[_start.first][_start.second] = new pawn(opposite_of(_eaten->get_side()));
-        case 't': board[_start.first][_start.second] = new tower(opposite_of(_eaten->get_side()));
-        case 'c': board[_start.first][_start.second] = new horse(opposite_of(_eaten->get_side()));
-        case 'a': board[_start.first][_start.second] = new bishop(opposite_of(_eaten->get_side()));
-        case 'd': board[_start.first][_start.second] = new queen(opposite_of(_eaten->get_side()));
-        case 'r': board[_start.first][_start.second] = new king(opposite_of(_eaten->get_side()));
-    }
-    board[_start.first][_start.second]->set_first_move(_first_move);
+    bool first_move = piece_at_pos(_end)->is_first_move();
+
+    do_legit(_end, _start);
+
+    board[_start.first][_start.second]->set_first_move(first_move);
     
     //delete board[_end.first][_end.second];
 
     switch(_special) {
         case 0:
-            switch(tolower(_eaten->get_alias())) {
-                case 'p': board[_end.first][_end.second] = new pawn(_eaten->get_side());
-                case 't': board[_end.first][_end.second] = new tower(_eaten->get_side());
-                case 'c': board[_end.first][_end.second] = new horse(_eaten->get_side());
-                case 'a': board[_end.first][_end.second] = new bishop(_eaten->get_side());
-                case 'd': board[_end.first][_end.second] = new queen(_eaten->get_side());
-                case ' ': board[_end.first][_end.second] = new empty_tile();
-            }
+            if (is_type<pawn>(*_eaten)) board[_end.first][_end.second] = new pawn(_eaten->get_side());
+            if (is_type<tower>(*_eaten)) board[_end.first][_end.second] = new tower(_eaten->get_side());
+            if (is_type<horse>(*_eaten)) board[_end.first][_end.second] = new horse(_eaten->get_side());
+            if (is_type<bishop>(*_eaten)) board[_end.first][_end.second] = new bishop(_eaten->get_side());
+            if (is_type<queen>(*_eaten)) board[_end.first][_end.second] = new queen(_eaten->get_side());
+            if (is_type<empty_tile>(*_eaten)) board[_end.first][_end.second] = new empty_tile();
+            break;
         case 1:
-            board[_end.first][_end.second] = new empty_tile();
             //delete board[_oth_piece.first][_oth_piece.second];
             board[_oth_piece.first][_oth_piece.second] = new pawn(_eaten->get_side());
             board[_oth_piece.first][_oth_piece.second]->set_first_move(_eaten->is_first_move());
+            break;
         case 2:
-            board[_end.first][_end.second] = new empty_tile();
             //delete board[_oth_piece.first][_oth_piece.second];
             board[_oth_piece.first][_oth_piece.second] = new tower(_eaten->get_side());
             int col;
@@ -363,6 +373,7 @@ void chessboard::undo(const int _special, const coords &_oth_piece, const coords
             else col = 4;
             //delete board[_start.first][col];
             board[_start.first][col] = new empty_tile();
+            break;
     }
 
 }
@@ -391,7 +402,13 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
 
     if (is_type<pawn>(*piece1)) {
 
-        legit = piece1->is_legit_move(path1, get_distance(_start, _end));
+        int distance = get_distance(_start, _end);
+        legit = piece1->is_legit_move(path1, distance);
+        if (legit) {
+            legit &= is_type<empty_tile>(*piece_at_pos(_start.first + distance, _start.second));
+            if (std::abs(distance)==2)
+                legit &= is_type<empty_tile>(*piece_at_pos(_start.first + distance/2, _start.second));
+        }
         pawn_eat = is_pawn_eat(path1, _start, _end);
         enpassant = is_enpassant(path1, _start, _end);
         promotion = is_promotion(_end);
@@ -417,15 +434,10 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
 
     if (legit || pawn_eat) {
 
+        std::cout << "--" << piece1->is_first_move();
+
         eaten = piece_at_pos(_end);
-        if (is_type<pawn>(*piece1)) board[_end.first][_end.second] = new pawn(side);
-        if (is_type<tower>(*piece1)) board[_end.first][_end.second] = new tower(side);
-        if (is_type<horse>(*piece1)) board[_end.first][_end.second] = new horse(side);
-        if (is_type<bishop>(*piece1)) board[_end.first][_end.second] = new bishop(side);
-        if (is_type<king>(*piece1)) board[_end.first][_end.second] = new king(side);
-        if (is_type<queen>(*piece1)) board[_end.first][_end.second] = new queen(side);
-        //delete board[_start.first][_start.second];
-        board[_start.first][_start.second] = new empty_tile();
+        do_legit(_start, _end);
 
     } else if (enpassant.first) {
 
@@ -434,7 +446,13 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
 
     } else if (castling.first) {
 
+        eaten = piece_at_pos(castling.second);
         do_castling(castling.second, _start, _end);
+
+    } else {
+
+        std::cout << "<<mossa illegale>>";
+        return std::make_pair(false, false);
 
     }
 
@@ -452,17 +470,13 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
         else if (castling.first) {
             special = 2;
             place = castling.second;
-            eaten = piece_at_pos(castling.second);
         }
-        undo(special, place, _start, _end, eaten, piece1->is_first_move());
+        undo(special, place, _start, _end, eaten);
         return std::make_pair(false, false);
-    } else if (piece1->is_first_move()) piece1->moved();
-    
-    if (checkmate(opposite_of(side))) return std::make_pair(true, true);
+    }
 
-    if (draw()) return std::make_pair(true, false);
-
-    /* FINE CONTROLLO SCACCO/PATTA/SCACCO MATTO --*/
+    if (piece1->is_first_move()) piece_at_pos(_end)->moved();
+    last_move = std::make_pair(_start, _end);
     
     if (promotion) {
 
@@ -474,8 +488,12 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
         std::cout << std::endl;
 
     }
+    
+    if (checkmate(opposite_of(side))) return std::make_pair(true, true);
 
-    last_move = std::make_pair(_start, _end);
+    if (draw()) return std::make_pair(true, false);
+
+    /* FINE CONTROLLO SCACCO/PATTA/SCACCO MATTO --*/
 
     //delete eaten;
 
