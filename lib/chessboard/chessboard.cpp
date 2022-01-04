@@ -504,14 +504,15 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
 void chessboard::print() const {
 
     for (int i = 7; i >= 0; i--) {
-        std::cout << std::endl;
-        std::cout << i + 1 << "   ";
-        for (unsigned int j = 0; j < 7; j++) {
-            std::cout << " " << piece_at_pos(i, j)->get_alias() << " |";
+        std::cout << std::endl << i + 1 << "   ";
+
+        for (unsigned int j = 0; j < 8; j++) {
+            std::cout << " " << piece_at_pos(i, j)->get_alias();
+            if (j!=7)
+                std::cout << " |";
         }
-        std::cout << " " << piece_at_pos(i, 7)->get_alias();
-        std::cout << std::endl;
-        std::cout << "    ";
+        std::cout << std::endl << "    ";
+        
         if (i!=0) {
             for (unsigned int j = 0; j < 15; j++) {
                 std::cout << "--";
@@ -519,6 +520,7 @@ void chessboard::print() const {
             std::cout << "-";
         }
     }
+    
     std::cout << "\n    ";
     for (unsigned int i = 0; i < 8; i++) {
         std::cout << " " << (char) (i + 'A') << "  ";
