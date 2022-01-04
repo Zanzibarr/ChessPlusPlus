@@ -5,10 +5,13 @@
 #include <stdlib.h>
 using namespace std;
 
-/*
- * path.h is a library from operation between 2 point in a chessboard
- * the goal of this library is separate piece from board.
- * @author Riccardo Modolo 2009667
+/**
+ * @file path.h
+ * @author Modolo Riccardo (riccardo.modolo.1@studenti.unipd.it)
+ * @brief Interface of the path
+ * @version 0.1
+ * @date 2021-12-24
+ *  
  */
 
 enum class path {Horizontal, Vertical, Diagonal, L};
