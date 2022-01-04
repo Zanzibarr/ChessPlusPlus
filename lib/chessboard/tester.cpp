@@ -4,6 +4,9 @@
 int main(void) {
 
     chessboard scacchiera {};
+    /*
+    std::cout << scacchiera.get_moves(std::make_pair(0, 1)).size();
+    */
     scacchiera.print();
     scacchiera.move(std::make_pair(6, 0), std::make_pair(4, 0));
     scacchiera.print();
@@ -23,5 +26,4 @@ int main(void) {
     scacchiera.print();
     scacchiera.move(std::make_pair(0, 4), std::make_pair(0, 3));
     scacchiera.print();
-
 }
