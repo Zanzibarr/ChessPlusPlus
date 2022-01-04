@@ -1,4 +1,4 @@
-#include "chessboard.h"
+#include "chessboard.cpp"
 #include <iostream>
 #include <regex>
 
