@@ -1,45 +1,48 @@
 #include "path.h"
 
-/*
- * implementation of path.h
- * @author Riccardo Modolo 2009667
+/**
+ * @file path.cpp
+ * @author Modolo Riccardo (riccardo.modolo.1@studenti.unipd.it)
+ * @brief Implementation of the path
+ * @version 0.1
+ * @date 2021-12-24
+ *  
  */
 
 bool is_Horizontal(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.second - _current_position.second;
-	int y_distance = _destination.first - _current_position.first;
+	int row_distance = _destination.first - _current_position.first;
+	int col_distance = _destination.second - _current_position.second;
 
-	return (y_distance == 0 && x_distance != 0);
+	return (row_distance == 0 && col_distance != 0);
 
 }
 
 bool is_Vertical(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.second - _current_position.second;
-	int y_distance = _destination.first - _current_position.first;
+	int row_distance = _destination.first - _current_position.first;
+	int col_distance = _destination.second - _current_position.second;
 
-	return (x_distance == 0 && y_distance != 0);
+	return (col_distance == 0 && row_distance != 0);
 
 }
 
 bool is_Diagonal(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.second - _current_position.second;
-	int y_distance = _destination.first - _current_position.first;
+	int row_distance = _destination.first - _current_position.first;
+	int col_distance = _destination.second - _current_position.second;
 
-	return ((x_distance != 0 && y_distance != 0 ) && std::abs(x_distance) == std::abs(y_distance));
+	return ((row_distance != 0 && col_distance != 0 ) && std::abs(row_distance) == std::abs(col_distance));
 }
 
 bool is_L(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
-	int x_distance = _destination.second - _current_position.second;
-	int y_distance = _destination.first - _current_position.first;
+	int row_distance = _destination.first - _current_position.first;
+	int col_distance = _destination.second - _current_position.second;
 
-	return (std::abs(x_distance) == 1 && (std::abs(y_distance) == 2) || (std::abs(x_distance) == 2 && std::abs(y_distance) == 1));
+	return (std::abs(col_distance) == 1 && (std::abs(row_distance) == 2) || (std::abs(col_distance) == 2 && std::abs(row_distance) == 1));
 
 }
-
 
 path get_path(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
 
