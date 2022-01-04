@@ -505,9 +505,23 @@ void chessboard::print() const {
 
     for (int i = 7; i >= 0; i--) {
         std::cout << std::endl;
-        for (unsigned int j = 0; j < 8; j++) {
-            std::cout << piece_at_pos(std::make_pair(i, j))->get_alias() << " ";
+        std::cout << i + 1 << "   ";
+        for (unsigned int j = 0; j < 7; j++) {
+            std::cout << " " << piece_at_pos(i, j)->get_alias() << " |";
         }
+        std::cout << " " << piece_at_pos(i, 7)->get_alias();
+        std::cout << std::endl;
+        std::cout << "    ";
+        if (i!=0) {
+            for (unsigned int j = 0; j < 15; j++) {
+                std::cout << "--";
+            }
+            std::cout << "-";
+        }
+    }
+    std::cout << "\n    ";
+    for (unsigned int i = 0; i < 8; i++) {
+        std::cout << " " << (char) (i + 'A') << "  ";
     }
 
 }
