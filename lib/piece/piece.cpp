@@ -42,3 +42,4 @@ int piece::get_max_distance() const { return max_distance; }
 set piece::get_side() const { return side; }
 bool piece::is_first_move() const { return first_move; }
 void piece::moved() { first_move = false; }
+void piece::set_first_move() { first_move = true; }
