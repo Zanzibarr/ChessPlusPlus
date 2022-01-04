@@ -116,8 +116,9 @@ class chessboard {
 
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
-
-        bool is(const char _c, const piece &_p) const;
+        bool draw() const;
+        
+        void undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten, const bool _first_move);
 
     public:
         chessboard(void);
@@ -132,7 +133,20 @@ class chessboard {
         std::vector<coords> get_moves(const coords &_pos) const;
 
         coords find(const char _piece) const;
-        bool move(const coords &_start, const coords &_end);
+
+        /**
+         * @brief Method to move a peice from _start to _end
+         * 
+         * @param _start Initial position of the piece to move
+         * @param _end Final position of the piece to move
+         * @return std::pair<bool, bool> Pair of conditions: ([finished][made the move/won])
+         *                  (false, true) if the move was successfull,
+         *                  (false, false) if the move was unsuccessfull due to check,
+         *                  (true, false) if it's a draw
+         *                  (true, true) if it's a checkmate (current player winning)
+         *                  
+         */
+        std::pair<bool, bool> move(const coords &_start, const coords &_end);
         
         /**
          * @brief Method to print the chessboard

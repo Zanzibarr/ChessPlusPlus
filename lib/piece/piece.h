@@ -27,7 +27,7 @@ class piece {
 		int get_max_distance() const;
 		bool is_first_move() const;
 		void moved();
-		void set_first_move();
+		void set_first_move(const bool _first);
 
 };
 
