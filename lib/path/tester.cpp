@@ -1,7 +1,7 @@
 #include<iostream>
 #include "path.cpp"
 #include <utility>
-using namespace std;
+ ;
 /*
 int main (void) {
 

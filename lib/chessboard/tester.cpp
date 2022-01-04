@@ -5,7 +5,7 @@ int main(void) {
 
     chessboard scacchiera {};
     scacchiera.print();
-    vector<coords> mosse = scacchiera.get_moves(std::make_pair(0, 1));
+    std::vector<coords> mosse = scacchiera.get_moves(std::make_pair(0, 1));
     scacchiera.move(std::make_pair(0, 1), std::make_pair(2, 0));
     scacchiera.print();
     scacchiera.move(std::make_pair(1, 1), std::make_pair(2, 1));

@@ -9,7 +9,7 @@
  *  
  */
 
-bool is_Horizontal(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
+bool is_Horizontal(const coords &_current_position, const coords &_destination) {
 
 	int row_distance = _destination.first - _current_position.first;
 	int col_distance = _destination.second - _current_position.second;
@@ -18,7 +18,7 @@ bool is_Horizontal(const pair<int, int> &_current_position, const pair<int,int> 
 
 }
 
-bool is_Vertical(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
+bool is_Vertical(const coords &_current_position, const coords &_destination) {
 
 	int row_distance = _destination.first - _current_position.first;
 	int col_distance = _destination.second - _current_position.second;
@@ -27,7 +27,7 @@ bool is_Vertical(const pair<int, int> &_current_position, const pair<int,int> &_
 
 }
 
-bool is_Diagonal(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
+bool is_Diagonal(const coords &_current_position, const coords &_destination) {
 
 	int row_distance = _destination.first - _current_position.first;
 	int col_distance = _destination.second - _current_position.second;
@@ -35,7 +35,7 @@ bool is_Diagonal(const pair<int, int> &_current_position, const pair<int,int> &_
 	return ((row_distance != 0 && col_distance != 0 ) && std::abs(row_distance) == std::abs(col_distance));
 }
 
-bool is_L(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
+bool is_L(const coords &_current_position, const coords &_destination) {
 
 	int row_distance = _destination.first - _current_position.first;
 	int col_distance = _destination.second - _current_position.second;
@@ -44,7 +44,7 @@ bool is_L(const pair<int, int> &_current_position, const pair<int,int> &_destina
 
 }
 
-path get_path(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
+path get_path(const coords &_current_position, const coords &_destination) {
 
 	if(is_Horizontal(_current_position, _destination)) return path::Horizontal;
 	if(is_Vertical(_current_position, _destination)) return path::Vertical;
@@ -54,7 +54,7 @@ path get_path(const pair<int, int> &_current_position, const pair<int,int> &_des
 	throw illegal_path_exception();
 }
 
-int get_distance(const pair<int, int> &_current_position, const pair<int,int> &_destination) {
+int get_distance(const coords &_current_position, const coords &_destination) {
 
 	if(is_Horizontal(_current_position, _destination)) return _destination.second - _current_position.second;
 	if(is_Vertical(_current_position, _destination)) return _destination.first - _current_position.first;

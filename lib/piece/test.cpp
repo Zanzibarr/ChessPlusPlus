@@ -6,7 +6,7 @@
 #include "pieces/pawn.cpp"
 #include "pieces/bishop.cpp"
 #include "pieces/horse.cpp"
-using namespace std;
+ ;
 
 void printPiece(piece *p, path _path, int l) {
 
