@@ -10,19 +10,26 @@ int main(void) {
     //std::cout<<"Welcome to Chess++, chose a mode:\n\t1) Bot VS Bot\n\t2) Human VS Bot";
 
     chessboard scacchiera {};
+    std::string name;
     scacchiera.print();
-    std::cout<<"\n";
-    player *giocatore = new human(scacchiera, set::White);
+    std::cout<<"\n INSERISCI IL TUO NOME: ";
+    std::getline(std::cin, name);
+
+    player *giocatore = new human(scacchiera, set::White, name);
 
     char in;
     do {
 
-        giocatore->move();
+        try {
+            giocatore->move();
+        }
+        catch (illegal_path_exception e) {
+            std::cout<<"mossa non valida, riprovare";
+        }
         std::cout << "\n'q' to quit (other key to keep playing): ";
         std::cin >> in;
         std::cout << "\n";
         std::cin.ignore();
     } while (in != 'q');
-
-    scacchiera.print();
+    
 }
