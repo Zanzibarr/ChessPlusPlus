@@ -23,7 +23,7 @@ class human : public player {
 			std::cout<<player_name<<" insert your move: ";
 			std::getline(std::cin, input);
 
-			for(int i = 0; i < input.size(); i++) { input[i] = std::toupper(input[i]); } //to Uppercase entire string
+			for(int i = 0; i < input.size(); i++) { input[i] = std::toupper(input[i]); } //Uppercase entire string
 			
 			if(input == "XX XX") game_board.print();
 			else {

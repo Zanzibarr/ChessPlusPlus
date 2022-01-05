@@ -12,8 +12,6 @@ class player {
 		set side;
 
 	public:
-		//player(chessboard _board, set _side = set::Black, std::string _name = " ");
-
 		virtual void move() = 0;
 
 };
