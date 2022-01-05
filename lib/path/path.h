@@ -16,7 +16,7 @@
 typedef std::pair<int, int> coords;
 
 enum class path {Horizontal, Vertical, Diagonal, L};
-class illegal_path_exception {};
+class illegal_move_exception {};
 
 path get_path(const coords &_current_position, const coords &_destination);
 int get_distance(const coords &_current_position, const coords &_destination);

@@ -37,8 +37,8 @@ class human : public player {
 					target.first = std::stoi(match.str(4)) -1;
 					target.second =  match.str(3)[0] - LETTERA;
 				}
-				else throw illegal_path_exception();
-				game_board.move(side, start, target);
+				else throw illegal_move_exception();
+				game_board.move(start, target);
 			}
 		}
 
