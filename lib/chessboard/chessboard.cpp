@@ -288,14 +288,9 @@ std::pair<bool, coords> chessboard::is_castling(const path &_path, const coords 
 
         piece* oth_piece = piece_at_pos(_start.first, col);
         
-        //if the oth_piece is a tower
-        if (is<tower>(*oth_piece)) {
-
-            //if it's the first move for both
-            if (king->is_first_move() && oth_piece->is_first_move())
-                return std::make_pair(true, std::make_pair(_start.first, col));
-
-        } 
+        //if the oth_piece is a tower and it's both's first move
+        if (is<tower>(*oth_piece) && king->is_first_move() && oth_piece->is_first_move())
+            return std::make_pair(true, std::make_pair(_start.first, col));
 
     }
 
