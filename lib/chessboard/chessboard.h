@@ -30,7 +30,6 @@ class chessboard {
         std::vector<std::pair<coords, coords>> moves;
         std::vector<coords> white;
         std::vector<coords> black;
-        set turn;
 
         void edit_white_pos(const coords &_start, const coords &_end);
         void edit_black_pos(const coords &_start, const coords &_end);
@@ -83,7 +82,7 @@ class chessboard {
          *                  (true, true) if it's a checkmate (current player winning)
          *                  
          */
-        /**/std::pair<bool, bool> move(const coords &_start, const coords &_end);
+        /**/std::pair<bool, bool> move(const set &_turn, const coords &_start, const coords &_end);
         
         /**/void print() const;
 };

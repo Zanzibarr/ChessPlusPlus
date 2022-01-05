@@ -34,9 +34,8 @@ chessboard::chessboard(void) {
     board[0][6] = new horse(set::White);
     board[0][7] = new tower(set::White);
 
-    for (unsigned int i = 2; i < 6; i++) for (unsigned int j = 0; j < 8; j++) {
+    for (unsigned int i = 2; i < 6; i++) for (unsigned int j = 0; j < 8; j++)
         board[i][j] = new empty_tile();
-    }
 
     for (unsigned int i = 0; i < 2; i++) {
         for (unsigned int j = 0; j < 8; j++) {
@@ -51,7 +50,6 @@ chessboard::chessboard(void) {
     }
 
     moves.clear();
-    turn = set::White;
 
 }
 
@@ -433,20 +431,30 @@ void chessboard::undo(const int _special, const coords &_oth_piece, const coords
 }
 
 bool chessboard::check(const set &_side) const {
-    return false;
+
+    vector<coords> danger;
+    
+    switch(_side) {
+        case set::White:
+            
+
+        case set::Black:
+
+    }
+
 }
 
 bool chessboard::checkmate(const set &_side) const { return false; }
 
 bool chessboard::draw() const { return false; }
 
-std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end) {
+std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, const coords &_end) {
 
     piece* piece1 = piece_at_pos(_start);
     set side = piece1->get_side();
     path path1 = get_path(_start, _end);
 
-    if (turn != side) return std::make_pair(false, false);
+    if (_turn != side) return std::make_pair(false, false);
 
     piece* eaten = nullptr;
 
@@ -541,7 +549,7 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
 
     moves.push_back(std::make_pair(_start, _end));
 
-    switch(turn) {
+    switch(_turn) {
         case set::White: edit_white_pos(_start, _end);
         case set::Black: edit_black_pos(_start, _end);
     }
@@ -562,8 +570,6 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
     if (draw()) return std::make_pair(true, false);
 
     /* FINE CONTROLLO SCACCO/PATTA/SCACCO MATTO --*/
-
-    turn = opposite_of(turn);
 
     return std::make_pair(false, true);
 
