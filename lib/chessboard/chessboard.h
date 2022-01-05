@@ -27,7 +27,7 @@ class chessboard {
     private:
         piece *empty;
         piece *board[8][8];
-        std::vector<std::pair<coords, coords>> moves;
+        std::pair<coords, coords> last_move;
 
         bool is_out(const coords &_pos) const;
         bool opposites(const coords &_c1, const coords &_c2) const;
