@@ -38,9 +38,12 @@ class human : public player {
 					target.second =  match.str(3)[0] - LETTERA;
 				}
 				else throw illegal_move_exception();
-				game_board.move(start, target);
+
+				if (game_board.move(side, start, target).second) change();
 			}
 		}
+
+		void change() { side = opposite_of(side); }
 
 
 };

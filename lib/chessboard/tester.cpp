@@ -15,13 +15,13 @@ int main(void) {
     std::cout<<"\n INSERISCI IL TUO NOME: ";
     std::getline(std::cin, name);
 
-    player *giocatore = new human(scacchiera, set::White, name);
+    human giocatore(scacchiera, set::White, name);
 
     char in;
     do {
 
         try {
-            giocatore->move();
+            giocatore.move();
         }
         catch (illegal_move_exception e) {
             std::cout<<"mossa non valida, riprovare";

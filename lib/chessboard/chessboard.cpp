@@ -447,7 +447,7 @@ bool chessboard::check(const set &_side) const {
             for (unsigned int i = 0; i < black.size(); i++) {
                 std::vector<coords> temp = get_moves(black.at(i));
                 for (unsigned int j = 0; j < temp.size(); j++) {
-                    if (king_coords == temp.at(i)) return true;
+                    if (king_coords == temp.at(j)) return true;
                 }
             }
 
@@ -463,11 +463,13 @@ bool chessboard::check(const set &_side) const {
             for (unsigned int i = 0; i < white.size(); i++) {
                 std::vector<coords> temp = get_moves(white.at(i));
                 for (unsigned int j = 0; j < temp.size(); j++) {
-                    if (king_coords == temp.at(i)) return true;
+                    if (king_coords == temp.at(j)) return true;
                 }
             }
 
     }
+
+    return false;
 
 }
 
@@ -560,6 +562,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     /* INIZIO CONTROLLO SCACCO/PATTA/SCACCO MATTO --*/
 
     if (check(side)) {
+
         int special = 0;
         coords place = _end;
         if (enpassant.first) {
@@ -607,10 +610,8 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
 
 std::vector<coords> chessboard::get_pieces(const set &_set) const {
 
-    switch(_set) {
-        case set::White: return white;
-        case set::Black: return black;
-    }
+    if (_set == set::White) return white;
+    else return black;
 
 }
 
@@ -626,12 +627,9 @@ void chessboard::print() const {
         }
         std::cout << std::endl << "    ";
         
-        if (i!=0) {
-            for (unsigned int j = 0; j < 15; j++)
-                std::cout << "--";
+        if (i!=0)
+            std::cout << "-------------------------------";
 
-            std::cout << "-";
-        }
     }
     
     std::cout << "\n    ";
