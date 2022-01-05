@@ -57,7 +57,7 @@ class chessboard {
         /**/void do_legit(const coords &_start, const coords &_end);
 
         bool check(const set &_side) const;
-        bool checkmate(const set &_side) const;
+        bool checkmate(const set &_side);
         bool draw() const;
         
         /**/void undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten);
@@ -84,6 +84,8 @@ class chessboard {
          *                  
          */
         /**/std::pair<bool, bool> move(const set &_turn, const coords &_start, const coords &_end);
+
+        bool checkmate_control(const coords &_start, const coords &_end);
         
         /**/void print() const;
 };
