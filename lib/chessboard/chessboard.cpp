@@ -413,8 +413,6 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
 
     if (legit || pawn_eat) {
 
-        std::cout << "--" << piece1->is_first_move();
-
         eaten = piece_at_pos(_end);
         do_legit(_start, _end);
 
