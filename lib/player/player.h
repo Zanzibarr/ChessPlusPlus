@@ -12,7 +12,7 @@ class player {
 		set side;
 
 	public:
-		virtual void move() = 0;
+		virtual bool move() = 0;
 
 };
 

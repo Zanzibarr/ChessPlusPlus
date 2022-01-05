@@ -11,7 +11,7 @@ class human : public player {
 			game_board = _board;
 			player_name = _name;
 		}
-		void move() {
+		bool move() {
 			
     		std::regex reg1("([A-H])([1-8]) ([A-H])([1-8])");
         	std::smatch match;
@@ -25,7 +25,10 @@ class human : public player {
 
 			for(int i = 0; i < input.size(); i++) { input[i] = std::toupper(input[i]); } //Uppercase entire string
 			
-			if(input == "XX XX") game_board->print();
+			if(input == "XX XX") {
+				game_board->print();
+				return false;
+			}
 			else {
 				if (std::regex_search(input, match, reg1) && match.size() >=5) {
 					
@@ -40,6 +43,7 @@ class human : public player {
 				else throw illegal_move_exception();
 
 				game_board->move(side, start, target);
+				return true;
 			}
 		}
 
