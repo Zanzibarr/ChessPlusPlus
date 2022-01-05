@@ -57,6 +57,7 @@ class chessboard {
         /**/void do_legit(const coords &_start, const coords &_end);
 
         bool check(const set &_side) const;
+        bool is_in_danger(const set &_side, const coords &_to_check) const;
         bool checkmate(const set &_side);
         bool draw() const;
         
