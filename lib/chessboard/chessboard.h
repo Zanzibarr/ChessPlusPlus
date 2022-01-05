@@ -19,6 +19,7 @@
 #include "../piece/pieces/empty_tile.cpp"
 #include <iostream>
 #include <vector>
+#include <iterator>
 
 typedef std::pair<int, int> coords;
 
@@ -27,39 +28,46 @@ class chessboard {
     private:
         piece *board[8][8];
         std::vector<std::pair<coords, coords>> moves;
+        std::vector<coords> white;
+        std::vector<coords> black;
+        set turn;
 
-        bool is_out(const coords &_pos) const;
-        bool opposites(const coords &_c1, const coords &_c2) const;
+        void edit_white_pos(const coords &_start, const coords &_end);
+        void edit_black_pos(const coords &_start, const coords &_end);
+        void eat_piece(const set &_side, const coords &_eaten);
+
+        /**/bool is_out(const coords &_pos) const;
+        /**/bool opposites(const coords &_c1, const coords &_c2) const;
         
-        bool try_add_move(std::vector<coords> &_moves, const coords _pos, const std::pair<int, int> _offset) const;
+        /**/bool try_add_move(std::vector<coords> &_moves, const coords _pos, const std::pair<int, int> _offset) const;
 
-        piece* piece_at_pos(const coords &_pos) const;
-        piece* piece_at_pos(const int i, const int j) const;
+        /**/piece* piece_at_pos(const coords &_pos) const;
+        /**/piece* piece_at_pos(const int i, const int j) const;
 
-        bool is_promotion(const coords &_pos) const;
-        void promote(const coords &_pos, const char piece);
+        /**/bool is_promotion(const coords &_pos) const;
+        /**/void promote(const coords &_pos, const char piece);
 
-        bool is_pawn_eat(const path &_p, const coords &_start, const coords &_end) const;
+        /**/bool is_pawn_eat(const path &_p, const coords &_start, const coords &_end) const;
         
-        std::pair<bool, coords> is_enpassant(const path &_p, const coords &_start, const coords &_end) const;
-        void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
+        /**/std::pair<bool, coords> is_enpassant(const path &_p, const coords &_start, const coords &_end) const;
+        /**/void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
         
-        std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
-        void do_castling(const coords &_tower, const coords &_start, const coords &_end);
+        /**/std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
+        /**/void do_castling(const coords &_tower, const coords &_start, const coords &_end);
 
-        void do_legit(const coords &_start, const coords &_end);
+        /**/void do_legit(const coords &_start, const coords &_end);
 
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
         bool draw() const;
         
-        void undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten);
+        /**/void undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten);
 
     public:
-        chessboard(void);
-        ~chessboard();
+        /**/chessboard(void);
+        /**/~chessboard();
         
-        std::vector<coords> get_moves(const coords &_pos) const;
+        /**/std::vector<coords> get_moves(const coords &_pos) const;
 
         coords find(const char _piece) const;
 
@@ -75,9 +83,9 @@ class chessboard {
          *                  (true, true) if it's a checkmate (current player winning)
          *                  
          */
-        std::pair<bool, bool> move(const coords &_start, const coords &_end);
+        /**/std::pair<bool, bool> move(const coords &_start, const coords &_end);
         
-        void print() const;
+        /**/void print() const;
 };
 
 template<typename Type>
