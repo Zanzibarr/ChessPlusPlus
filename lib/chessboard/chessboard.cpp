@@ -284,11 +284,11 @@ bool chessboard::is_pawn_eat(const path &_path, const coords &_start, const coor
 }
 
 std::pair<bool, coords> chessboard::is_enpassant(const path &_path, const coords &_start, const coords &_end) const {
-    
-    if (moves.size()==0) return std::make_pair(false, std::make_pair(0, 0));
+
+    if (moves.size() == 0) return std::make_pair(false, std::make_pair(0, 0));
+    std::pair<coords, coords> last_move = moves.at(moves.size() - 1);
 
     piece* pawn1 = piece_at_pos(_start);
-    std::pair<coords, coords> last_move = moves.at(moves.size() - 1);
     piece* oth_piece = piece_at_pos(last_move.second);
     
     //get the direction of the pawn based on his side
@@ -300,8 +300,11 @@ std::pair<bool, coords> chessboard::is_enpassant(const path &_path, const coords
         int mid = (last_move.first.first + last_move.second.first)/2;
 
         //if it's a legal move
-        if (_path==path::Diagonal && get_distance(_start, _end) == distance && last_move.first.second == _end.second && mid == _end.first)
+        if (_path==path::Diagonal && get_distance(_start, _end) == distance && is_Vertical(last_move.first, _end) && mid == _end.first) {
+        
             return std::make_pair(true, last_move.second);
+        
+        }
 
     }
 
@@ -346,9 +349,14 @@ std::pair<bool, coords> chessboard::is_castling(const path &_path, const coords 
 
         piece* oth_piece = piece_at_pos(_start.first, col);
         
-        //if the oth_piece is a tower and it's both's first move
-        if (is<tower>(*oth_piece) && king->is_first_move() && oth_piece->is_first_move())
-            return std::make_pair(true, std::make_pair(_start.first, col));
+        //if the oth_piece is a tower
+        if (is<tower>(*oth_piece)) {
+
+            //if it's the first move for both
+            if (king->is_first_move() && oth_piece->is_first_move())
+                return std::make_pair(true, std::make_pair(_start.first, col));
+
+        } 
 
     }
 
@@ -465,9 +473,9 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
 
     } else {
 
-        std::vector<coords> piece_moves = get_moves(_start);
-        for (unsigned int i = 0; i < piece_moves.size(); i++) {
-            if (_end == piece_moves.at(i)) {
+        std::vector<coords> moves = get_moves(_start);
+        for (unsigned int i = 0; i < moves.size(); i++) {
+            if (_end == moves.at(i)) {
                 legit = true;
                 break;
             }
@@ -475,8 +483,9 @@ std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end)
         
     }
     
-    if (is<king>(*piece1))
+    if (is<king>(*piece1)) {
         castling = is_castling(path1, _start, _end);
+    }
 
     /*-- FINE CONTROLLI MOSSE SPECIALI O LEGALI --*/
 
