@@ -369,11 +369,13 @@ bool chessboard::checkmate(const set &_side) const { return false; }
 
 bool chessboard::draw() const { return false; }
 
-std::pair<bool, bool> chessboard::move(const coords &_start, const coords &_end) {
+std::pair<bool, bool> chessboard::move(const set _side, const coords &_start, const coords &_end) {
 
     piece* piece1 = piece_at_pos(_start);
     set side = piece1->get_side();
     path path1 = get_path(_start, _end);
+
+    if(side != _side) throw illegal_path_exception();
 
     piece* eaten = nullptr;
 

@@ -76,7 +76,7 @@ class chessboard {
          *                  (true, true) if it's a checkmate (current player winning)
          *                  
          */
-        std::pair<bool, bool> move(const coords &_start, const coords &_end);
+        std::pair<bool, bool> move(const set _side, const coords &_start, const coords &_end);
         
         void print() const;
 };
