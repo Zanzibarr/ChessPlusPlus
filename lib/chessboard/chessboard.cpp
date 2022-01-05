@@ -34,8 +34,10 @@ chessboard::chessboard(void) {
     board[0][6] = new horse(set::White);
     board[0][7] = new tower(set::White);
 
+    empty = new empty_tile();
+
     for (unsigned int i = 2; i < 6; i++) for (unsigned int j = 0; j < 8; j++) {
-        board[i][j] = new empty_tile();
+        board[i][j] = empty;
     }
 
 }
@@ -320,7 +322,7 @@ void chessboard::do_legit(const coords &_start, const coords &_end) {
 
     piece* p = board[_end.first][_end.second];
     board[_end.first][_end.second] = board[_start.first][_start.second];
-    board[_start.first][_start.second] = p;
+    board[_start.first][_start.second] = empty;
 
 }
 
@@ -337,7 +339,7 @@ void chessboard::undo(const int _special, const coords &_oth_piece, const coords
             else if (is<horse>(*_eaten)) board[_end.first][_end.second] = new horse(_eaten->get_side());
             else if (is<bishop>(*_eaten)) board[_end.first][_end.second] = new bishop(_eaten->get_side());
             else if (is<queen>(*_eaten)) board[_end.first][_end.second] = new queen(_eaten->get_side());
-            else if (is<empty_tile>(*_eaten)) board[_end.first][_end.second] = new empty_tile();
+            else if (is<empty_tile>(*_eaten)) board[_end.first][_end.second] = empty;
             break;
 
         case 1:

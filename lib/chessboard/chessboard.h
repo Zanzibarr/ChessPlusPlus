@@ -25,6 +25,7 @@ typedef std::pair<int, int> coords;
 class chessboard {
 
     private:
+        piece *empty;
         piece *board[8][8];
         std::pair<coords, coords> last_move;
 
