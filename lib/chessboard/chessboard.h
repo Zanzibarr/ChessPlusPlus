@@ -67,6 +67,7 @@ class chessboard {
         /**/~chessboard();
         
         /**/std::vector<coords> get_moves(const coords &_pos) const;
+        std::vector<coords> get_pieces(const set &_set) const;
 
         coords find(const char _piece) const;
 
@@ -77,7 +78,7 @@ class chessboard {
          * @param _end Final position of the piece to move
          * @return std::pair<bool, bool> Pair of conditions: ([finished][made the move/won])
          *                  (false, true) if the move was successfull,
-         *                  (false, false) if the move was unsuccessfull due to check or illegal,
+         *                  (false, false) if the move was unsuccessfull due to check,
          *                  (true, false) if it's a draw
          *                  (true, true) if it's a checkmate (current player winning)
          *                  

@@ -432,13 +432,40 @@ void chessboard::undo(const int _special, const coords &_oth_piece, const coords
 
 bool chessboard::check(const set &_side) const {
 
-    vector<coords> danger;
+    coords king_coords;
     
     switch(_side) {
         case set::White:
-            
+
+            for (unsigned int i = 0; i < white.size(); i++) {
+                if (is<king>(*piece_at_pos(white.at(i)))) {
+                    king_coords = white.at(i);
+                    break;
+                }
+            }
+
+            for (unsigned int i = 0; i < black.size(); i++) {
+                std::vector<coords> temp = get_moves(black.at(i));
+                for (unsigned int j = 0; j < temp.size(); j++) {
+                    if (king_coords == temp.at(i)) return true;
+                }
+            }
 
         case set::Black:
+
+            for (unsigned int i = 0; i < black.size(); i++) {
+                if (is<king>(*piece_at_pos(black.at(i)))) {
+                    king_coords = black.at(i);
+                    break;
+                }
+            }
+
+            for (unsigned int i = 0; i < white.size(); i++) {
+                std::vector<coords> temp = get_moves(white.at(i));
+                for (unsigned int j = 0; j < temp.size(); j++) {
+                    if (king_coords == temp.at(i)) return true;
+                }
+            }
 
     }
 
@@ -454,7 +481,10 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     set side = piece1->get_side();
     path path1 = get_path(_start, _end);
 
-    if (_turn != side) return std::make_pair(false, false);
+    if (_turn != side) {
+        std::cout << "<<mossa illegale>>";
+        throw illegal_move_exception();
+    }
 
     piece* eaten = nullptr;
 
@@ -521,7 +551,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     } else {
 
         std::cout << "<<mossa illegale>>";
-        return std::make_pair(false, false);
+        throw illegal_move_exception();
 
     }
 
@@ -572,6 +602,15 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     /* FINE CONTROLLO SCACCO/PATTA/SCACCO MATTO --*/
 
     return std::make_pair(false, true);
+
+}
+
+std::vector<coords> chessboard::get_pieces(const set &_set) const {
+
+    switch(_set) {
+        case set::White: return white;
+        case set::Black: return black;
+    }
 
 }
 
