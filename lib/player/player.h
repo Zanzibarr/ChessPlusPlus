@@ -7,7 +7,7 @@
 class player {
 
 	protected:
-		chessboard game_board;
+		chessboard *game_board;
 		std::string player_name;
 		set side;
 

@@ -1,9 +1,9 @@
 #include "chessboard.cpp"
 #include "../player/human.cpp"
 #include <iostream>
-#include <regex>
 
 #define LETTERA 'A'
+
 
 int main(void) {
 
@@ -15,13 +15,16 @@ int main(void) {
     std::cout<<"\n INSERISCI IL TUO NOME: ";
     std::getline(std::cin, name);
 
-    human giocatore(scacchiera, set::White, name);
+    player *giocatore= new human(&scacchiera, set::White, name);
+    player *giocatore2 = new human(&scacchiera, set::Black, "GIUDA");
 
     char in;
     do {
 
         try {
-            giocatore.move();
+            giocatore->move();
+            giocatore2->move();
+            std::cout<<"prova";
         }
         catch (illegal_move_exception e) {
             std::cout<<"mossa non valida, riprovare";
