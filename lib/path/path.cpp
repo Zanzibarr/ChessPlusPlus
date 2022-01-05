@@ -51,7 +51,7 @@ path get_path(const coords &_current_position, const coords &_destination) {
 	if(is_Diagonal(_current_position, _destination)) return path::Diagonal;
 	if(is_L(_current_position, _destination)) return path::L;
 
-	throw illegal_path_exception();
+	throw illegal_move_exception();
 }
 
 int get_distance(const coords &_current_position, const coords &_destination) {
@@ -61,5 +61,5 @@ int get_distance(const coords &_current_position, const coords &_destination) {
 	if(is_Diagonal(_current_position, _destination)) return _destination.first - _current_position.first; //for diagonal movement one of coordinate is acceptable
 	if(is_L(_current_position, _destination)) return 3;
 
-	throw illegal_path_exception();
+	throw illegal_move_exception();
 }

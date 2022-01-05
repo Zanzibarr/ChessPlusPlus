@@ -1,4 +1,5 @@
 #include "chessboard.cpp"
+#include "../player/human.cpp"
 #include <iostream>
 #include <regex>
 
@@ -9,48 +10,26 @@ int main(void) {
     //std::cout<<"Welcome to Chess++, chose a mode:\n\t1) Bot VS Bot\n\t2) Human VS Bot";
 
     chessboard scacchiera {};
+    std::string name;
     scacchiera.print();
-    std::regex reg1("([A-H])([1-8])");
+    std::cout<<"\n INSERISCI IL TUO NOME: ";
+    std::getline(std::cin, name);
+
+    player *giocatore = new human(scacchiera, set::White, name);
 
     char in;
-    char input;
     do {
-        coords start;
-        coords end;
-        std::string start_reaching;
-        std::string end_reaching;
-        std::smatch match;
 
-        std::cout << "\nstart: ";
-        std::cin >> start_reaching;
-        if (std::regex_search(start_reaching, match, reg1) && match.size() > 1) {
-            std::string s = match.str(1);
-            start.second =  s[0] - LETTERA;
-            s = match.str(2);
-            start.first = std::stoi(s) -1;
-        } else {
-            break;
+        try {
+            giocatore->move();
         }
-        std::cout << "\nend: ";
-        std::cin >> end_reaching;
-        if (std::regex_search(end_reaching, match, reg1) && match.size() > 1) {
-            std::string s = match.str(1);
-            end.second =  s[0] - LETTERA;
-            s = match.str(2);
-            end.first = std::stoi(s) -1;
-        } else {
-            break;
+        catch (illegal_move_exception e) {
+            std::cout<<"mossa non valida, riprovare";
         }
-
-
-        scacchiera.move(start, end);
-        scacchiera.print();
-
         std::cout << "\n'q' to quit (other key to keep playing): ";
         std::cin >> in;
         std::cout << "\n";
-
+        std::cin.ignore();
     } while (in != 'q');
-
-    scacchiera.print();
+    
 }
