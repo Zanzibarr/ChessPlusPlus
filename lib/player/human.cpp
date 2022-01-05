@@ -6,11 +6,11 @@
 class human : public player {
 
 	public:
-		human(chessboard _board, set _side, std::string _name = "Miss Era Scacchi") /*: player(_board, _side, _name)*/ { 
+		human(chessboard *_board, set _side, std::string _name = "Miss Era Scacchi") { 
 			side = _side;
+			game_board = _board;
 			player_name = _name;
 		}
-
 		void move() {
 			
     		std::regex reg1("([A-H])([1-8]) ([A-H])([1-8])");
@@ -25,7 +25,7 @@ class human : public player {
 
 			for(int i = 0; i < input.size(); i++) { input[i] = std::toupper(input[i]); } //Uppercase entire string
 			
-			if(input == "XX XX") game_board.print();
+			if(input == "XX XX") game_board->print();
 			else {
 				if (std::regex_search(input, match, reg1) && match.size() >=5) {
 					
@@ -39,11 +39,8 @@ class human : public player {
 				}
 				else throw illegal_move_exception();
 
-				if (game_board.move(side, start, target).second) change();
+				game_board->move(side, start, target);
 			}
 		}
-
-		void change() { side = opposite_of(side); }
-
 
 };
