@@ -1,5 +1,6 @@
 #include "chessboard.cpp"
 #include "../player/human.cpp"
+#include "../player/bot.cpp"
 #include <iostream>
 
 #define LETTERA 'A'
@@ -12,27 +13,32 @@ int main(void) {
     chessboard scacchiera {};
     std::string name;
     scacchiera.print();
-    std::cout<<"\n INSERISCI IL TUO NOME: ";
-    std::getline(std::cin, name);
+    std::cout<<"\n\n";
+    /*std::cout<<"\n INSERISCI IL TUO NOME: ";
+    std::getline(std::cin, name);*/
 
-    player *giocatore= new human(&scacchiera, set::White, name);
-    player *giocatore2 = new human(&scacchiera, set::Black, "GIUDA");
+    player *giocatore = new bot(&scacchiera, set::White);
+    player *giocatore2 = new bot(&scacchiera, set::Black);
+
+    bool cond;
+    bool cond2;
 
     char in;
-    do {
 
-        try {
-            giocatore->move();
-            giocatore2->move();
-            std::cout<<"prova";
+    for(int i = 0; i < 500; i++) {
+        try{
+        do {
+            cond = giocatore->move();
         }
-        catch (illegal_move_exception e) {
-            std::cout<<"mossa non valida, riprovare";
+        while(cond != true);
+        do {
+            cond2 = giocatore2->move();
         }
-        std::cout << "\n'q' to quit (other key to keep playing): ";
-        std::cin >> in;
-        std::cout << "\n";
+        while(cond2 != true);
+        scacchiera.print();
         std::cin.ignore();
-    } while (in != 'q');
+        } 
+        catch (illegal_move_exception) {i--;};
+    }
     
 }
