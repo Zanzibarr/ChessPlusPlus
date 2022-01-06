@@ -25,20 +25,21 @@ int main(void) {
 
     char in;
 
-    for(int i = 0; i < 500; i++) {
+    do {
         try{
-        do {
-            cond = giocatore->move();
-        }
-        while(cond != true);
-        do {
-            cond2 = giocatore2->move();
-        }
-        while(cond2 != true);
-        scacchiera.print();
-        std::cin.ignore();
+            do{
+                cond = giocatore->move();
+            }while(cond == false);
+            do{
+                cond2 = giocatore2->move();
+            }while(cond2 == false);
+            scacchiera.print();
         } 
-        catch (illegal_move_exception) {i--;};
-    }
+        catch (illegal_move_exception) {};
+        std::cout<<"\nq to quit: ";
+        std::cin>>in;
+        std::cin.ignore();
+    }while(in != 'q');
+    
     
 }
