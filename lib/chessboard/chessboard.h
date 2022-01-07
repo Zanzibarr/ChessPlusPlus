@@ -25,8 +25,9 @@ typedef std::pair<int, int> coords;
 
 class chessboard {
     public:
-        chessboard(void);
-        ~chessboard();
+        /**/chessboard(void);
+        /**/chessboard(std::vector<piece*> &_copy);
+        /**/~chessboard();
         
         std::vector<coords> get_pieces(const set &_set) const;
         std::vector<coords> get_moves(const coords &_pos) const;
@@ -49,10 +50,11 @@ class chessboard {
 
     private:
         piece *board[8][8];
-        piece* eaten;
         std::vector<std::pair<coords, coords>> moves;
         std::vector<coords> white;
         std::vector<coords> black;
+
+        std::vector<piece*> to_vector() const;
 
         bool is_out(const coords &_pos) const;
         bool opposites(const coords &_c1, const coords &_c2) const;
@@ -63,8 +65,7 @@ class chessboard {
         /**/coords find(const set &_side, const piece* _piece) const;
         /**/coords find(const set &_side, const char _piece) const;
 
-        void edit_white_pos(const coords &_start, const coords &_end);
-        void edit_black_pos(const coords &_start, const coords &_end);
+        void edit_pos(const set _side, const coords &_start, const coords &_end);
         void eat_piece(const set &_side, const coords &_piece);
         /**/void add_piece(const set &_side, const coords &_piece);
 
@@ -76,18 +77,15 @@ class chessboard {
         std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
         
         void do_legit(const coords &_start, const coords &_end);
-        void promote(const coords &_pos, const char piece);
+        void promote(const coords &_pos);
         void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
         void do_castling(const coords &_tower, const coords &_start, const coords &_end);
 
         bool is_in_danger(const set &_side, const coords &_to_check) const;
         bool check(const set &_side) const;
-        bool checkmate(const set &_side);
-        bool checkmate_control(const coords &_start, const coords &_end);
-        bool draw() const;
+        bool checkmate(const set &_side) const;
+        bool draw(const set &_side) const;
         
-        void undo(const int _special, const coords &_oth_piece, const coords &_start, const coords &_end, const piece* _eaten);
-
 };
 
 template<typename Type>

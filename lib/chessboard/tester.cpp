@@ -17,8 +17,8 @@ int main(void) {
     /*std::cout<<"\n INSERISCI IL TUO NOME: ";
     std::getline(std::cin, name);*/
 
-    player *giocatore = new bot(&scacchiera, set::White);
-    player *giocatore2 = new bot(&scacchiera, set::Black);
+    player *giocatore = new human(&scacchiera, set::White, "Matteo");
+    player *giocatore2 = new human(&scacchiera, set::Black);
 
     bool cond;
     bool cond2;
