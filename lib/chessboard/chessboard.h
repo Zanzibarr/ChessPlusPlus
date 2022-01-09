@@ -19,18 +19,49 @@
 #include "../piece/pieces/empty_tile.cpp"
 #include <iostream>
 #include <vector>
-#include <iterator>
 
 typedef std::pair<int, int> coords;
 
 class chessboard {
     public:
-        /**/chessboard(void);
-        /**/chessboard(std::vector<piece*> &_copy);
-        /**/~chessboard();
+
+        /**
+         * @brief Construct a new chessboard object
+         * 
+         */
+        chessboard(void);
+
+        /**
+         * @brief Construct a new chessboard object from an existing position
+         * 
+         * @param _copy A vector containing every piece/empty tile of the chessboard to copy
+         * 
+         */
+        chessboard(const std::vector<piece*> &_copy);
+
+        /**
+         * @brief Destroy the chessboard object
+         * 
+         */
+        ~chessboard();
         
+        /**
+         * @brief Get the current location of every piece from _set side
+         * 
+         * @param _set The side of the pieces wanted
+         * @return std::vector<coords> The coords of the _set side pieces
+         * 
+         */
         std::vector<coords> get_pieces(const set &_set) const;
-        std::vector<coords> get_moves(const coords &_pos) const;
+
+        /**
+         * @brief Get all the possible moves that a piece in _pos position can make (special moves included)
+         * 
+         * @param _pos The position of the object
+         * @return std::vector<coords>& A vector containing all the coords the piece can reach from _pos
+         * 
+         */
+        std::vector<coords>& get_moves(const coords &_pos) const;
 
         /**
          * @brief Method to move a peice from _start to _end
@@ -46,33 +77,38 @@ class chessboard {
          */
         std::pair<bool, bool> move(const set &_turn, const coords &_start, const coords &_end);
         
+        /**
+         * @brief Method that prints the chessboard in it's current state
+         * 
+         */
         void print() const;
 
     private:
+    
         piece *board[8][8];
-        std::vector<std::pair<coords, coords>> moves;
-        std::vector<coords> white;
-        std::vector<coords> black;
+        std::vector<std::pair<coords, coords>> history;
+        std::vector<coords> white_pieces;
+        std::vector<coords> black_pieces;
 
         std::vector<piece*> to_vector() const;
 
         bool is_out(const coords &_pos) const;
-        bool opposites(const coords &_c1, const coords &_c2) const;
+        bool opposites(const coords &_pos_1, const coords &_pos_2) const;
 
         piece* piece_at_pos(const coords &_pos) const;
         piece* piece_at_pos(const int i, const int j) const;
 
-        /**/coords find(const set &_side, const piece* _piece) const;
-        /**/coords find(const set &_side, const char _piece) const;
+        coords find(const set &_side, const piece* _piece) const;
+        coords find(const set &_side, const char _piece_alias) const;
 
-        void edit_pos(const set _side, const coords &_start, const coords &_end);
+        void edit_pos(const set &_side, const coords &_start, const coords &_end);
         void eat_piece(const set &_side, const coords &_piece);
-        /**/void add_piece(const set &_side, const coords &_piece);
+        void add_piece(const set &_side, const coords &_piece);
 
-        bool try_add_move(std::vector<coords> &_moves, const coords _pos, const std::pair<int, int> _offset) const;
+        bool try_add_move(std::vector<coords> &_moves, const coords &_pos, const coords &_offset) const;
 
         bool is_promotion(const coords &_pos) const;
-        bool is_pawn_eat(const path &_p, const coords &_start, const coords &_end) const;
+        bool is_pawn_eat(const path &_path, const coords &_start, const coords &_end) const;
         std::pair<bool, coords> is_enpassant(const path &_p, const coords &_start, const coords &_end) const;
         std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
         
@@ -90,6 +126,7 @@ class chessboard {
 
 template<typename Type>
 bool is(const piece &data) {
+
 	if( &data == NULL ) return false;
     
     if (typeid(Type) == typeid(tower)) return tolower(data.get_alias()) == 't';
@@ -101,6 +138,7 @@ bool is(const piece &data) {
     if (typeid(Type) == typeid(empty_tile)) return data.get_alias() == ' ';
 
     return false;
+
 }
 
 coords operator+(const coords &_a, const coords &_b) {
