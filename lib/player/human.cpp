@@ -13,7 +13,7 @@ class human : public player {
 		}
 		bool move() {
 			
-    		std::regex reg1("([A-H])([1-8]) ([A-H])([1-8])");
+    		std::regex reg1("^([A-H]){1}([1-8]){1} ([A-H]){1}([1-8]){1}$");
         	std::smatch match;
 
 			std::string input;
