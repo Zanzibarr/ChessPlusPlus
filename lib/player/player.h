@@ -2,6 +2,10 @@
 #define PLAYER_H
 #include "..\chessboard\chessboard.h"
 #include <string>
+#include <cstdlib>
+#include <ctime>
+#include <regex>
+
 #define LETTERA 'A'
 
 class player {

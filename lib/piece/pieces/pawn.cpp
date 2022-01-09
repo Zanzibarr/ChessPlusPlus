@@ -1,5 +1,4 @@
 #include "../piece.h"
-#include <iostream>
 
 class pawn : public piece {
 

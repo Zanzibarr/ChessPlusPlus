@@ -1,7 +1,4 @@
 #include "player.h"
-#include <regex>
-#include <cctype>
-#include <iostream>
 
 class human : public player {
 

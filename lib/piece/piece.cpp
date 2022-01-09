@@ -1,5 +1,4 @@
 #include "piece.h"
-#include <iostream>
 
 set opposite_of(const set _set){
 	

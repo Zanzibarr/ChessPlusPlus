@@ -1,6 +1,4 @@
 #include "player.h"
-#include <cstdlib>
-#include <ctime>
 
 class bot : public player {
 
