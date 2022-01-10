@@ -1,9 +1,12 @@
+#ifndef ALGORITHMS_H
+#define ALGORITHMS_H
+
 /**
  * 
  * @file include.h
  * 
  * @authors Bertan Kabir     2008287     (kabir.bertan@studenti.unipd.it)
- *          Modolo Riccardo              ()
+ *          Modolo Riccardo              (riccardo.modolo1@studenti.unipd.it)
  *          Zanella Matteo   2000139     (matteo.zanella.3@studenti.unipd.it)
  * 
  * @brief Raccolta di metodi eccezioni e classi utili a tutti i file
@@ -11,9 +14,6 @@
  * @date 2021-12-26
  *  
  */
-
-#ifndef ALGORITHMS_H
-#define ALGORITHMS_H
 
 
 #include "piece/pieces/queen.cpp"
@@ -59,7 +59,7 @@ set opposite_of(const set _set){
 	}
 
 	throw invalid_set_exception();
-    
+
 }
 
 
