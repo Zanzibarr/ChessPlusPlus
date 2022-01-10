@@ -115,7 +115,7 @@ std::vector<coords> chessboard::get_pieces(const set &_set) const {
 }
 
 //[V]
-std::vector<coords>& chessboard::get_moves(const coords &_pos) const {
+std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
     piece* piece1 = piece_at_pos(_pos);
     

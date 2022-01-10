@@ -61,7 +61,7 @@ class chessboard {
          * @return std::vector<coords>& A vector containing all the coords the piece can reach from _pos
          * 
          */
-        std::vector<coords>& get_moves(const coords &_pos) const;
+        std::vector<coords> get_moves(const coords &_pos) const;
 
         /**
          * @brief Method to move a peice from _start to _end
@@ -109,7 +109,7 @@ class chessboard {
 
         bool try_add_move(std::vector<coords> &_moves, const coords &_pos, const coords &_offset) const;
 
-        bool chessboard::is_legit(const coords &_start, const coords &_end) const;
+        bool is_legit(const coords &_start, const coords &_end) const;
         bool is_pawn_eat(const coords &_start, const coords &_end) const;
         bool is_castling(const coords &_start, const coords &_end) const;
         std::pair<bool, coords> is_enpassant(const coords &_start, const coords &_end) const;
