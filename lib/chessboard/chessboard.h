@@ -90,6 +90,8 @@ class chessboard {
         std::vector<coords> white_pieces;
         std::vector<coords> black_pieces;
 
+        const coords ILLEGAL_COORDS {-1, -1};
+
         std::vector<piece*> to_vector() const;
 
         bool is_out(const coords &_pos) const;
@@ -107,20 +109,22 @@ class chessboard {
 
         bool try_add_move(std::vector<coords> &_moves, const coords &_pos, const coords &_offset) const;
 
+        bool chessboard::is_legit(const coords &_start, const coords &_end) const;
+        bool is_pawn_eat(const coords &_start, const coords &_end) const;
+        bool is_castling(const coords &_start, const coords &_end) const;
+        std::pair<bool, coords> is_enpassant(const coords &_start, const coords &_end) const;
         bool is_promotion(const coords &_pos) const;
-        bool is_pawn_eat(const path &_path, const coords &_start, const coords &_end) const;
-        std::pair<bool, coords> is_enpassant(const path &_p, const coords &_start, const coords &_end) const;
-        std::pair<bool, coords> is_castling(const path &_p, const coords &_start, const coords &_end) const;
         
         void do_legit(const coords &_start, const coords &_end);
-        void promote(const coords &_pos);
+        void do_castling(const coords &_start, const coords &_end);
         void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
-        void do_castling(const coords &_tower, const coords &_start, const coords &_end);
+        void do_promotion(const coords &_pos);
 
         bool is_in_danger(const set &_side, const coords &_to_check) const;
         bool check(const set &_side) const;
         bool checkmate(const set &_side) const;
         bool draw(const set &_side) const;
+        bool draw_for_pieces() const;
         
 };
 
