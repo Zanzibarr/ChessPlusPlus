@@ -1,12 +1,12 @@
-#ifndef ALGORITHMS_H
-#define ALGORITHMS_H
+#ifndef INCLUDE_CPP
+#define INCLUDE_CPP
 
 /**
  * 
  * @file include.h
  * 
  * @authors Bertan Kabir     2008287     (kabir.bertan@studenti.unipd.it)
- *          Modolo Riccardo              (riccardo.modolo1@studenti.unipd.it)
+ *          Modolo Riccardo  2009667     (riccardo.modolo1@studenti.unipd.it)
  *          Zanella Matteo   2000139     (matteo.zanella.3@studenti.unipd.it)
  * 
  * @brief Raccolta di metodi eccezioni e classi utili a tutti i file
@@ -34,7 +34,7 @@
 #include <regex>
 
 
-typedef std::pair<int, int> coords;   
+typedef std::pair<int, int> coords;
 
 const coords ILLEGAL_COORDS {-1, -1};
 const char LETTERA {'A'};
@@ -58,7 +58,7 @@ set opposite_of(const set _set){
 		case set::Empty: return set::Empty;
 	}
 
-	throw invalid_set_exception();
+	throw illegal_set_exception();
 
 }
 

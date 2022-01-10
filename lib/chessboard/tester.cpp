@@ -1,6 +1,5 @@
 #include "chessboard.cpp"
 #include "../player/human.cpp"
-#include "../player/bot.cpp"
 #include <iostream>
 
 #define LETTERA 'A'
