@@ -716,9 +716,8 @@ bool chessboard::checkmate(const set &_side) const {
 
             chessboard check_ctrl {board_vector};
 
-            if (check_ctrl.move(set::Empty, pieces.at(counter), moves.at(i)).second) {
+            if (check_ctrl.move(set::Empty, pieces.at(counter), moves.at(i)).second)
                 return false;
-            }
 
         }
 
