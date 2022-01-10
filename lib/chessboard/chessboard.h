@@ -13,8 +13,8 @@
 #include "../piece/pieces/queen.cpp"
 #include "../piece/pieces/king.cpp"
 #include "../piece/pieces/bishop.cpp"
-#include "../piece/pieces/horse.cpp"
-#include "../piece/pieces/tower.cpp"
+#include "../piece/pieces/knight.cpp"
+#include "../piece/pieces/rook.cpp"
 #include "../piece/pieces/pawn.cpp"
 #include "../piece/pieces/empty_tile.cpp"
 #include <iostream>
@@ -37,7 +37,7 @@ class chessboard {
          * @param _copy A vector containing every piece/empty tile of the chessboard to copy
          * 
          */
-        chessboard(const std::vector<piece*> &_copy);
+        chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> &_history);
 
         /**
          * @brief Destroy the chessboard object
@@ -133,8 +133,8 @@ bool is(const piece &data) {
 
 	if( &data == NULL ) return false;
     
-    if (typeid(Type) == typeid(tower)) return tolower(data.get_alias()) == 't';
-    if (typeid(Type) == typeid(horse)) return tolower(data.get_alias()) == 'c';
+    if (typeid(Type) == typeid(rook)) return tolower(data.get_alias()) == 't';
+    if (typeid(Type) == typeid(knight)) return tolower(data.get_alias()) == 'c';
     if (typeid(Type) == typeid(bishop)) return tolower(data.get_alias()) == 'a';
     if (typeid(Type) == typeid(king)) return tolower(data.get_alias()) == 'r';
     if (typeid(Type) == typeid(queen)) return tolower(data.get_alias()) == 'd';

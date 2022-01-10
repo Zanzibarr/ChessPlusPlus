@@ -1,9 +1,9 @@
 #include "../piece.h"
 
-class horse : public piece {
+class knight : public piece {
 
 	public:
-		horse(set _set) : piece(_set) {
+		knight(set _set) : piece(_set) {
 			alias = 'C';
 			max_distance = 3;
 			valid_path.push_back(path::L);

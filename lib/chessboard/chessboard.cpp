@@ -9,35 +9,33 @@
 
 #include "chessboard.h"
 
-
-
 //---------------------PUBLIC
 
 //[V]
 chessboard::chessboard(void) {
 
-    board[7][0] = new tower(set::Black);
-    board[7][1] = new horse(set::Black);
+    board[7][0] = new rook(set::Black);
+    board[7][1] = new knight(set::Black);
     board[7][2] = new bishop(set::Black);
     board[7][3] = new queen(set::Black);
     board[7][4] = new king(set::Black);
     board[7][5] = new bishop(set::Black);
-    board[7][6] = new horse(set::Black);
-    board[7][7] = new tower(set::Black);
+    board[7][6] = new knight(set::Black);
+    board[7][7] = new rook(set::Black);
 
     for (unsigned int i = 0; i < 8; i++) {
         board[6][i] = new pawn(set::Black);
         board[1][i] = new pawn(set::White);
     }
 
-    board[0][0] = new tower(set::White);
-    board[0][1] = new horse(set::White);
+    board[0][0] = new rook(set::White);
+    board[0][1] = new knight(set::White);
     board[0][2] = new bishop(set::White);
     board[0][3] = new queen(set::White);
     board[0][4] = new king(set::White);
     board[0][5] = new bishop(set::White);
-    board[0][6] = new horse(set::White);
-    board[0][7] = new tower(set::White);
+    board[0][6] = new knight(set::White);
+    board[0][7] = new rook(set::White);
 
     for (unsigned int i = 2; i < 6; i++)
         for (unsigned int j = 0; j < 8; j++)
@@ -71,7 +69,7 @@ chessboard::~chessboard(void) {
 }
 
 //[V]
-chessboard::chessboard(const std::vector<piece*> &_copy) {
+chessboard::chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> &_history) {
 
     for (unsigned int i = 0; i < _copy.size(); i++) {
 
@@ -85,10 +83,10 @@ chessboard::chessboard(const std::vector<piece*> &_copy) {
                 board[i/8][i%8] = new pawn(side);
                 break;
             case 't':
-                board[i/8][i%8] = new tower(side);
+                board[i/8][i%8] = new rook(side);
                 break;
             case 'c':
-                board[i/8][i%8] = new horse(side);
+                board[i/8][i%8] = new knight(side);
                 break;
             case 'a':
                 board[i/8][i%8] = new bishop(side);
@@ -104,6 +102,8 @@ chessboard::chessboard(const std::vector<piece*> &_copy) {
         add_piece(side, std::make_pair(i/8, i%8));
 
     }
+
+    history = _history;
 
 }
 
@@ -256,7 +256,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     if (_turn != set::Empty) {
 
         std::vector<piece*> pieces = to_vector();
-        chessboard check_ctrl {pieces};
+        chessboard check_ctrl {pieces, history};
 
         if (castling) check_ctrl.do_castling(_start, _end);
         else if (enpassant.first) check_ctrl.do_enpassant(enpassant.second, _start, _end);
@@ -572,7 +572,7 @@ bool chessboard::is_castling(const coords &_start, const coords &_end) const {
     piece* piece2 = piece_at_pos(_start.first, col);
     
     //if the oth_piece is a tower
-    if (is<tower>(*piece2) && piece1->is_first_move() && piece2->is_first_move())
+    if (is<rook>(*piece2) && piece1->is_first_move() && piece2->is_first_move())
         return true;
 
     return false;
@@ -635,8 +635,8 @@ void chessboard::do_legit(const coords &_start, const coords &_end) {
     delete board[_end.first][_end.second];
 
     if (is<pawn>(*p1)) board[_end.first][_end.second] = new pawn(p1->get_side());
-    else if (is<tower>(*p1)) board[_end.first][_end.second] = new tower(p1->get_side());
-    else if (is<horse>(*p1)) board[_end.first][_end.second] = new horse(p1->get_side());
+    else if (is<rook>(*p1)) board[_end.first][_end.second] = new rook(p1->get_side());
+    else if (is<knight>(*p1)) board[_end.first][_end.second] = new knight(p1->get_side());
     else if (is<bishop>(*p1)) board[_end.first][_end.second] = new bishop(p1->get_side());
     else if (is<queen>(*p1)) board[_end.first][_end.second] = new queen(p1->get_side());
     else if (is<king>(*p1)) board[_end.first][_end.second] = new king(p1->get_side());
@@ -704,9 +704,9 @@ void chessboard::do_promotion(const coords &_pos) {
     //promote the piece based on the _piece parameter
     switch(piece) {
         case 't':
-            board[_pos.first][_pos.second] = new tower(side);
+            board[_pos.first][_pos.second] = new rook(side);
         case 'c':
-            board[_pos.first][_pos.second] = new horse(side); 
+            board[_pos.first][_pos.second] = new knight(side); 
         case 'a':
             board[_pos.first][_pos.second] = new bishop(side);
         case 'd':
@@ -768,7 +768,7 @@ bool chessboard::checkmate(const set &_side) const {
 
         for (unsigned int i = 0; i < moves.size(); i++) {
 
-            chessboard check_ctrl {board_vector};
+            chessboard check_ctrl {board_vector, history};
 
             if (check_ctrl.move(set::Empty, pieces.at(counter), moves.at(i)).second)
                 return false;
@@ -796,10 +796,15 @@ bool chessboard::draw_for_pieces() const {
     coords w_bishop = find(set::White, 'a');
     coords b_bishop = find(set::Black, 'a');
 
+    coords w_horse = find(set::White, 'c');
+    coords b_horse = find(set::Black, 'c');
+
     bool ret = false;
     ret |= (white_pieces.size() == 1 && black_pieces.size() == 1);
     ret |= (white_pieces.size() == 2 && w_bishop != ILLEGAL_COORDS && black_pieces.size() == 1);
     ret |= (black_pieces.size() == 2 && b_bishop != ILLEGAL_COORDS && white_pieces.size() == 1);
+    ret |= (white_pieces.size() == 2 && w_horse != ILLEGAL_COORDS && black_pieces.size() == 1);
+    ret |= (black_pieces.size() == 2 && b_horse != ILLEGAL_COORDS && white_pieces.size() == 1);
     ret |= (white_pieces.size() == 2 && w_bishop != ILLEGAL_COORDS && black_pieces.size() == 2 && b_bishop != ILLEGAL_COORDS && (w_bishop.first + w_bishop.second) % 2 == (b_bishop.first + b_bishop.second) % 2);
 
     return ret;
