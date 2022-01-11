@@ -30,12 +30,9 @@ class human : public player {
 				if (std::regex_search(input, match, reg1) && match.size() >=5) {
 					
 					//coordinate iniziali
-					start.first = std::stoi(match.str(2)) -1;
-					start.second =  match.str(1)[0] - LETTERA;
-
-					//coordinate finali					
-					target.first = std::stoi(match.str(4)) -1;
-					target.second =  match.str(3)[0] - LETTERA;
+					start = chess_to_matrix(std::make_pair(match.str(1)[0], std::stoi(match.str(2))));
+					
+					target = chess_to_matrix(std::make_pair(match.str(3)[0],std::stoi(match.str(4))));
 				}
 				else throw illegal_move_exception();
 
