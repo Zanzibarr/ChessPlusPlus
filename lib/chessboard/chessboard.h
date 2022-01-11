@@ -24,7 +24,6 @@
 typedef std::pair<int, int> coords;
 
 class illegal_type_exception{};
-
 class chessboard;
 
 class chessboard {
@@ -136,8 +135,6 @@ class chessboard {
 
 template<typename Type>
 bool is(const piece &data) {
-
-    if( &data == NULL ) return false;
     
     if (typeid(Type) == typeid(rook)) return std::tolower(data.get_alias()) == 't';
     else if (typeid(Type) == typeid(knight)) return std::tolower(data.get_alias()) == 'c';

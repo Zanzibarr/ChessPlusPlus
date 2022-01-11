@@ -8,7 +8,7 @@ set opposite_of(const set _set){
 		case set::Empty: return set::Empty;
 	}
 
-	throw invalid_set_exception();
+	throw illegal_set_exception();
 }
 
 piece::piece(set _side) {
@@ -34,7 +34,7 @@ char piece::get_alias() const {
 		case set::Empty : return ' ';	
 	} 
 
-	throw invalid_set_exception();
+	throw illegal_set_exception();
 }
 
 int piece::get_max_distance() const { return max_distance; }

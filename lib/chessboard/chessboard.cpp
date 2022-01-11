@@ -407,6 +407,8 @@ std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) 
                 }
 
             break;
+        case set::Empty :
+            throw illegal_set_exception();
 
     }
 
@@ -439,7 +441,8 @@ void chessboard::edit_pos(const set &_side, const coords &_start, const coords &
             }
 
             break;
-
+        case set::Empty :
+            throw illegal_set_exception();
     }
 
 }
@@ -470,7 +473,8 @@ void chessboard::eat_piece(const set &_side, const coords &_piece) {
             black_pieces.pop_back();
 
             break;
-
+        case set::Empty :
+            throw illegal_set_exception();
     }
 
 }
@@ -485,6 +489,8 @@ void chessboard::add_piece(const set &_side, const coords &_piece) {
         case set::Black:
             black_pieces.push_back(_piece);
             break;
+        case set::Empty :
+            throw illegal_set_exception();
     }
 
 }
@@ -536,7 +542,6 @@ bool chessboard::is_pawn_eat(const coords &_start, const coords &_end) const {
         return false;
 
     path path1 = get_path(_start, _end);
-    piece* piece2 = piece_at_pos(_end);
 
     //get the direction of the pawn based on his side
     int distance = (piece1->get_side() == set::White) ? 1 : -1;
@@ -767,6 +772,8 @@ bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
             }
             
             break;
+        case set::Empty :
+            throw illegal_set_exception();
     
     }
 
@@ -837,7 +844,7 @@ bool chessboard::draw_for_pieces() const {
     ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_bishop_found && white_pieces.size() == 1);
     ret |= (white_pieces.size() == 2 && w_knight_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_knight_found && white_pieces.size() == 1);
     ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 2 && b_bishop_found && (w_bishop.first + w_bishop.second) % 2 == (b_bishop.first + b_bishop.second) % 2);
-    ret |= (white_pieces.size() == 3 && black_pieces.size() == 1 && w_knight_found) || (black_pieces.size() == 3 && white_pieces.size() == 1 && b_knight_found);
+    ret |= (white_pieces.size() == 3 && black_pieces.size() == 1 && w_knight_found && w_knight_numb) || (black_pieces.size() == 3 && white_pieces.size() == 1 && b_knight_found && b_knight_numb);
 
     return ret;
 

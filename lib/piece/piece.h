@@ -6,7 +6,7 @@
 #include <cctype>
 
 enum class set {Black, White, Empty};
-class invalid_set_exception{};
+class illegal_set_exception{};
 set opposite_of(const set _set);
 
 class piece {
