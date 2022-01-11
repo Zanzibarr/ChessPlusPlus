@@ -51,7 +51,6 @@ int main(void) {
                     std::cout << "Patta!";
                     exit(0);
                 } else {
-                    std::cout << "lol";
                     failed = (!result.first && !result.second);
                 }
             }

@@ -203,11 +203,12 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     std::pair<bool, coords> castling = is_castling(_start, _end);
     std::pair<bool, coords> enpassant = is_enpassant(_start, _end);
 
-    std::cout << "\nWhite:";
+    std::cout << "----------------\nWhite:";
     for (auto i : white_pieces) std::cout << std::endl << piece_at_pos(i)->get_alias() << ": " << i.first << ";" << i.second;
     std::cout << "\nBlack:";
     for (auto i : black_pieces) std::cout << std::endl << piece_at_pos(i)->get_alias() << ": " << i.first << ";" << i.second;
-    
+    std::cout << "\n----------------\n";
+
     /*
      If turn == set::Empty, that means the move method is called from the checkmate control method
      If the move method is called from the checkmate control method, I don't need to execute the moves in a copy chessboard
@@ -243,8 +244,9 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
 
     }
 
-    if(piece1->is_first_move())
-        piece_at_pos(_end)->moved();
+    piece_at_pos(_end)->moved();
+
+    std::cout << ((piece1->is_first_move()) ? "true" : "false");
 
     history.push_back(std::make_pair(_start, _end));
     
@@ -327,6 +329,8 @@ chessboard::chessboard(const std::vector<piece*> &_copy, const std::vector<std::
                 board[i/8][i%8] = new king(side);
                 break;
         }
+
+        board[i/8][i%8]->set_first_move(_copy.at(i)->is_first_move());
 
         add_piece(side, std::make_pair(i/8, i%8));
 
