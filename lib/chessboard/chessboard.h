@@ -134,15 +134,15 @@ class chessboard {
 };
 
 template<typename Type>
-bool is(const piece &data) {
+bool is(const piece *data) {
     
-    if (typeid(Type) == typeid(rook)) return std::tolower(data.get_alias()) == 't';
-    else if (typeid(Type) == typeid(knight)) return std::tolower(data.get_alias()) == 'c';
-    else if (typeid(Type) == typeid(bishop)) return std::tolower(data.get_alias()) == 'a';
-    else if (typeid(Type) == typeid(king)) return std::tolower(data.get_alias()) == 'r';
-    else if (typeid(Type) == typeid(queen)) return std::tolower(data.get_alias()) == 'd';
-    else if (typeid(Type) == typeid(pawn)) return std::tolower(data.get_alias()) == 'p';
-    else if (typeid(Type) == typeid(empty_tile)) return data.get_alias() == ' ';
+    if (typeid(*Type) == typeid(rook)) return std::tolower(data.get_alias()) == 't';
+    else if (typeid(*Type) == typeid(knight)) return std::tolower(data.get_alias()) == 'c';
+    else if (typeid(*Type) == typeid(bishop)) return std::tolower(data.get_alias()) == 'a';
+    else if (typeid(*Type) == typeid(king)) return std::tolower(data.get_alias()) == 'r';
+    else if (typeid(*Type) == typeid(queen)) return std::tolower(data.get_alias()) == 'd';
+    else if (typeid(*Type) == typeid(pawn)) return std::tolower(data.get_alias()) == 'p';
+    else if (typeid(*Type) == typeid(empty_tile)) return data.get_alias() == ' ';
 
     throw illegal_type_exception();
 
