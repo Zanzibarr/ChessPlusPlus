@@ -1,0 +1,28 @@
+Testati:
+PAWN
+    pedina che mangia
+    pedina che si muove normalmente
+    pedina che si muove di 2
+    enpassant
+ROOK
+KNIGHT
+    mossa del cavallo
+BISHOP
+QUEEN
+KING
+    arrocco sotto scacco
+    arrocco non sotto scacco
+    scacco
+    salvarsi dallo scacco mangiando la pedina che mette sotto scacco
+    salvarsi dallo scacco intrapponendosi tra la pedina e il re
+    scacco matto
+
+mangiare pedina
+spostamento pedina
+mosse illegali
+mosse al turno sbagliato
+
+Da testare:
+arrocco sotto minaccia ma non sotto scacco
+salvarsi da scacco con enpassant
+salvarsi da scacco matto con enpassant

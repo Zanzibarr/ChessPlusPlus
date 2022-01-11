@@ -110,9 +110,9 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
         int direction = (piece1->get_side() == set::White) ? 1 : -1;
         
-        if (is<empty_tile>(*piece_at_pos(_pos + std::make_pair(1*direction, 0))))
-            try_add_move(ret, _pos, std::make_pair(1*direction, 0));
-        if (piece1->is_first_move() && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(2*direction, 0))))
+        if (is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))))
+            try_add_move(ret, _pos, std::make_pair(direction, 0));
+        if (piece1->is_first_move() && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))) && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(2*direction, 0))))
             try_add_move(ret, _pos, std::make_pair(2*direction, 0));
 
         if (is_pawn_eat(_pos, _pos + std::make_pair(1*direction, -1)))
