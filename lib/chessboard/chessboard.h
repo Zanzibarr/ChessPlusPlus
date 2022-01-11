@@ -151,7 +151,6 @@ bool is(const piece &data) {
 
 }
 
-coords operator+(const coords &_a, const coords &_b) { return std::make_pair(_a.first + _b.first, _a.second + _b.second); }
-
+coords operator+(const coords &_a, const coords &_b) { return std::pair{_a.first + _b.first, _a.second + _b.second}; }
 
 #endif
