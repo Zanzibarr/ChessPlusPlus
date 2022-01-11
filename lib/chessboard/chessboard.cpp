@@ -407,8 +407,6 @@ std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) 
                 }
 
             break;
-        case set::Empty :
-            throw illegal_set_exception();
 
     }
 
@@ -441,8 +439,6 @@ void chessboard::edit_pos(const set &_side, const coords &_start, const coords &
             }
 
             break;
-        case set::Empty :
-            throw illegal_set_exception();
     }
 
 }
@@ -473,8 +469,6 @@ void chessboard::eat_piece(const set &_side, const coords &_piece) {
             black_pieces.pop_back();
 
             break;
-        case set::Empty :
-            throw illegal_set_exception();
     }
 
 }
@@ -489,8 +483,6 @@ void chessboard::add_piece(const set &_side, const coords &_piece) {
         case set::Black:
             black_pieces.push_back(_piece);
             break;
-        case set::Empty :
-            throw illegal_set_exception();
     }
 
 }
@@ -772,8 +764,6 @@ bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
             }
             
             break;
-        case set::Empty :
-            throw illegal_set_exception();
     
     }
 
