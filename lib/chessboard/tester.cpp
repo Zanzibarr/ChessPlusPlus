@@ -1,44 +1,64 @@
 #include "chessboard.cpp"
-#include "../player/human.cpp"
+#include <regex>
 #include <iostream>
+#include <string>
 
 #define LETTERA 'A'
 
-
 int main(void) {
 
-    //std::cout<<"Welcome to Chess++, chose a mode:\n\t1) Bot VS Bot\n\t2) Human VS Bot";
+    chessboard scacchiera{};
 
-    chessboard scacchiera {};
-    std::string name;
-    scacchiera.print();
-    std::cout<<"\n\n";
-    /*std::cout<<"\n INSERISCI IL TUO NOME: ";
-    std::getline(std::cin, name);*/
+    std::vector<std::string> names {"Matteo", "Riccardo"};
+    std::vector<set> turn {set::White, set::Black};
+    int counter = 0;
+			
+    std::regex reg1("^([A-H]){1}([1-8]){1} ([A-H]){1}([1-8]){1}$");
+    std::smatch match;
 
-    player *giocatore = new human(&scacchiera, set::White, "Matteo");
-    player *giocatore2 = new human(&scacchiera, set::Black);
+    while (true) {
 
-    bool cond;
-    bool cond2;
+        bool failed = true;
 
-    char in;
+        while(failed) {
 
-    do {
-        try{
-            do{
-                cond = giocatore->move();
-            }while(cond == false);
-            do{
-                cond2 = giocatore2->move();
-            }while(cond2 == false);
-            scacchiera.print();
-        } 
-        catch (illegal_move_exception) {};
-        std::cout<<"\nq to quit: ";
-        std::cin>>in;
-        std::cin.ignore();
-    }while(in != 'q');
-    
-    
+            std::cout << std::endl << names[counter] + " inserisci una mossa: ";
+            std::string input;
+			std::getline(std::cin, input);
+			if(input == "XX XX") {
+				scacchiera.print();
+			} else {
+                coords start;
+                coords target;
+                if (std::regex_search(input, match, reg1) && match.size() >=5) {
+                        
+                    //coordinate iniziali
+                    start.first = std::stoi(match.str(2)) -1;
+                    start.second =  match.str(1)[0] - LETTERA;
+
+                    //coordinate finali					
+                    target.first = std::stoi(match.str(4)) -1;
+                    target.second =  match.str(3)[0] - LETTERA;
+                }
+                std::pair<bool, bool> result;
+                try {
+                    result = scacchiera.move(turn[counter], start, target);
+                } catch (illegal_move_exception) { continue; }
+                if (result.first && result.second) {
+                    std::cout << "Scacco matto!";
+                    exit(0);
+                } else if(result.first && !result.second) {
+                    std::cout << "Patta!";
+                    exit(0);
+                } else {
+                    std::cout << "lol";
+                    failed = (!result.first && !result.second);
+                }
+            }
+        }
+
+        counter = (counter+1)%2;
+
+    }
+
 }

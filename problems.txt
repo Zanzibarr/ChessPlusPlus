@@ -3,5 +3,19 @@ Non prende le mosse illegali del nero
 G2 G3 - G8 F6
 B1 C3 - G7 G6
 F1 G2 - F8 G7
-G1 F3 - ... Esce a terminale
+G1 F3 - ... Esce a terminale (+ in un altro caso (foto))
 ]
+
+da controllare la gestione della memoria (delete e new)
+
+Testati:
+enpassant
+arrocco sotto scacco
+arrocco non sotto scacco
+scacco
+salvarsi dallo scacco mangiando la pedina che mette sotto scacco
+salvarsi dallo scacco intrapponendosi tra la pedina e il re
+pedina che mangia
+pedina che si muove normalmente
+mossa del cavallo
+scacco matto

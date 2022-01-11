@@ -59,6 +59,8 @@ chessboard::~chessboard(void) {
         delete board[i][j];
     }
 
+    delete check_ctrl;
+
     history.clear();
     white_pieces.clear();
     black_pieces.clear();
@@ -123,6 +125,17 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
         if (is_enpassant(_pos, _pos + std::make_pair(1*direction, -1)).first)
             try_add_move(ret, _pos, std::make_pair(1*direction, -1));
 
+    } else if (is<knight>(*piece1)) {
+
+        try_add_move(ret, _pos, std::make_pair(2, 1));
+        try_add_move(ret, _pos, std::make_pair(2, -1));
+        try_add_move(ret, _pos, std::make_pair(1, 2));
+        try_add_move(ret, _pos, std::make_pair(-1, 2));
+        try_add_move(ret, _pos, std::make_pair(-2, 1));
+        try_add_move(ret, _pos, std::make_pair(-2, -1));
+        try_add_move(ret, _pos, std::make_pair(1, -2));
+        try_add_move(ret, _pos, std::make_pair(-1, -2));
+    
     } else {
 
         while (counter <= piece1->get_max_distance() && (h_l || h_r || d_1 || d_2 || d_3 || d_4 || v_u || v_d)) {
@@ -173,33 +186,12 @@ std::vector<coords> chessboard::get_moves(const coords &_pos) const {
 
     }
     
-    //add the L moves if needed
-    if (piece1->is_legit_move(path::L, 3)) {
-
-        try_add_move(ret, _pos, std::make_pair(2, 1));
-        try_add_move(ret, _pos, std::make_pair(2, -1));
-        try_add_move(ret, _pos, std::make_pair(1, 2));
-        try_add_move(ret, _pos, std::make_pair(-1, 2));
-        try_add_move(ret, _pos, std::make_pair(-2, 1));
-        try_add_move(ret, _pos, std::make_pair(-2, -1));
-        try_add_move(ret, _pos, std::make_pair(1, -2));
-        try_add_move(ret, _pos, std::make_pair(-1, -2));
-
-    }
-    
     return ret;
 
 }
 
 //[V]
 std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, const coords &_end) {
-
-    std::pair<bool, bool> CHECK {false, false};
-    std::pair<bool, bool> SUCCESS {false, true};
-    std::pair<bool, bool> DRAW {true, false};
-    std::pair<bool, bool> CHECKMATE {true, true};
-
-    chessboard* check_ctrl{};
 
     piece* piece1 = piece_at_pos(_start);
     set side = piece1->get_side();
@@ -211,6 +203,11 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     std::pair<bool, coords> castling = is_castling(_start, _end);
     std::pair<bool, coords> enpassant = is_enpassant(_start, _end);
 
+    std::cout << "\nWhite:";
+    for (auto i : white_pieces) std::cout << std::endl << piece_at_pos(i)->get_alias() << ": " << i.first << ";" << i.second;
+    std::cout << "\nBlack:";
+    for (auto i : black_pieces) std::cout << std::endl << piece_at_pos(i)->get_alias() << ": " << i.first << ";" << i.second;
+    
     /*
      If turn == set::Empty, that means the move method is called from the checkmate control method
      If the move method is called from the checkmate control method, I don't need to execute the moves in a copy chessboard
@@ -229,7 +226,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
 
         if (check_ctrl->check(side))
             return CHECK;
-        
+
     }
 
     if (castling.first) do_castling(castling.second, _start, _end);
@@ -240,8 +237,10 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
      If the move method is called from the checkmate control method, I don't need to go further with this method, so I simply return if it's a check or not
     */
     if (_turn == set::Empty) {
+
         if (check(side)) return CHECK;
-        else return SUCCESS;
+        return SUCCESS;
+
     }
 
     if(piece1->is_first_move())
@@ -253,13 +252,10 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
         do_promotion(_end);
 
     if (check(opposite_of(side))) {
-
-        std::cout << "\nAttenzione: ";
     
         if (checkmate(opposite_of(_turn))) {
-            std::cout << "Scacco matto\n";
             return CHECKMATE;
-        } else std::cout << "Scacco\n";
+        }
 
     }
 
@@ -302,7 +298,7 @@ void chessboard::print() const {
 
 
 //[V]
-chessboard::chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> &_history) {
+chessboard::chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> _history) {
 
     for (unsigned int i = 0; i < _copy.size(); i++) {
 
@@ -352,7 +348,7 @@ std::vector<piece*> chessboard::to_vector() const {
 }
 
 //[VV]
-bool is_out(const coords &_pos) {
+bool chessboard::is_out(const coords &_pos) const {
     
     return _pos.first < 0 || _pos.first >= 8 || _pos.second < 0 || _pos.second >= 8;
     
@@ -379,29 +375,42 @@ piece* chessboard::piece_at_pos(const int i, const int j) const {
 
 }
 
+//[V]
+bool chessboard::contains(const set &_side, const char _piece_alias) const {
+
+    return find(_side, _piece_alias).at(0) != ILLEGAL_COORDS;
+
+}
+
 //[VV]
-coords chessboard::find(const set &_side, const char _piece) const {
+std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) const {
+
+    std::vector<coords> ret {ILLEGAL_COORDS};
 
     switch(_side) {
         case set::White:
 
             for (unsigned int i = 0; i < white_pieces.size(); i++)
-                if(std::tolower(_piece) == std::tolower(piece_at_pos(white_pieces.at(i))->get_alias()))
-                    return white_pieces.at(i);
+                if(std::tolower(_piece_alias) == std::tolower(piece_at_pos(white_pieces.at(i))->get_alias())) {
+                    ret.clear();
+                    ret.push_back(white_pieces.at(i));
+                }
 
             break;
 
         case set::Black:
 
             for (unsigned int i = 0; i < black_pieces.size(); i++)
-                if(std::toupper(_piece) == piece_at_pos(black_pieces.at(i))->get_alias())
-                    return black_pieces.at(i);
+                if(std::toupper(_piece_alias) == piece_at_pos(black_pieces.at(i))->get_alias()) {
+                    ret.clear();
+                    ret.push_back(black_pieces.at(i));
+                }
 
             break;
 
     }
 
-    return ILLEGAL_COORDS;
+    return ret;
     
 }
 
@@ -470,8 +479,12 @@ void chessboard::eat_piece(const set &_side, const coords &_piece) {
 void chessboard::add_piece(const set &_side, const coords &_piece) {
 
     switch(_side) {
-        case set::White: white_pieces.push_back(_piece);
-        case set::Black: black_pieces.push_back(_piece);
+        case set::White:
+            white_pieces.push_back(_piece);
+            break;
+        case set::Black:
+            black_pieces.push_back(_piece);
+            break;
     }
 
 }
@@ -717,28 +730,44 @@ void chessboard::do_promotion(const coords &_pos) {
 //[V]
 bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
 
+    if (_to_check == ILLEGAL_COORDS) return false;
+
     std::vector<coords> danger_zone;
 
     switch(_side) {
+
         case set::White:
 
             for (unsigned int i = 0; i < black_pieces.size(); i++) {
+
                 danger_zone = get_moves(black_pieces.at(i));
                 for (unsigned j = 0; j < danger_zone.size(); j++) {
-                    if (_to_check == danger_zone.at(j)) return true;
+
+                    if (_to_check == danger_zone.at(j))
+                        return true;
+
                 }
-                danger_zone.clear();
+
             }
+
             break;
+
         case set::Black:
+            
             for (unsigned int i = 0; i < white_pieces.size(); i++) {
+
                 danger_zone = get_moves(white_pieces.at(i));
                 for (unsigned j = 0; j < danger_zone.size(); j++) {
-                    if (_to_check == danger_zone.at(j)) return true;
+
+                    if (_to_check == danger_zone.at(j))
+                        return true;
+                    
                 }
-                danger_zone.clear();
+
             }
+            
             break;
+    
     }
 
     return false;
@@ -748,12 +777,12 @@ bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
 //[V]
 bool chessboard::check(const set &_side) const {
 
-    return is_in_danger(_side, find(_side, 'r'));
+    return is_in_danger(_side, find(_side, 'r').at(0));
 
 }
 
 //[V]
-bool chessboard::checkmate(const set &_side) const {
+bool chessboard::checkmate(const set &_side) {
 
     int counter = 0;
 
@@ -766,9 +795,9 @@ bool chessboard::checkmate(const set &_side) const {
 
         for (unsigned int i = 0; i < moves.size(); i++) {
 
-            chessboard check_ctrl {board_vector, history};
+            check_ctrl = new chessboard{board_vector, history};
 
-            if (check_ctrl.move(set::Empty, pieces.at(counter), moves.at(i)).second)
+            if (check_ctrl->move(set::Empty, pieces.at(counter), moves.at(i)).second)
                 return false;
 
         }
@@ -782,7 +811,7 @@ bool chessboard::checkmate(const set &_side) const {
 }
 
 //[?]
-bool chessboard::draw(const set &_side) const {
+bool chessboard::draw(const set &_side) {
     
     return (!check(_side) && checkmate(_side)) || draw_for_pieces();
     
@@ -791,19 +820,24 @@ bool chessboard::draw(const set &_side) const {
 //[?]
 bool chessboard::draw_for_pieces() const {
 
-    coords w_bishop = find(set::White, 'a');
-    coords b_bishop = find(set::Black, 'a');
+    bool w_bishop_found = contains(set::White, 'a');
+    bool b_bishop_found = contains(set::Black, 'a');
 
-    coords w_horse = find(set::White, 'c');
-    coords b_horse = find(set::Black, 'c');
+    bool w_knight_found = contains(set::White, 'c');
+    bool b_knight_found = contains(set::Black, 'c');
+
+    coords w_bishop = find(set::White, 'a').at(0);
+    coords b_bishop = find(set::Black, 'a').at(0);
+
+    bool w_knight_numb = find(set::White, 'c').size() == 2;
+    bool b_knight_numb = find(set::Black, 'c').size() == 2;
 
     bool ret = false;
     ret |= (white_pieces.size() == 1 && black_pieces.size() == 1);
-    ret |= (white_pieces.size() == 2 && w_bishop != ILLEGAL_COORDS && black_pieces.size() == 1);
-    ret |= (black_pieces.size() == 2 && b_bishop != ILLEGAL_COORDS && white_pieces.size() == 1);
-    ret |= (white_pieces.size() == 2 && w_horse != ILLEGAL_COORDS && black_pieces.size() == 1);
-    ret |= (black_pieces.size() == 2 && b_horse != ILLEGAL_COORDS && white_pieces.size() == 1);
-    ret |= (white_pieces.size() == 2 && w_bishop != ILLEGAL_COORDS && black_pieces.size() == 2 && b_bishop != ILLEGAL_COORDS && (w_bishop.first + w_bishop.second) % 2 == (b_bishop.first + b_bishop.second) % 2);
+    ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_bishop_found && white_pieces.size() == 1);
+    ret |= (white_pieces.size() == 2 && w_knight_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_knight_found && white_pieces.size() == 1);
+    ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 2 && b_bishop_found && (w_bishop.first + w_bishop.second) % 2 == (b_bishop.first + b_bishop.second) % 2);
+    ret |= (white_pieces.size() == 3 && black_pieces.size() == 1 && w_knight_found) || (black_pieces.size() == 3 && white_pieces.size() == 1 && b_knight_found);
 
     return ret;
 

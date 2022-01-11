@@ -43,8 +43,6 @@ class chessboard {
          */
         ~chessboard();
         
-        chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> &_history);
-        
         /**
          * @brief Get the current location of every piece from _set side
          * 
@@ -90,17 +88,26 @@ class chessboard {
         std::vector<coords> white_pieces;
         std::vector<coords> black_pieces;
 
+        chessboard* check_ctrl;
+
+        const std::pair<bool, bool> CHECK {false, false};
+        const std::pair<bool, bool> SUCCESS {false, true};
+        const std::pair<bool, bool> DRAW {true, false};
+        const std::pair<bool, bool> CHECKMATE {true, true};
         const coords ILLEGAL_COORDS {-1, -1};
+        
+        chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> _history);
 
         std::vector<piece*> to_vector() const;
 
+        bool is_out(const coords &_pos) const;
         bool opposites(const coords &_pos_1, const coords &_pos_2) const;
 
         piece* piece_at_pos(const coords &_pos) const;
         piece* piece_at_pos(const int i, const int j) const;
 
-        coords find(const set &_side, const piece* _piece) const;
-        coords find(const set &_side, const char _piece_alias) const;
+        bool contains(const set &_side, const char _piece_alias) const;
+        std::vector<coords> find(const set &_side, const char _piece_alias) const;
 
         void edit_pos(const set &_side, const coords &_start, const coords &_end);
         void eat_piece(const set &_side, const coords &_piece);
@@ -121,8 +128,8 @@ class chessboard {
 
         bool is_in_danger(const set &_side, const coords &_to_check) const;
         bool check(const set &_side) const;
-        bool checkmate(const set &_side) const;
-        bool draw(const set &_side) const;
+        bool checkmate(const set &_side);
+        bool draw(const set &_side);
         bool draw_for_pieces() const;
         
 };
@@ -143,7 +150,6 @@ bool is(const piece &data) {
     throw illegal_type_exception();
 
 }
-
 
 coords operator+(const coords &_a, const coords &_b) { return std::make_pair(_a.first + _b.first, _a.second + _b.second); }
 
