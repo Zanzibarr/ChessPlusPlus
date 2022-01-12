@@ -234,6 +234,12 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     else if (enpassant.first) do_enpassant(enpassant.second, _start, _end);
     else if (legit) do_legit(_start, _end);
 
+    std::cout << "----------------\nWhite:";
+    for (auto i : white_pieces) std::cout << std::endl << piece_at_pos(i)->get_alias() << ": " << i.first << ";" << i.second;
+    std::cout << "\nBlack:";
+    for (auto i : black_pieces) std::cout << std::endl << piece_at_pos(i)->get_alias() << ": " << i.first << ";" << i.second;
+    std::cout << "\n----------------\n";
+
     /*
      If the move method is called from the checkmate control method, I don't need to go further with this method, so I simply return if it's a check or not
     */
@@ -734,6 +740,8 @@ bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
     if (_to_check == ILLEGAL_COORDS) return false;
 
     std::vector<coords> danger_zone;
+
+        std::cout << "Prova1\n";
 
     switch(_side) {
 
