@@ -87,6 +87,7 @@ class chessboard {
         std::vector<coords> white_pieces;
         std::vector<coords> black_pieces;
 
+        //memory leak here
         chessboard* check_ctrl;
 
         const std::pair<bool, bool> CHECK {false, false};

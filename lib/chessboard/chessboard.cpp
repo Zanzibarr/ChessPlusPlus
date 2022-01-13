@@ -55,7 +55,7 @@ chessboard::chessboard(void) {
 chessboard::~chessboard(void) {
 
     for (unsigned int i = 0; i < 8; i++) for (unsigned int j = 0; j < 8; j++) {
-        board[i][j] = 0;
+        board[i][j] = nullptr;
         delete board[i][j];
     }
 
@@ -66,6 +66,8 @@ chessboard::~chessboard(void) {
     history.~vector();
     white_pieces.~vector();
     black_pieces.~vector();
+
+    delete check_ctrl;
 
 }
 
@@ -211,6 +213,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
      which is needed to "undo" the move in a check situation, since this is just a control move and is not a final move.
     */
     std::vector<piece*> pieces = to_vector();
+    //memory leak here
     check_ctrl = new chessboard{pieces, history};
 
     if (castling.first) check_ctrl->do_castling(castling.second, _start, _end);
@@ -257,24 +260,30 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
 //[VV]
 void chessboard::print() const {
 
+    std::cout << std::endl << "     --- --- --- --- --- --- --- --- ";
+
     for (int i = 7; i >= 0; i--) {
         std::cout << std::endl << i + 1 << "   ";
 
+        std::cout << "|";
         for (unsigned int j = 0; j < 8; j++) {
-            std::cout << " " << piece_at_pos(i, j)->get_alias();
+            std::cout << " " << piece_at_pos(i, j)->get_alias() << " ";
             if (j!=7)
-                std::cout << " |";
+                std::cout << "|";
         }
-        std::cout << std::endl << "    ";
+        std::cout << "|" << std::endl << "    ";
         
         if (i!=0)
-            std::cout << "-------------------------------";
+            std::cout << " --- --- --- --- --- --- --- --- ";
 
     }
     
-    std::cout << "\n    ";
+    std::cout << " --- --- --- --- --- --- --- --- " << std::endl << std::endl << "     ";
+    
     for (unsigned int i = 0; i < 8; i++)
         std::cout << " " << (char) (i + 'A') << "  ";
+
+    std::cout << std::endl << std::endl;
 
 }
 
