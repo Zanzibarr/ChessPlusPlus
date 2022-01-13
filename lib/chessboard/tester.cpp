@@ -31,7 +31,7 @@ int main(void) {
                 coords start;
                 coords target;
                 if (std::regex_search(input, match, reg1) && match.size() >=5) {
-                        
+
                     //coordinate iniziali
                     start.first = std::stoi(match.str(2)) -1;
                     start.second =  match.str(1)[0] - LETTERA;
@@ -45,9 +45,11 @@ int main(void) {
                     result = scacchiera.move(turn[counter], start, target);
                 } catch (illegal_move_exception) { continue; }
                 if (result.first && result.second) {
+                    scacchiera.print();
                     std::cout << "Scacco matto!";
                     exit(0);
                 } else if(result.first && !result.second) {
+                    scacchiera.print();
                     std::cout << "Patta!";
                     exit(0);
                 } else {

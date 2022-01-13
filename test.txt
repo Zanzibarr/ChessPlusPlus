@@ -6,6 +6,8 @@ PAWN
     enpassant
     salvarsi da scacco con enpassant
     salvarsi da scacco matto con enpassant
+    mosse al contrario
+    promozione
 ROOK
 KNIGHT
     mossa del cavallo

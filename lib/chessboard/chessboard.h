@@ -58,7 +58,7 @@ class chessboard {
          * @return std::vector<coords>& A vector containing all the coords the piece can reach from _pos
          * 
          */
-        std::vector<coords> get_moves(const coords &_pos) const;
+        std::vector<coords> get_moves(const coords &_pos, bool with_castling = false) const;
 
         /**
          * @brief Method to move a peice from _start to _end
