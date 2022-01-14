@@ -27,6 +27,8 @@ mangiare pedina
 spostamento pedina
 mosse illegali
 mosse al turno sbagliato
+patta per mancanza di mosse
+patta per re e cavallo
 
 
 Da testare:
