@@ -58,7 +58,7 @@ class chessboard {
          * @return std::vector<coords>& A vector containing all the coords the piece can reach from _pos
          * 
          */
-        std::vector<coords> get_moves(const coords &_pos, bool with_castling = false) const;
+        std::vector<coords> get_moves(const coords &_pos, const bool _with_castling = false, const bool _unchecked = true);
 
         /**
          * @brief Method to move a peice from _start to _end
@@ -90,7 +90,7 @@ class chessboard {
         //memory leak here
         chessboard* check_ctrl;
 
-        const std::pair<bool, bool> CHECK {false, false};
+        const std::pair<bool, bool> FAILED {false, false};
         const std::pair<bool, bool> SUCCESS {false, true};
         const std::pair<bool, bool> DRAW {true, false};
         const std::pair<bool, bool> CHECKMATE {true, true};
@@ -113,11 +113,11 @@ class chessboard {
         void eat_piece(const set &_side, const coords &_piece);
         void add_piece(const set &_side, const coords &_piece);
 
-        bool try_add_move(std::vector<coords> &_moves, const coords &_pos, const coords &_offset) const;
+        bool try_add_move(std::vector<coords> &_moves, const coords &_pos, const coords &_offset, const bool _unchecked);
 
-        bool is_legit(const coords &_start, const coords &_end) const;
+        bool is_legit(const coords &_start, const coords &_end);
         bool is_pawn_eat(const coords &_start, const coords &_end) const;
-        std::pair<bool, coords> is_castling(const coords &_start, const coords &_end) const;
+        std::pair<bool, coords> is_castling(const coords &_start, const coords &_end);
         std::pair<bool, coords> is_enpassant(const coords &_start, const coords &_end) const;
         bool is_promotion(const coords &_pos) const;
         
@@ -126,8 +126,8 @@ class chessboard {
         void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
         void do_promotion(const coords &_pos);
 
-        bool is_in_danger(const set &_side, const coords &_to_check) const;
-        bool check(const set &_side) const;
+        bool is_in_danger(const set &_side, const coords &_to_check);
+        bool check(const set &_side);
         bool checkmate(const set &_side);
         bool draw(const set &_side);
         bool draw_for_pieces() const;

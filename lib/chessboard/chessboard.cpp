@@ -12,7 +12,7 @@
 
 //---------------------PUBLIC
 
-//[VV]
+//[VV]*/
 chessboard::chessboard(void) {
 
     board[7][0] = new rook(set::Black);
@@ -51,7 +51,7 @@ chessboard::chessboard(void) {
 
 }
 
-//[?]
+//[?]*/
 chessboard::~chessboard(void) {
 
     for (unsigned int i = 0; i < 8; i++) for (unsigned int j = 0; j < 8; j++) {
@@ -71,15 +71,15 @@ chessboard::~chessboard(void) {
 
 }
 
-//[VV]
+//[VV]*/
 std::vector<coords> chessboard::get_pieces(const set &_set) const {
     
     return (_set == set::White) ? white_pieces : black_pieces;
     
 }
 
-//[V]
-std::vector<coords> chessboard::get_moves(const coords &_pos, bool with_castling) const {
+//[V]*/
+std::vector<coords> chessboard::get_moves(const coords &_pos, const bool with_castling, const bool _unchecked) {
 
     piece* piece1 = piece_at_pos(_pos);
     
@@ -99,10 +99,10 @@ std::vector<coords> chessboard::get_moves(const coords &_pos, bool with_castling
     if (is<king>(*piece1) && with_castling) {
 
         if (is_castling(_pos, _pos + std::make_pair(0, 2)).first)
-            try_add_move(ret, _pos, std::make_pair(0, 2));
+            try_add_move(ret, _pos, std::make_pair(0, 2), _unchecked);
 
         if (is_castling(_pos, _pos + std::make_pair(0, -2)).first)
-            try_add_move(ret, _pos, std::make_pair(0, -2));
+            try_add_move(ret, _pos, std::make_pair(0, -2), _unchecked);
 
     }
 
@@ -111,30 +111,30 @@ std::vector<coords> chessboard::get_moves(const coords &_pos, bool with_castling
         int direction = (piece1->get_side() == set::White) ? 1 : -1;
         
         if (is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))))
-            try_add_move(ret, _pos, std::make_pair(direction, 0));
+            try_add_move(ret, _pos, std::make_pair(direction, 0), _unchecked);
         if (piece1->is_first_move() && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))) && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(2*direction, 0))))
-            try_add_move(ret, _pos, std::make_pair(2*direction, 0));
+            try_add_move(ret, _pos, std::make_pair(2*direction, 0), _unchecked);
 
         if (is_pawn_eat(_pos, _pos + std::make_pair(1*direction, -1)))
-            try_add_move(ret, _pos, std::make_pair(1*direction, -1));
+            try_add_move(ret, _pos, std::make_pair(1*direction, -1), _unchecked);
         if (is_pawn_eat(_pos, _pos + std::make_pair(1*direction, 1)))
-            try_add_move(ret, _pos, std::make_pair(1*direction, 1));
+            try_add_move(ret, _pos, std::make_pair(1*direction, 1), _unchecked);
 
         if (is_enpassant(_pos, _pos + std::make_pair(1*direction, 1)).first)
-            try_add_move(ret, _pos, std::make_pair(1*direction, 1));
+            try_add_move(ret, _pos, std::make_pair(1*direction, 1), _unchecked);
         if (is_enpassant(_pos, _pos + std::make_pair(1*direction, -1)).first)
-            try_add_move(ret, _pos, std::make_pair(1*direction, -1));
+            try_add_move(ret, _pos, std::make_pair(1*direction, -1), _unchecked);
 
     } else if (is<knight>(*piece1)) {
 
-        try_add_move(ret, _pos, std::make_pair(2, 1));
-        try_add_move(ret, _pos, std::make_pair(2, -1));
-        try_add_move(ret, _pos, std::make_pair(1, 2));
-        try_add_move(ret, _pos, std::make_pair(-1, 2));
-        try_add_move(ret, _pos, std::make_pair(-2, 1));
-        try_add_move(ret, _pos, std::make_pair(-2, -1));
-        try_add_move(ret, _pos, std::make_pair(1, -2));
-        try_add_move(ret, _pos, std::make_pair(-1, -2));
+        try_add_move(ret, _pos, std::make_pair(2, 1), _unchecked);
+        try_add_move(ret, _pos, std::make_pair(2, -1), _unchecked);
+        try_add_move(ret, _pos, std::make_pair(1, 2), _unchecked);
+        try_add_move(ret, _pos, std::make_pair(-1, 2), _unchecked);
+        try_add_move(ret, _pos, std::make_pair(-2, 1), _unchecked);
+        try_add_move(ret, _pos, std::make_pair(-2, -1), _unchecked);
+        try_add_move(ret, _pos, std::make_pair(1, -2), _unchecked);
+        try_add_move(ret, _pos, std::make_pair(-1, -2), _unchecked);
     
     } else {
 
@@ -153,9 +153,9 @@ std::vector<coords> chessboard::get_moves(const coords &_pos, bool with_castling
             if (piece1->is_legit_move(path::Horizontal, counter)) {
 
                 //left
-                if (h_l) h_l = try_add_move(ret, _pos, std::make_pair(0, -counter));
+                if (h_l) h_l = try_add_move(ret, _pos, std::make_pair(0, -counter), _unchecked);
                 //right
-                if (h_r) h_r = try_add_move(ret, _pos, std::make_pair(0, counter));
+                if (h_r) h_r = try_add_move(ret, _pos, std::make_pair(0, counter), _unchecked);
 
             }
 
@@ -163,22 +163,22 @@ std::vector<coords> chessboard::get_moves(const coords &_pos, bool with_castling
             if (piece1->is_legit_move(path::Vertical, counter)) {
 
                 //up
-                if (v_u) v_u = try_add_move(ret, _pos, std::make_pair(counter, 0));
+                if (v_u) v_u = try_add_move(ret, _pos, std::make_pair(counter, 0), _unchecked);
                 //down
-                if (v_d) v_d = try_add_move(ret, _pos, std::make_pair(-counter, 0));
+                if (v_d) v_d = try_add_move(ret, _pos, std::make_pair(-counter, 0), _unchecked);
             }
 
             //add diagonal move if needed
             if (piece1->is_legit_move(path::Diagonal, counter)) {
 
                 //up left
-                if (d_1) d_1 = try_add_move(ret, _pos, std::make_pair(counter, -counter));
+                if (d_1) d_1 = try_add_move(ret, _pos, std::make_pair(counter, -counter), _unchecked);
                 //up right
-                if (d_2) d_2 = try_add_move(ret, _pos, std::make_pair(counter, counter));
+                if (d_2) d_2 = try_add_move(ret, _pos, std::make_pair(counter, counter), _unchecked);
                 //down right
-                if (d_3) d_3 = try_add_move(ret, _pos, std::make_pair(-counter, counter));
+                if (d_3) d_3 = try_add_move(ret, _pos, std::make_pair(-counter, counter), _unchecked);
                 //down left
-                if (d_4) d_4 = try_add_move(ret, _pos, std::make_pair(-counter, -counter));
+                if (d_4) d_4 = try_add_move(ret, _pos, std::make_pair(-counter, -counter), _unchecked);
             }
 
             counter++;
@@ -190,7 +190,7 @@ std::vector<coords> chessboard::get_moves(const coords &_pos, bool with_castling
 
 }
 
-//[V]
+//[V]*/
 std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, const coords &_end) {
 
     piece* piece1 = piece_at_pos(_start);
@@ -219,14 +219,16 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     if (castling.first) check_ctrl->do_castling(castling.second, _start, _end);
     else if (enpassant.first) check_ctrl->do_enpassant(enpassant.second, _start, _end);
     else if (legit) check_ctrl->do_legit(_start, _end);
-    else
-        throw illegal_move_exception();
+    else return FAILED;
 
-    if (check_ctrl->check(side))
-        return CHECK;
-    else if (_turn == set::Empty) 
+    if (check_ctrl->check(side)) {
+        delete check_ctrl;
+        return FAILED;
+    } else if (_turn == set::Empty) {
+        delete check_ctrl;
         return SUCCESS;
-        
+    }
+    delete check_ctrl;
 
     if (castling.first) do_castling(castling.second, _start, _end);
     else if (enpassant.first) do_enpassant(enpassant.second, _start, _end);
@@ -257,7 +259,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
 
 }
 
-//[VV]
+//[VV]*/
 void chessboard::print() const {
 
     std::cout << std::endl << "     --- --- --- --- --- --- --- --- ";
@@ -292,7 +294,7 @@ void chessboard::print() const {
 //---------------------PRIVATE
 
 
-//[VV]
+//[VV]*/
 chessboard::chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> _history) {
 
     for (unsigned int i = 0; i < _copy.size(); i++) {
@@ -333,7 +335,7 @@ chessboard::chessboard(const std::vector<piece*> &_copy, const std::vector<std::
 
 }
 
-//[VV]
+//[VV]*/
 std::vector<piece*> chessboard::to_vector() const {
 
     std::vector<piece*> ret;
@@ -344,42 +346,42 @@ std::vector<piece*> chessboard::to_vector() const {
 
 }
 
-//[VV]
+//[VV]*/
 bool chessboard::is_out(const coords &_pos) const {
     
     return _pos.first < 0 || _pos.first >= 8 || _pos.second < 0 || _pos.second >= 8;
     
 }
 
-//[VV]
+//[VV]*/
 bool chessboard::opposites(const coords &_pos_1, const coords &_pos_2) const {
 
     return piece_at_pos(_pos_1)->get_side() == opposite_of(piece_at_pos(_pos_2)->get_side());
 
 }
 
-//[VV]
+//[VV]*/
 piece* chessboard::piece_at_pos(const coords &_pos) const {
 
     return board[_pos.first][_pos.second];
 
 }
 
-//[VV]
+//[VV]*/
 piece* chessboard::piece_at_pos(const int i, const int j) const {
 
     return board[i][j];
 
 }
 
-//[VV]
+//[VV]*/
 bool chessboard::contains(const set &_side, const char _piece_alias) const {
 
     return find(_side, _piece_alias).at(0) != ILLEGAL_COORDS;
 
 }
 
-//[VV]
+//[VV]*/
 std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) const {
 
     std::vector<coords> ret {ILLEGAL_COORDS};
@@ -411,7 +413,7 @@ std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) 
     
 }
 
-//[VV]
+//[VV]*/
 void chessboard::edit_pos(const set &_side, const coords &_start, const coords &_end) {
 
     switch(_side) {
@@ -440,7 +442,7 @@ void chessboard::edit_pos(const set &_side, const coords &_start, const coords &
 
 }
 
-//[VV]
+//[VV]*/
 void chessboard::eat_piece(const set &_side, const coords &_piece) {
 
     bool start_moving = false;
@@ -470,7 +472,7 @@ void chessboard::eat_piece(const set &_side, const coords &_piece) {
 
 }
 
-//[VV]
+//[VV]*/
 void chessboard::add_piece(const set &_side, const coords &_piece) {
 
     switch(_side) {
@@ -484,30 +486,31 @@ void chessboard::add_piece(const set &_side, const coords &_piece) {
 
 }
 
-//[VV]
-bool chessboard::try_add_move(std::vector<coords> &_moves, const coords &_pos, const coords &_offset) const {
+//[VV]*/
+bool chessboard::try_add_move(std::vector<coords> &_moves, const coords &_pos, const coords &_offset, const bool _unchecked) {
 
     coords pos_check = _pos + _offset;
     if (is_out(pos_check))
         return false;
 
     bool ret = true;
+    bool king_in_check = !_unchecked && !move(set::Empty, _pos, pos_check).second;
 
-    if (is<empty_tile>(*piece_at_pos(pos_check)))
+    if (!king_in_check && is<empty_tile>(*piece_at_pos(pos_check)))
         _moves.push_back(pos_check);
     
     else
         ret = false;
 
-    if (opposites(pos_check, _pos))
+    if (!king_in_check && opposites(pos_check, _pos))
         _moves.push_back(pos_check);
 
     return ret;
 
 }
 
-//[VV]
-bool chessboard::is_legit(const coords &_start, const coords &_end) const {
+//[VV]*/
+bool chessboard::is_legit(const coords &_start, const coords &_end) {
 
     if (is_out(_end))
         return false;
@@ -523,7 +526,7 @@ bool chessboard::is_legit(const coords &_start, const coords &_end) const {
 
 }
 
-//[VV]
+//[VV]*/
 bool chessboard::is_pawn_eat(const coords &_start, const coords &_end) const {
 
     piece* piece1 = piece_at_pos(_start);
@@ -542,8 +545,8 @@ bool chessboard::is_pawn_eat(const coords &_start, const coords &_end) const {
 
 }
 
-//[VV]
-std::pair<bool, coords> chessboard::is_castling(const coords &_start, const coords &_end) const {
+//[VV]*/
+std::pair<bool, coords> chessboard::is_castling(const coords &_start, const coords &_end) {
 
     path path1 = get_path(_start, _end);
     piece* piece1 = piece_at_pos(_start);
@@ -585,7 +588,7 @@ std::pair<bool, coords> chessboard::is_castling(const coords &_start, const coor
     
 }
 
-//[VV]
+//[VV]*/
 std::pair<bool, coords> chessboard::is_enpassant(const coords &_start, const coords &_end) const {
 
     std::pair<bool, coords> false_ret = std::make_pair(false, ILLEGAL_COORDS);
@@ -614,7 +617,7 @@ std::pair<bool, coords> chessboard::is_enpassant(const coords &_start, const coo
 
 }
 
-//[VV]
+//[VV]*/
 bool chessboard::is_promotion(const coords &_pos) const {
 
     if(is_out(_pos))
@@ -630,7 +633,7 @@ bool chessboard::is_promotion(const coords &_pos) const {
 
 }
 
-//[VV]
+//[VV]*/
 void chessboard::do_legit(const coords &_start, const coords &_end) {
 
     piece* p1 = piece_at_pos(_start);
@@ -656,7 +659,7 @@ void chessboard::do_legit(const coords &_start, const coords &_end) {
 
 }
 
-//[VV]
+//[VV]*/
 void chessboard::do_castling(const coords &_tower, const coords &_start, const coords &_end) {
 
     set side = piece_at_pos(_start)->get_side();
@@ -675,7 +678,7 @@ void chessboard::do_castling(const coords &_tower, const coords &_start, const c
     
 }
 
-//[VV]
+//[VV]*/
 void chessboard::do_enpassant(const coords &_eat, const coords &_start, const coords &_end) {
 
     set side1 = piece_at_pos(_start)->get_side();
@@ -693,7 +696,7 @@ void chessboard::do_enpassant(const coords &_eat, const coords &_start, const co
 
 }
 
-//[VV]
+//[VV]*/
 void chessboard::do_promotion(const coords &_pos) {
 
     bool exit_cond = false;
@@ -735,8 +738,8 @@ void chessboard::do_promotion(const coords &_pos) {
 
 }
 
-//[VV]
-bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
+//[VV]*/
+bool chessboard::is_in_danger(const set &_side, const coords &_to_check) {
 
     if (_to_check == ILLEGAL_COORDS) return false;
 
@@ -782,14 +785,14 @@ bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
 
 }
 
-//[VV]
-bool chessboard::check(const set &_side) const {
+//[VV]*/
+bool chessboard::check(const set &_side) {
 
     return is_in_danger( _side, find(_side, 'r').at(0) );
 
 }
 
-//[VV]
+//[VV]*/
 bool chessboard::checkmate(const set &_side) {
 
     int counter = 0;
@@ -816,14 +819,14 @@ bool chessboard::checkmate(const set &_side) {
 
 }
 
-//[?]
+//[?]*/
 bool chessboard::draw(const set &_side) {
     
     return (!check(_side) && checkmate(_side)) || draw_for_pieces();
     
 }
 
-//[?]
+//[?]*/
 bool chessboard::draw_for_pieces() const {
 
     bool w_bishop_found = contains(set::White, 'a');

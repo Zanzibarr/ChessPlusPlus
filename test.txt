@@ -28,6 +28,7 @@ spostamento pedina
 mosse illegali
 mosse al turno sbagliato
 
+
 Da testare:
 
 valgrind

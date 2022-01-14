@@ -6,6 +6,15 @@
 
 #define LETTERA 'A'
 
+//coordinate converter
+std::pair<char, int> matrix_to_chess(std::pair<int,int> matrix_coords) {
+
+	char letter = matrix_coords.second + 'A';
+	int number = matrix_coords.first + 1;
+
+	return std::pair<char,int>{letter, number};
+};
+
 int main(void) {
 
     chessboard scacchiera{};
@@ -17,13 +26,19 @@ int main(void) {
     std::regex reg1("^([A-H]){1}([1-8]){1} ([A-H]){1}([1-8]){1}$");
     std::smatch match;
 
+    int tries = 0;
+    int bot_average = 0;
+    int rounds = 0;
+
     scacchiera.print();
+    std::vector<coords> pc;
 
     while (true) {
 
+        if (rounds > 200) break;
+
         bool failed;
 
-        /*
         failed = true;
 
         while(failed) {
@@ -74,25 +89,29 @@ int main(void) {
             }
 
         }
-        */
 
-       failed = true;
+        failed = true;
+        tries = 0;
+
+        pc = scacchiera.get_pieces(turn[counter]);
 
         while(failed) {
 
-            //std::cout << "\nTentativo del bot " << counter << ": ";
+            tries++;
 
-            std::vector<coords> pc = scacchiera.get_pieces(turn[counter]);
+            //std::cout << "\nTentativo del bot " << counter << ": ";
 
             std::srand(time(0));
             coords start = pc.at(std::rand()%pc.size());
 
-            std::vector<coords> mv = scacchiera.get_moves(start, true);
+            std::vector<coords> mv = scacchiera.get_moves(start, true, false);
 
             std::srand(time(0));
 
             if (mv.empty()) {
-                //std::cout << " mossa fallita per pedina bloccata";
+                //std::cout << " mossa fallita per pedina bloccat";
+                std::remove(pc.begin(), pc.end(), start);
+                //std::cout << "a";
                 continue;
             }
 
@@ -104,33 +123,35 @@ int main(void) {
                 result = scacchiera.move(turn[counter], start, target);
             } catch (illegal_move_exception) {
                 //std::cout << " mossa fallita per mossa illegale";
+                continue;
             }
 
             if (result.first && result.second) {
 
                 scacchiera.print();
                 std::cout << "Scacco matto!";
-                exit(0);
+                break;
 
             } else if(result.first && !result.second) {
 
                 scacchiera.print();
                 std::cout << "Patta!";
-                exit(0);
+                break;
 
             } else
                 failed = (!result.first && !result.second);
 
             if (!failed) {
-                //std::cout << start.first << ";" << start.second << " -> " << target.first << ";" << target.second;
+                std::pair<char, int> coords_s = matrix_to_chess(start);
+                std::pair<char, int> coords_f = matrix_to_chess(target);
+                std::cout << "\nTentativo n. " << tries << " del bot " << counter << ": ";
+                std::cout << coords_s.first << ";" << coords_s.second << " -> " << coords_f.first << ";" << coords_f.second;
                 scacchiera.print();
+                counter = ( counter + 1) % 2;
+                bot_average += tries;
+                rounds++;
             } //else
                 //std::cout << " mossa fallita per scacco";
-            
-            if (!failed) {
-                std::cout << "\nTentativo del bot " << counter << ": ";
-                counter = ( counter + 1) % 2;
-            }
 
         }
 
@@ -141,5 +162,7 @@ int main(void) {
         */
 
     }
+
+    std::cout << bot_average / rounds << " average tries per move.";
 
 }
