@@ -85,7 +85,7 @@ std::vector<coords> chessboard::get_moves(const coords &_pos, const bool with_ca
 
     piece* piece1 = piece_at_pos(_pos);
     
-    std::vector<coords> ret;
+    std::vector<coords> ret{};
 
     bool h_l = true;
     bool h_r = true;
@@ -112,9 +112,9 @@ std::vector<coords> chessboard::get_moves(const coords &_pos, const bool with_ca
 
         int direction = (piece1->get_side() == set::White) ? 1 : -1;
         
-        if (is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))))
+        if (!is_out(_pos + std::make_pair(direction, 0)) && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))))
             try_add_move(ret, _pos, std::make_pair(direction, 0));
-        if (piece1->is_first_move() && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))) && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(2*direction, 0))))
+        if (!is_out(_pos + std::make_pair(direction, 0)) && !is_out(_pos + std::make_pair(2*direction, 0)) && piece1->is_first_move() && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(direction, 0))) && is<empty_tile>(*piece_at_pos(_pos + std::make_pair(2*direction, 0))))
             try_add_move(ret, _pos, std::make_pair(2*direction, 0));
 
         if (is_pawn_eat(_pos, _pos + std::make_pair(1*direction, -1)))
@@ -209,26 +209,6 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     if (!castling.first) enpassant = is_enpassant(_start, _end);
     if (!castling.first && !enpassant.first) legit = is_legit(_start, _end);
 
-    /*
-     If turn == set::Empty, that means the move method is called from the checkmate control method
-     If the move method is called from the checkmate control method, I don't need to execute the moves in a copy chessboard
-     which is needed to "undo" the move in a check situation, since this is just a control move and is not a final move.
-    
-    std::vector<piece*> pieces = to_vector();
-    //memory leak here
-    check_ctrl = new chessboard{pieces, history};
-
-    if (castling.first) check_ctrl->do_castling(castling.second, _start, _end);
-    else if (enpassant.first) check_ctrl->do_enpassant(enpassant.second, _start, _end);
-    else if (legit) check_ctrl->do_legit(_start, _end);
-    else return FAILED;
-
-    if (check_ctrl->check(side))
-        return FAILED;
-    else if (_turn == set::Empty)
-        return SUCCESS;
-    */
-
     int special = 0;
     coords second_piece = ILLEGAL_COORDS;
 
@@ -256,8 +236,8 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
 
     history.push_back(std::make_pair(_start, _end));
     
-    if (is_promotion(_end))
-        do_promotion(_end);
+    //if (is_promotion(_end))
+    //    do_promotion(_end);
 
     //AGGIUNGERE IN QUALCHE MODO LA PROMOZIONE ALL'HISTORY
 
@@ -274,6 +254,47 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
         return DRAW;
 
     return SUCCESS;
+
+}
+
+//[VV]*/
+bool chessboard::is_promotion(const coords &_pos) const {
+
+    if(is_out(_pos))
+        return false;
+
+    piece* p = piece_at_pos(_pos);
+    set side = p->get_side();
+
+    if (is<pawn>(*p) && ( _pos.first == 0 && side == set::Black || _pos.first == 7 && side == set::White ))
+        return true;
+
+    return false;
+
+}
+
+//[VV]*/
+void chessboard::do_promotion(const coords &_pos, const char &_piece) {
+
+    set side = piece_at_pos(_pos)->get_side();
+
+    delete board[_pos.first][_pos.second];
+
+    //promote the piece based on the _piece parameter
+    switch(_piece) {
+        case 't':
+            board[_pos.first][_pos.second] = new rook(side);
+            break;
+        case 'c':
+            board[_pos.first][_pos.second] = new knight(side);
+            break;
+        case 'a':
+            board[_pos.first][_pos.second] = new bishop(side);
+            break;
+        case 'd':
+            board[_pos.first][_pos.second] = new queen(side);
+            break;
+    }
 
 }
 
@@ -313,47 +334,6 @@ void chessboard::print() const {
 
 
 //[VV]*/
-/*chessboard::chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> _history) {
-
-    for (unsigned int i = 0; i < _copy.size(); i++) {
-
-        set side = _copy.at(i)->get_side();
-
-        switch(std::tolower(_copy.at(i)->get_alias())) {
-            case ' ':
-                board[i/8][i%8] = new empty_tile();
-                break;
-            case 'p':
-                board[i/8][i%8] = new pawn(side);
-                break;
-            case 't':
-                board[i/8][i%8] = new rook(side);
-                break;
-            case 'c':
-                board[i/8][i%8] = new knight(side);
-                break;
-            case 'a':
-                board[i/8][i%8] = new bishop(side);
-                break;    
-            case 'd':
-                board[i/8][i%8] = new queen(side);
-                break;
-            case 'r':
-                board[i/8][i%8] = new king(side);
-                break;
-        }
-
-        board[i/8][i%8]->set_first_move(_copy.at(i)->is_first_move());
-
-        add_piece(side, std::make_pair(i/8, i%8));
-
-    }
-
-    history = _history;
-
-}*/
-
-//[VV]*/
 std::vector<piece*> chessboard::to_vector() const {
 
     std::vector<piece*> ret;
@@ -381,12 +361,16 @@ bool chessboard::opposites(const coords &_pos_1, const coords &_pos_2) const {
 //[VV]*/
 piece* chessboard::piece_at_pos(const coords &_pos) const {
 
+    if (is_out(_pos)) throw illegal_coords_exception();
+
     return board[_pos.first][_pos.second];
 
 }
 
 //[VV]*/
 piece* chessboard::piece_at_pos(const int i, const int j) const {
+
+    if (is_out(std::make_pair(i, j))) throw illegal_coords_exception();
 
     return board[i][j];
 
@@ -635,45 +619,28 @@ std::pair<bool, coords> chessboard::is_enpassant(const coords &_start, const coo
 }
 
 //[VV]*/
-bool chessboard::is_promotion(const coords &_pos) const {
-
-    if(is_out(_pos))
-        return false;
-
-    piece* p = piece_at_pos(_pos);
-    set side = p->get_side();
-
-    if (is<pawn>(*p) && ( _pos.first == 0 && side == set::Black || _pos.first == 7 && side == set::White ))
-        return true;
-
-    return false;
-
-}
-
-//[VV]*/
 void chessboard::do_legit(const coords &_start, const coords &_end) {
 
     piece* p1 = piece_at_pos(_start);
+    piece* p2 = piece_at_pos(_end);
     set side = p1->get_side();
 
     bool eaten = !is<empty_tile>(*piece_at_pos(_end));
 
     delete eaten_piece;
-
-    if (is<pawn>(*p1)) eaten_piece = new pawn(p1->get_side());
-    else if (is<rook>(*p1)) eaten_piece = new rook(p1->get_side());
-    else if (is<knight>(*p1)) eaten_piece = new knight(p1->get_side());
-    else if (is<bishop>(*p1)) eaten_piece = new bishop(p1->get_side());
-    else if (is<queen>(*p1)) eaten_piece = new queen(p1->get_side());
-    else if (is<king>(*p1)) eaten_piece = new king(p1->get_side());
-    else if (is<empty_tile>(*p1)) eaten_piece = new empty_tile();
+    eaten_piece = new empty_tile();
 
     piece* temp = board[_end.first][_end.second];
-    board[_end.first][_end.second] = eaten_piece;
-    eaten_piece = temp;
+    board[_end.first][_end.second] = board[_start.first][_start.second];
+    board[_start.first][_start.second] = temp;
+    
+    if (eaten) {
 
-    delete board[_start.first][_start.second];
-    board[_start.first][_start.second] = new empty_tile();
+        temp = eaten_piece;
+        eaten_piece = board[_start.first][_start.second];
+        board[_start.first][_start.second] = temp;
+
+    }
 
     if (eaten) eat_piece(opposite_of(side), _end);
     edit_pos(side, _start, _end);
@@ -722,53 +689,11 @@ void chessboard::do_enpassant(const coords &_eat, const coords &_start, const co
 }
 
 //[VV]*/
-void chessboard::do_promotion(const coords &_pos) {
-
-    bool exit_cond = false;
-
-    while(!exit_cond) {
-
-        std::cout << std::endl << "\nSelect the piece you wish to have your pawn promoted to: 't', 'c', 'a', 'd': ";
-        std::string in;
-        std::cin >> in;
-        char piece = std::tolower(in[0]);
-
-        set side = piece_at_pos(_pos)->get_side();
-
-        delete board[_pos.first][_pos.second];
-
-        //promote the piece based on the _piece parameter
-        switch(piece) {
-            case 't':
-                board[_pos.first][_pos.second] = new rook(side);
-                exit_cond = true;
-                break;
-            case 'c':
-                board[_pos.first][_pos.second] = new knight(side); 
-                exit_cond = true;
-                break;
-            case 'a':
-                board[_pos.first][_pos.second] = new bishop(side);
-                exit_cond = true;
-                break;
-            case 'd':
-                board[_pos.first][_pos.second] = new queen(side);
-                exit_cond = true;
-                break;
-        }
-        
-        std::cout << std::endl;
-
-    }
-
-}
-
-//[VV]*/
 bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
 
     if (_to_check == ILLEGAL_COORDS) return false;
 
-    std::vector<coords> danger_zone;
+    std::vector<coords> danger_zone{};
 
     switch(_side) {
 

@@ -35,17 +35,22 @@ int main(void) {
 
     while (true) {
 
-        if (rounds > 100) break;
+        //if (rounds > 100) break;
 
         bool failed;
 
-        failed = true;
+        /*failed = true;
 
         while(failed) {
 
             std::cout << std::endl << names[counter] + " inserisci una mossa: ";
             std::string input;
 			std::getline(std::cin, input);
+
+            if (input.compare("XX XX") == 0) {
+                scacchiera.print();
+                continue;
+            }
 
             coords start;
             coords target;
@@ -72,23 +77,45 @@ int main(void) {
 
                 scacchiera.print();
                 std::cout << "Scacco matto!";
-                exit(0);
+                goto exit;
 
             } else if(result.first && !result.second) {
 
                 scacchiera.print();
                 std::cout << "Patta!";
-                exit(0);
+                goto exit;
 
             } else
                 failed = (!result.first && !result.second);
 
             if (!failed) {
-                scacchiera.print();
+
+                std::cout << "Mossa a buon fine";
+
+                if (scacchiera.is_promotion(target)) {
+
+                    char piece;
+                    bool exit_cond = false;
+
+                    while(!exit_cond) {
+
+                        std::cout << std::endl << "\nSelect the piece you wish to have your pawn promoted to: 't', 'c', 'a', 'd': ";
+                        std::string in;
+                        std::cin >> in;
+                        piece = std::tolower(in[0]);
+
+                        exit_cond = piece == 'a' || piece == 'c' || piece == 'd' || piece == 't';
+                    
+                    }
+
+                    scacchiera.do_promotion(target, piece);
+
+                }
+                //scacchiera.print();
                 counter = (counter + 1)%2;
             }
 
-        }
+        }*/
 
         failed = true;
         tries = 0;
@@ -140,13 +167,25 @@ int main(void) {
                 std::pair<char, int> coords_f = matrix_to_chess(target);
                 std::cout << "\nTentativo n. " << tries << " del bot " << counter << ": ";
                 std::cout << coords_s.first << ";" << coords_s.second << " -> " << coords_f.first << ";" << coords_f.second;
+
+                if (scacchiera.is_promotion(target)) {
+
+                    std::vector<char> pieces{'t', 'c', 'a', 'd'};
+
+                    std::srand(time(0));
+                    char piece = pieces.at(std::rand()%4);
+
+                    scacchiera.do_promotion(target, piece);
+
+                }
+
                 scacchiera.print();
+
                 counter = ( counter + 1) % 2;
                 bot_average += tries;
                 rounds++;
             } else
                 all_moves.erase(all_moves.begin() + rand_index);
-
 
         }
 

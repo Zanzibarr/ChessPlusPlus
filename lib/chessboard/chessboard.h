@@ -73,6 +73,10 @@ class chessboard {
          *                  
          */
         std::pair<bool, bool> move(const set &_turn, const coords &_start, const coords &_end);
+
+        bool is_promotion(const coords &_pos) const;
+
+        void do_promotion(const coords &_pos, const char &_piece);
         
         /**
          * @brief Method that prints the chessboard in it's current state
@@ -81,6 +85,8 @@ class chessboard {
         void print() const;
 
     private:
+
+        class illegal_coords_exception{};
     
         piece *board[8][8];
         std::vector<std::pair<coords, coords>> history;
@@ -120,12 +126,10 @@ class chessboard {
         bool is_pawn_eat(const coords &_start, const coords &_end) const;
         std::pair<bool, coords> is_castling(const coords &_start, const coords &_end) const;
         std::pair<bool, coords> is_enpassant(const coords &_start, const coords &_end) const;
-        bool is_promotion(const coords &_pos) const;
         
         void do_legit(const coords &_start, const coords &_end);
         void do_castling(const coords &_tower, const coords &_start, const coords &_end);
         void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
-        void do_promotion(const coords &_pos);
 
         bool is_in_danger(const set &_side, const coords &_to_check) const;
         bool check(const set &_side) const;
@@ -153,5 +157,7 @@ bool is(const piece data) {
 }
 
 coords operator+(const coords &_a, const coords &_b) { return std::make_pair(_a.first + _b.first, _a.second + _b.second); }
+
+bool operator==(const coords &_a, const coords &_b) { return _a.first == _b.first && _a.second == _b.second; }
 
 #endif
