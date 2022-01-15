@@ -18,4 +18,9 @@ D2 D5 - F6 D7
 D5 D7 - ...
 ]
 
+[V]
 da controllare la gestione della memoria (delete e new)
+
+test con tante mosse
+std::bad_alloc (raro)
+crash (ogni tanto)

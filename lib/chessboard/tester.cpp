@@ -35,9 +35,9 @@ int main(void) {
 
     while (true) {
 
-        if (rounds > 200) break;
+        //if (rounds > 300) break;
 
-        bool failed;
+        bool failed;/*
 
         failed = true;
 
@@ -88,41 +88,35 @@ int main(void) {
                 counter = (counter + 1)%2;
             }
 
-        }
+        }*/
 
         failed = true;
         tries = 0;
 
         pc = scacchiera.get_pieces(turn[counter]);
+        std::vector<std::pair<coords, coords>> all_moves;
+
+        for (int i = 0; i < pc.size(); i++) {
+            std::vector<coords> mv = scacchiera.get_moves(pc.at(i), true);
+            for (int j = 0; j < mv.size(); j++) all_moves.push_back(std::make_pair(pc.at(i), mv.at(j)));
+        }
 
         while(failed) {
 
             tries++;
 
-            //std::cout << "\nTentativo del bot " << counter << ": ";
-
             std::srand(time(0));
-            coords start = pc.at(std::rand()%pc.size());
+            int rand_index = std::rand()%all_moves.size();
 
-            std::vector<coords> mv = scacchiera.get_moves(start, true, false);
-
-            std::srand(time(0));
-
-            if (mv.empty()) {
-                //std::cout << " mossa fallita per pedina bloccat";
-                std::remove(pc.begin(), pc.end(), start);
-                //std::cout << "a";
-                continue;
-            }
-
-            coords target = mv.at(std::rand()%mv.size());
+            coords start = all_moves.at(rand_index).first;
+            coords target = all_moves.at(rand_index).second;
 
             std::pair<bool, bool> result;
 
             try {
                 result = scacchiera.move(turn[counter], start, target);
             } catch (illegal_move_exception) {
-                //std::cout << " mossa fallita per mossa illegale";
+                all_moves.erase(all_moves.begin() + rand_index);
                 continue;
             }
 
@@ -130,13 +124,13 @@ int main(void) {
 
                 scacchiera.print();
                 std::cout << "Scacco matto!";
-                break;
+                goto exit;
 
             } else if(result.first && !result.second) {
 
                 scacchiera.print();
                 std::cout << "Patta!";
-                break;
+                goto exit;
 
             } else
                 failed = (!result.first && !result.second);
@@ -150,8 +144,9 @@ int main(void) {
                 counter = ( counter + 1) % 2;
                 bot_average += tries;
                 rounds++;
-            } //else
-                //std::cout << " mossa fallita per scacco";
+            } else
+                all_moves.erase(all_moves.begin() + rand_index);
+
 
         }
 
@@ -162,6 +157,8 @@ int main(void) {
         */
 
     }
+
+    exit:
 
     std::cout << bot_average / rounds << " average tries per move.";
 
