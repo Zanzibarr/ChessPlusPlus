@@ -844,14 +844,14 @@ bool chessboard::checkmate(const set &_side) {
 
 }
 
-//[?]*/
+//[VV]*/
 bool chessboard::draw(const set &_side) {
     
     return (!check(_side) && checkmate(_side)) || draw_for_pieces();
     
 }
 
-//[?]*/
+//[VV]*/
 bool chessboard::draw_for_pieces() const {
 
     bool w_bishop_found = contains(set::White, 'a');
@@ -863,20 +863,23 @@ bool chessboard::draw_for_pieces() const {
     coords w_bishop = find(set::White, 'a').at(0);
     coords b_bishop = find(set::Black, 'a').at(0);
 
-    bool w_knight_numb = find(set::White, 'c').size() == 2;
-    bool b_knight_numb = find(set::Black, 'c').size() == 2;
-
     bool ret = false;
+
+    //king and king
     ret |= (white_pieces.size() == 1 && black_pieces.size() == 1);
+    //king-bishop and king
     ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_bishop_found && white_pieces.size() == 1);
     ret |= (white_pieces.size() == 2 && w_knight_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_knight_found && white_pieces.size() == 1);
+    //king-bishop and king-bishop
     ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 2 && b_bishop_found && (w_bishop.first + w_bishop.second) % 2 == (b_bishop.first + b_bishop.second) % 2);
-    ret |= (white_pieces.size() == 3 && black_pieces.size() == 1 && w_knight_found && w_knight_numb) || (black_pieces.size() == 3 && white_pieces.size() == 1 && b_knight_found && b_knight_numb);
+    //king-knight and king
+    ret |= (white_pieces.size() == 2 && black_pieces.size() == 1 && w_knight_found) || (black_pieces.size() == 2 && white_pieces.size() == 1 && b_knight_found);
 
     return ret;
 
 }
 
+//[VV]
 void chessboard::undo(const int _move_type, const coords _initial_pos, const coords _final_pos, const coords _oth_pos, const set _side) {
 
     piece* temp = board[_final_pos.first][_final_pos.second];
