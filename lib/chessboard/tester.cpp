@@ -35,7 +35,7 @@ int main(void) {
 
     while (true) {
 
-        //if (rounds > 300) break;
+        if (rounds > 250) break;
 
         bool failed;/*
 
