@@ -35,9 +35,9 @@ int main(void) {
 
     while (true) {
 
-        if (rounds > 250) break;
+        if (rounds > 100) break;
 
-        bool failed;/*
+        bool failed;
 
         failed = true;
 
@@ -88,7 +88,7 @@ int main(void) {
                 counter = (counter + 1)%2;
             }
 
-        }*/
+        }
 
         failed = true;
         tries = 0;
