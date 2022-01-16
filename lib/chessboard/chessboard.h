@@ -52,6 +52,16 @@ class chessboard {
         std::vector<coords> get_pieces(const set &_set) const;
 
         /**
+         * @brief Get the alias of the piece at (i, j) position
+         * 
+         * @param _i Row index of the piece
+         * @param _j Col index of the piece
+         * @return char The alias of the piece in the specified position
+         * 
+         */
+        char at(const int _i, const int _j) const;
+
+        /**
          * @brief Get all the possible moves that a piece in _pos position can make (special moves included)
          * 
          * @param _pos The position of the object
@@ -74,15 +84,25 @@ class chessboard {
          */
         std::pair<bool, bool> move(const set &_turn, const coords &_start, const coords &_end);
 
-        bool is_promotion(const coords &_pos) const;
-
-        void do_promotion(const coords &_pos, const char &_piece);
-        
         /**
-         * @brief Method that prints the chessboard in it's current state
+         * @brief Checks if the piece in _pos position is in a promotion condition
+         * 
+         * @param _pos Position of the piece to check
+         * @return true If it's in a promotion condition
+         * @return false If it's not in a promotion condition
          * 
          */
-        void print() const;
+        bool is_promotion(const coords &_pos) const;
+
+        /**
+         * @brief Method that does the promotion of the piece at _pos position into the _piece selected
+         * 
+         * @param _pos The position of the pawn to promote
+         * @param _piece The choosen promotion
+         * 
+         */
+        void do_promotion(const coords &_pos, const char &_piece);
+        
 
     private:
 
@@ -93,8 +113,6 @@ class chessboard {
         std::vector<coords> white_pieces;
         std::vector<coords> black_pieces;
 
-        //memory leak here
-        //chessboard* check_ctrl;
         piece* eaten_piece;
 
         const std::pair<bool, bool> FAILED {false, false};
@@ -103,10 +121,6 @@ class chessboard {
         const std::pair<bool, bool> CHECKMATE {true, true};
         const coords ILLEGAL_COORDS {-1, -1};
         
-        chessboard(const std::vector<piece*> &_copy, const std::vector<std::pair<coords, coords>> _history);
-
-        std::vector<piece*> to_vector() const;
-
         bool is_out(const coords &_pos) const;
         bool opposites(const coords &_pos_1, const coords &_pos_2) const;
 
@@ -159,5 +173,36 @@ bool is(const piece data) {
 coords operator+(const coords &_a, const coords &_b) { return std::make_pair(_a.first + _b.first, _a.second + _b.second); }
 
 bool operator==(const coords &_a, const coords &_b) { return _a.first == _b.first && _a.second == _b.second; }
+
+std::ostream& operator<<(std::ostream& _os, const chessboard &_board) {
+
+    _os << std::endl << "     --- --- --- --- --- --- --- --- ";
+
+    for (int i = 7; i >= 0; i--) {
+        _os << std::endl << i + 1 << "   ";
+
+        _os << "|";
+        for (unsigned int j = 0; j < 8; j++) {
+            _os << " " << _board.at(i, j) << " ";
+            if (j!=7)
+                _os << "|";
+        }
+        _os << "|" << std::endl << "    ";
+        
+        if (i!=0)
+            _os << " --- --- --- --- --- --- --- --- ";
+
+    }
+    
+    _os << " --- --- --- --- --- --- --- --- " << std::endl << std::endl << "     ";
+    
+    for (unsigned int i = 0; i < 8; i++)
+        _os << " " << (char) (i + 'A') << "  ";
+
+    _os << std::endl << std::endl;
+
+    return _os;
+
+}
 
 #endif
