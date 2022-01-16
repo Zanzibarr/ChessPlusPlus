@@ -30,7 +30,8 @@ int main(void) {
     int bot_average = 0;
     int rounds = 0;
 
-    scacchiera.print();
+    std::cout << scacchiera;
+
     std::vector<coords> pc;
 
     while (true) {
@@ -39,7 +40,7 @@ int main(void) {
 
         bool failed;
 
-        /*failed = true;
+        failed = true;
 
         while(failed) {
 
@@ -48,7 +49,7 @@ int main(void) {
 			std::getline(std::cin, input);
 
             if (input.compare("XX XX") == 0) {
-                scacchiera.print();
+                std::cout << scacchiera;
                 continue;
             }
 
@@ -75,13 +76,13 @@ int main(void) {
 
             if (result.first && result.second) {
 
-                scacchiera.print();
+                std::cout << scacchiera;
                 std::cout << "Scacco matto!";
                 goto exit;
 
             } else if(result.first && !result.second) {
 
-                scacchiera.print();
+                std::cout << scacchiera;
                 std::cout << "Patta!";
                 goto exit;
 
@@ -115,7 +116,7 @@ int main(void) {
                 counter = (counter + 1)%2;
             }
 
-        }*/
+        }
 
         failed = true;
         tries = 0;
@@ -149,13 +150,13 @@ int main(void) {
 
             if (result.first && result.second) {
 
-                scacchiera.print();
+                std::cout << scacchiera;
                 std::cout << "Scacco matto!";
                 goto exit;
 
             } else if(result.first && !result.second) {
 
-                scacchiera.print();
+                std::cout << scacchiera;
                 std::cout << "Patta!";
                 goto exit;
 
@@ -179,7 +180,7 @@ int main(void) {
 
                 }
 
-                scacchiera.print();
+                std::cout << scacchiera;
 
                 counter = ( counter + 1) % 2;
                 bot_average += tries;
@@ -199,6 +200,6 @@ int main(void) {
 
     exit:
 
-    std::cout << bot_average / rounds << " average tries per move.";
+    std::cout << (double)bot_average / rounds << " average tries per move.";
 
 }
