@@ -1,2 +1,0 @@
-C:/Users/user/Desktop/ChessPlusPlus/test/CMakeFiles/ALL_BUILD.dir
-C:/Users/user/Desktop/ChessPlusPlus/test/CMakeFiles/ZERO_CHECK.dir
