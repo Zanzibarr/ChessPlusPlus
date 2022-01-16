@@ -23,7 +23,6 @@
 
 typedef std::pair<int, int> coords;
 
-class illegal_type_exception{};
 class chessboard;
 
 class chessboard {
@@ -107,6 +106,7 @@ class chessboard {
     private:
 
         class illegal_coords_exception{};
+        class illegal_type_exception{};
     
         piece *board[8][8];
         std::vector<std::pair<coords, coords>> history;
