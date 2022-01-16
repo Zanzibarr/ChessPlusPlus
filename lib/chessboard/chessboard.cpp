@@ -38,9 +38,11 @@ chessboard::chessboard(void) {
     board[0][6] = new knight(set::White);
     board[0][7] = new rook(set::White);
 
+    empty_piece = new empty_tile();
+
     for (unsigned int i = 2; i < 6; i++)
         for (unsigned int j = 0; j < 8; j++)
-            board[i][j] = new empty_tile();
+            board[i][j] = empty_piece;
 
     for (unsigned int i = 0; i < 2; i++) {
         for (unsigned int j = 0; j < 8; j++) {
@@ -55,14 +57,17 @@ chessboard::chessboard(void) {
 
 //[?]*/
 chessboard::~chessboard(void) {
-
-    for (unsigned int i = 0; i < 8; i++) for (unsigned int j = 0; j < 8; j++)
-        delete board[i][j];
+    
+    for (int i = 0; i < white_pieces.size(); i++)
+        delete piece_at_pos(white_pieces.at(i));
+    for (int i = 0; i < black_pieces.size(); i++)
+        delete piece_at_pos(black_pieces.at(i));
 
     history.clear();
     white_pieces.clear();
     black_pieces.clear();
 
+    delete empty_piece;
     delete eaten_piece;
 
 }
@@ -237,14 +242,16 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
         throw illegal_move_exception();
 
     //If I'm under check or I'm inside the checkmate control method, undo the move (look at the checkmate method)
+    std::cout << "a";
     bool is_on_check = check(side);
     if (is_on_check || _turn == set::Empty)
         undo(special, _start, _end, second_piece, side);
     
     //If I'm under check or I was inside the checkmate control method, I have to return now
-    if (is_on_check)
+    if (is_on_check) {
+        std::cout << "Scacco";
         return FAILED;
-    else if (_turn == set::Empty)
+    } else if (_turn == set::Empty)
         return SUCCESS;
 
     //Final updates of the chessboard
@@ -328,8 +335,6 @@ bool chessboard::opposites(const coords &_pos_1, const coords &_pos_2) const {
 //[VV]*/
 piece* chessboard::piece_at_pos(const coords &_pos) const {
 
-    if (is_out(_pos)) throw illegal_coords_exception();
-
     return board[_pos.first][_pos.second];
 
 }
@@ -351,15 +356,19 @@ bool chessboard::contains(const set &_side, const char _piece_alias) const {
 //[VV]*/
 std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) const {
 
-    std::vector<coords> ret {ILLEGAL_COORDS};
+    std::vector<coords> ret{ILLEGAL_COORDS};
 
     std::vector<coords> pieces = (_side == set::White) ? white_pieces : black_pieces;
 
-    for (unsigned int i = 0; i < pieces.size(); i++)
-        if(std::tolower(_piece_alias) == std::tolower(piece_at_pos(pieces.at(i))->get_alias())) {
-            if (ret.at(0) == ILLEGAL_COORDS) ret.clear();
+    for (unsigned int i = 0; i < pieces.size(); i++) {
+        char piece = piece_at_pos(pieces.at(i))->get_alias();
+        piece = (_side == set::White) ? piece : std::tolower(piece);
+        if(_piece_alias == piece)
             ret.push_back(pieces.at(i));
-        }
+    }
+
+    if (ret.size() > 1 && ret.at(0) == ILLEGAL_COORDS)
+        ret.erase(ret.begin());
 
     return ret;
     
@@ -436,7 +445,7 @@ bool chessboard::is_legit(const coords &_start, const coords &_end) const {
     if (is_out(_end))
         return false;
 
-    std::vector<coords> piece_moves = get_moves(_start, false);
+    std::vector<coords> piece_moves = get_moves(_start);
     
     for (unsigned int i = 0; i < piece_moves.size(); i++) {
         if (_end == piece_moves.at(i))
@@ -545,8 +554,10 @@ void chessboard::do_legit(const coords &_start, const coords &_end) {
 
     bool eaten = !is<empty_tile>(*piece_at_pos(_end));
 
-    delete eaten_piece;
-    eaten_piece = new empty_tile();
+    if (!is<empty_tile>(*eaten_piece)) {
+        delete eaten_piece;
+        eaten_piece = empty_piece;
+    }
 
     piece* temp = board[_end.first][_end.second];
     board[_end.first][_end.second] = board[_start.first][_start.second];
@@ -594,8 +605,10 @@ void chessboard::do_enpassant(const coords &_eat, const coords &_start, const co
     board[_end.first][_end.second] = board[_start.first][_start.second];
     board[_start.first][_start.second] = temp;
 
-    delete eaten_piece;
-    eaten_piece = new empty_tile();
+    if (!is<empty_tile>(*eaten_piece)) {
+        delete eaten_piece;
+        eaten_piece = empty_piece;
+    }
 
     temp = eaten_piece;
     eaten_piece = board[_eat.first][_eat.second];
@@ -609,8 +622,6 @@ void chessboard::do_enpassant(const coords &_eat, const coords &_start, const co
 //[VV]*/
 bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
 
-    if (_to_check == ILLEGAL_COORDS) return false;
-
     std::vector<coords> pieces = (_side == set::White) ? black_pieces : white_pieces;
 
     for (unsigned int i = 0; i < pieces.size(); i++)
@@ -623,6 +634,8 @@ bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
 
 //[VV]*/
 bool chessboard::check(const set &_side) const {
+
+    std::cout << ((_side == set::White) ? "\nWhite" : "\nBlack") << " king at " << find(_side, 'r').at(0).first << ";" << find(_side, 'r').at(0).second;
 
     return is_in_danger( _side, find(_side, 'r').at(0) );
 
@@ -670,8 +683,10 @@ bool chessboard::draw_for_pieces() const {
     bool w_knight_found = contains(set::White, 'c');
     bool b_knight_found = contains(set::Black, 'c');
 
-    coords w_bishop = find(set::White, 'a').at(0);
-    coords b_bishop = find(set::Black, 'a').at(0);
+    coords w_bishop;
+    coords b_bishop;
+    if (w_bishop_found) w_bishop = find(set::White, 'a').at(0);
+    if (b_bishop_found) b_bishop = find(set::Black, 'a').at(0);
 
     bool ret = false;
 
@@ -681,7 +696,7 @@ bool chessboard::draw_for_pieces() const {
     ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_bishop_found && white_pieces.size() == 1);
     ret |= (white_pieces.size() == 2 && w_knight_found && black_pieces.size() == 1) || (black_pieces.size() == 2 && b_knight_found && white_pieces.size() == 1);
     //king-bishop and king-bishop
-    ret |= (white_pieces.size() == 2 && w_bishop_found && black_pieces.size() == 2 && b_bishop_found && (w_bishop.first + w_bishop.second) % 2 == (b_bishop.first + b_bishop.second) % 2);
+    if (w_bishop_found && b_bishop_found) ret |= (white_pieces.size() == 2 && black_pieces.size() == 2 && (w_bishop.first + w_bishop.second) % 2 == (b_bishop.first + b_bishop.second) % 2);
     //king-knight and king
     ret |= (white_pieces.size() == 2 && black_pieces.size() == 1 && w_knight_found) || (black_pieces.size() == 2 && white_pieces.size() == 1 && b_knight_found);
 

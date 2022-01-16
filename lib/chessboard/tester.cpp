@@ -40,7 +40,7 @@ int main(void) {
 
         bool failed;
 
-        failed = true;
+        /*failed = true;
 
         while(failed) {
 
@@ -116,7 +116,7 @@ int main(void) {
                 counter = (counter + 1)%2;
             }
 
-        }
+        }*/
 
         failed = true;
         tries = 0;
@@ -181,6 +181,7 @@ int main(void) {
                 }
 
                 std::cout << scacchiera;
+                std::cout << rounds;
 
                 counter = ( counter + 1) % 2;
                 bot_average += tries;
