@@ -130,7 +130,7 @@ class chessboard {
         bool contains(const set &_side, const char _piece_alias) const;
         std::vector<coords> find(const set &_side, const char _piece_alias) const;
 
-        void edit_pos(const set &_side, const coords &_start, const coords &_end);
+        void edit_pos(const set _side, const coords _start, const coords _end);
         void eat_piece(const set &_side, const coords &_piece);
         void add_piece(const set &_side, const coords &_piece);
 

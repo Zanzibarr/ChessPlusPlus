@@ -79,7 +79,7 @@ std::vector<coords> chessboard::get_pieces(const set &_set) const {
     
 }
 
-//[V]*/
+//[V]*/ INUTILE(non lo usi  mai)
 char chessboard::at(const int _i, const int _j) const {
 
     return piece_at_pos(_i, _j)->get_alias();
@@ -357,14 +357,16 @@ bool chessboard::contains(const set &_side, const char _piece_alias) const {
 std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) const {
 
     std::vector<coords> ret{ILLEGAL_COORDS};
+    
+    //std::vector<coords> pieces = (_side == set::White) ? white_pieces : black_pieces;
 
-    std::vector<coords> pieces = (_side == set::White) ? white_pieces : black_pieces;
-
-    for (unsigned int i = 0; i < pieces.size(); i++) {
-        char piece = piece_at_pos(pieces.at(i))->get_alias();
+    for (unsigned int i = 0; i < 8; i++) {
+        for(unsigned int j = 0; j <8 ; j++) {
+        char piece = piece_at_pos(std::make_pair(i,j))->get_alias();
         piece = (_side == set::White) ? piece : std::tolower(piece);
         if(_piece_alias == piece)
-            ret.push_back(pieces.at(i));
+            ret.push_back(std::make_pair(i,j));
+        }
     }
 
     if (ret.size() > 1 && ret.at(0) == ILLEGAL_COORDS)
@@ -375,7 +377,7 @@ std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) 
 }
 
 //[VV]*/
-void chessboard::edit_pos(const set &_side, const coords &_start, const coords &_end) {
+void chessboard::edit_pos(const set _side, const coords _start, const coords _end) {
 
     std::vector<coords>& pieces = (_side == set::White) ? white_pieces : black_pieces;
 
