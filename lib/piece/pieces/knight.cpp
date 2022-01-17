@@ -8,6 +8,9 @@ class knight : public piece {
 			max_distance = 3;
 			valid_path.push_back(path::L);
 		}
+		~knight() {
+			valid_path.clear();
+		}
 		
 		bool is_legit_move(path _path, int _distance) const {
 

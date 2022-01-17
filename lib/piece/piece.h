@@ -20,6 +20,7 @@ class piece {
 		
 	public:
 		piece(set _side = set::Black);
+		~piece();
 		virtual bool is_legit_move(path _path, int _path_length) const;
 
 		char get_alias() const;

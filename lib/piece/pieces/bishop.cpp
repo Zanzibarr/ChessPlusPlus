@@ -8,5 +8,8 @@ class bishop : public piece {
 			max_distance = 8;
 			valid_path.push_back(path::Diagonal);
 		}
+		~bishop() {
+			valid_path.clear();
+		}
 
 };

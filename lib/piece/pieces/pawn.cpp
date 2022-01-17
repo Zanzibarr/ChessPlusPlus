@@ -8,6 +8,9 @@ class pawn : public piece {
 			max_distance = 1;
 			valid_path.push_back(path::Vertical);
 		}
+		~pawn() {
+			valid_path.clear();
+		}
 
 		bool is_legit_move(path _path, int _distance) const {
 

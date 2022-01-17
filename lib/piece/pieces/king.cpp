@@ -10,5 +10,8 @@ class king : public piece {
 			valid_path.push_back(path::Vertical);
 			valid_path.push_back(path::Diagonal);
 		}
+		~king() {
+			valid_path.clear();
+		}
 
 };

@@ -7,5 +7,8 @@ class empty_tile : public piece {
 			alias = ' ';
 			max_distance = 0;
 		}
+		~empty_tile() {
+			valid_path.clear();
+		}
 
 };

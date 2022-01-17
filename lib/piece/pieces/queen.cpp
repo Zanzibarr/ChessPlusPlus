@@ -10,5 +10,8 @@ class queen : public piece {
 			valid_path.push_back(path::Horizontal);
 			valid_path.push_back(path::Diagonal);
 		}
+		~queen() {
+			valid_path.clear();
+		}
 
 };

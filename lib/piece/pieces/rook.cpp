@@ -9,5 +9,8 @@ class rook : public piece {
 			valid_path.push_back(path::Horizontal);
 			valid_path.push_back(path::Vertical);
 		}
+		~rook() {
+			valid_path.clear();
+		}
 	
 };
