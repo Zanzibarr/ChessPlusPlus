@@ -176,6 +176,7 @@ bool operator==(const coords &_a, const coords &_b) { return _a.first == _b.firs
 
 std::ostream& operator<<(std::ostream& _os, const chessboard &_board) {
 
+
     _os << std::endl << "     --- --- --- --- --- --- --- --- ";
 
     for (int i = 7; i >= 0; i--) {

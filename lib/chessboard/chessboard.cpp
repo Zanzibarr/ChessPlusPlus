@@ -356,21 +356,20 @@ bool chessboard::contains(const set &_side, const char _piece_alias) const {
 //[VV]*/
 std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) const {
 
-    std::vector<coords> ret{ILLEGAL_COORDS};
+    std::vector<coords> ret;
     
-    //std::vector<coords> pieces = (_side == set::White) ? white_pieces : black_pieces;
+    std::vector<coords> pieces = (_side == set::White) ? white_pieces : black_pieces;
 
-    for (unsigned int i = 0; i < 8; i++) {
-        for(unsigned int j = 0; j <8 ; j++) {
-        char piece = piece_at_pos(std::make_pair(i,j))->get_alias();
-        piece = (_side == set::White) ? piece : std::tolower(piece);
-        if(_piece_alias == piece)
-            ret.push_back(std::make_pair(i,j));
+    for (unsigned int i = 0; i < pieces.size(); i++) {
+        char piece = std::tolower(piece_at_pos(pieces.at(i))->get_alias());
+        //piece = (_side == set::White) ? piece : std::tolower(piece);
+        if(_piece_alias == piece){
+            ret.push_back(pieces.at(i));
         }
     }
 
-    if (ret.size() > 1 && ret.at(0) == ILLEGAL_COORDS)
-        ret.erase(ret.begin());
+    if (ret.size() == 0)
+        ret.push_back(ILLEGAL_COORDS);
 
     return ret;
     
@@ -401,7 +400,7 @@ void chessboard::eat_piece(const set &_side, const coords &_piece) {
         if (pieces.at(i) == _piece) start_moving = true;
         if (start_moving) pieces.at(i) = pieces.at(i+1);
     }
-    white_pieces.pop_back();
+    pieces.pop_back();
 
 }
 
