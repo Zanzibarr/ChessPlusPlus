@@ -58,7 +58,7 @@ chessboard::chessboard(void) {
 //[?]*/
 chessboard::~chessboard(void) {
     
-    /*for (int i = 0; i < white_pieces.size(); i++)
+    for (int i = 0; i < white_pieces.size(); i++)
         delete piece_at_pos(white_pieces.at(i));
     for (int i = 0; i < black_pieces.size(); i++)
         delete piece_at_pos(black_pieces.at(i));
@@ -67,7 +67,7 @@ chessboard::~chessboard(void) {
     white_pieces.clear();
     black_pieces.clear();
 
-    delete empty_piece;
+    /*delete empty_piece;
     delete eaten_piece;*/
 
 }
