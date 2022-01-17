@@ -556,7 +556,7 @@ void chessboard::do_legit(const coords &_start, const coords &_end) {
     bool eaten = !is<empty_tile>(*piece_at_pos(_end));
 
     if (!is<empty_tile>(*eaten_piece)) {
-        delete eaten_piece;
+        //delete eaten_piece;
         eaten_piece = empty_piece;
     }
 
