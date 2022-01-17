@@ -411,6 +411,7 @@ void chessboard::add_piece(const set &_side, const coords &_piece) {
         case set::Black:
             black_pieces.push_back(_piece);
             break;
+        case set::Empty: break;
     }
 
 }
@@ -547,7 +548,7 @@ std::pair<bool, coords> chessboard::is_enpassant(const coords &_start, const coo
 void chessboard::do_legit(const coords &_start, const coords &_end) {
 
     piece* p1 = piece_at_pos(_start);
-    piece* p2 = piece_at_pos(_end);
+    //piece* p2 = piece_at_pos(_end);
     set side = p1->get_side();
 
     bool eaten = !is<empty_tile>(*piece_at_pos(_end));
