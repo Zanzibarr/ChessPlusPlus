@@ -10,7 +10,7 @@ class human : public player {
 		}
 		bool move() {
 			
-    		std::regex reg1("^([A-H]){1}([1-8]){1} ([A-H]){1}([1-8]){1}$");
+    		std::regex reg1("^([A-H-a-h]){1}([1-8]){1} ([A-H-a-h]){1}([1-8]){1}$");
         	std::smatch match;
 
 			std::string input;
@@ -23,7 +23,7 @@ class human : public player {
 			for(int i = 0; i < input.size(); i++) { input[i] = std::toupper(input[i]); } //Uppercase entire string
 			
 			if(input == "XX XX") {
-				game_board->print();
+				std::cout<<game_board;
 				return false;
 			}
 			else {
