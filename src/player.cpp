@@ -13,13 +13,15 @@ human::~human() {
 bool human::move() {
 
 	std::regex move_expression("^([A-H-a-h]){1}([1-8]){1} ([A-H-a-h]){1}([1-8]){1}$"); //A5 B6
+	char _side = (side == set::White) ? 'w' : 'B';
 	std::smatch match_container;
 	std::string input;
 	bool failed = true;
+	bool print = false;
 
 	while(failed) {
-
-		std::cout<<std::endl<<name<<" insert a move, or XX XX to view the board: ";
+		print = false;
+		std::cout<<name<<" ["<<_side<<"]"<<" insert a move, or XX XX to view the board: ";
 		std::getline(std::cin, input);
 
 		//upperstring all input
@@ -28,7 +30,8 @@ bool human::move() {
 		}
 		
 		if(input.compare("XX XX") == 0) {
-			std::cout<<game_board;
+			std::cout<<*game_board;
+			print = true;
 		}	
 
 		coords start;
@@ -49,7 +52,7 @@ bool human::move() {
 		try {
 			move_result = game_board->move(side, start, end);
 		} catch (illegal_move_exception) {
-			std::cout<<"Oh, you can't do that";
+			if(!print)std::cout<<"Oh, you can't do that\n";
 		}
 
 		//check chessboard.h for true true condition
@@ -67,7 +70,7 @@ bool human::move() {
 		}
 
 		if(!failed) {
-			std::cout<<"move is valid.";
+			std::cout<<"move is valid.\n";
 			if(game_board->is_promotion(end)){
 				char piece;
 				bool exit_cond;
@@ -85,7 +88,6 @@ bool human::move() {
 				game_board->do_promotion(end, piece);
 			}
 		}
-
 	}
 	
 	return false;
@@ -115,6 +117,7 @@ bot::~bot() {
 
 bool bot::move() {
 	bool failed = true;
+	char _side = (side == set::White) ? 'w' : 'B';
 	std::vector<coords> pieces = game_board->get_pieces(side);
 	std::vector<std::pair<coords, coords>> all_moves;
 
@@ -157,7 +160,7 @@ bool bot::move() {
 			std::pair<char, int> start_print = matrix_to_chess(start);
 			std::pair<char, int> end_print = matrix_to_chess(end);
 			
-			std::cout<<name<<" moved from ";
+			std::cout<<name<<" ["<<_side<<"]"<<" moved from ";
 			std::cout<<start_print.first<<start_print.second<<" to "<<end_print.first<<end_print.second<<std::endl;
 
 			if(game_board->is_promotion(end)) {

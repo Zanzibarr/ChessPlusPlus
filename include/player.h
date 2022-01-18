@@ -17,7 +17,7 @@ class player {
 
 class human : public player {
 	public:
-		human(chessboard *board, set _side, std::string _name = "Miss Era Scacchi");
+		human(chessboard *board, set _side, std::string _name);
 		~human();
 
 		//move decided by human input

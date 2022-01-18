@@ -30,6 +30,7 @@ int main (void) {
 	do {
 		std::cout<<"insert 1 or 2: ";
 		std::cin>>in;
+		std::cin.ignore();
 	}while(in != 1 && in != 2);
 
 	switch (in) {
@@ -42,7 +43,6 @@ int main (void) {
 			end = players[turn_decider]->move();
 			turn_decider = (turn_decider + 1)%2;
 			turn++;
-			std::cout<<board;
 		}
 		if(turn >= max_turn*2) std::cout<<"Draw for max move reached!";
 		break;
