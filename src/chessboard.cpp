@@ -67,9 +67,6 @@ chessboard::~chessboard(void) {
     white_pieces.clear();
     black_pieces.clear();
 
-    delete empty_piece;
-    delete eaten_piece;
-
 }
 
 //[VV]*/
