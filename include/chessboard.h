@@ -11,15 +11,10 @@
  *  
  */
 
-#include "../piece/pieces/queen.cpp"
-#include "../piece/pieces/king.cpp"
-#include "../piece/pieces/bishop.cpp"
-#include "../piece/pieces/knight.cpp"
-#include "../piece/pieces/rook.cpp"
-#include "../piece/pieces/pawn.cpp"
-#include "../piece/pieces/empty_tile.cpp"
+#include "pieces.h"
 #include <vector>
 #include <iostream>
+#define LETTER 'A'
 
 typedef std::pair<int, int> coords;
 
@@ -156,54 +151,9 @@ class chessboard {
 };
 
 template<typename Type>
-bool is(const piece data) {
-    
-    if (typeid(Type) == typeid(rook)) return std::tolower(data.get_alias()) == 't';
-    else if (typeid(Type) == typeid(knight)) return std::tolower(data.get_alias()) == 'c';
-    else if (typeid(Type) == typeid(bishop)) return std::tolower(data.get_alias()) == 'a';
-    else if (typeid(Type) == typeid(king)) return std::tolower(data.get_alias()) == 'r';
-    else if (typeid(Type) == typeid(queen)) return std::tolower(data.get_alias()) == 'd';
-    else if (typeid(Type) == typeid(pawn)) return std::tolower(data.get_alias()) == 'p';
-    else if (typeid(Type) == typeid(empty_tile)) return data.get_alias() == ' ';
-
-    throw illegal_type_exception();
-
-}
-
-coords operator+(const coords &_a, const coords &_b) { return std::make_pair(_a.first + _b.first, _a.second + _b.second); }
-
-bool operator==(const coords &_a, const coords &_b) { return _a.first == _b.first && _a.second == _b.second; }
-
-std::ostream& operator<<(std::ostream& _os, const chessboard &_board) {
-
-
-    _os << std::endl << "     --- --- --- --- --- --- --- --- ";
-
-    for (int i = 7; i >= 0; i--) {
-        _os << std::endl << i + 1 << "   ";
-
-        _os << "|";
-        for (unsigned int j = 0; j < 8; j++) {
-            _os << " " << _board.at(i, j) << " ";
-            if (j!=7)
-                _os << "|";
-        }
-        _os << "|" << std::endl << "    ";
-        
-        if (i!=0)
-            _os << " --- --- --- --- --- --- --- --- ";
-
-    }
-    
-    _os << " --- --- --- --- --- --- --- --- " << std::endl << std::endl << "     ";
-    
-    for (unsigned int i = 0; i < 8; i++)
-        _os << " " << (char) (i + 'A') << "  ";
-
-    _os << std::endl << std::endl;
-
-    return _os;
-
-}
+bool is(const piece data);
+coords operator+(const coords &_a, const coords &_b);
+bool operator==(const coords &_a, const coords &_b);
+std::ostream& operator<<(std::ostream& _os, const chessboard &_board);
 
 #endif

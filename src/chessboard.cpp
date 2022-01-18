@@ -7,7 +7,7 @@
  *  
  */
 
-#include "chessboard.h"
+#include "../include/chessboard.h"
 
 
 //---------------------PUBLIC
@@ -239,14 +239,12 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
         throw illegal_move_exception();
 
     //If I'm under check or I'm inside the checkmate control method, undo the move (look at the checkmate method)
-    std::cout << "a";
     bool is_on_check = check(side);
     if (is_on_check || _turn == set::Empty)
         undo(special, _start, _end, second_piece, side);
     
     //If I'm under check or I was inside the checkmate control method, I have to return now
     if (is_on_check) {
-        std::cout << "Scacco";
         return FAILED;
     } else if (_turn == set::Empty)
         return SUCCESS;
@@ -633,9 +631,6 @@ bool chessboard::is_in_danger(const set &_side, const coords &_to_check) const {
 
 //[VV]*/
 bool chessboard::check(const set &_side) const {
-
-    std::cout << ((_side == set::White) ? "\nWhite" : "\nBlack") << " king at " << find(_side, 'r').at(0).first << ";" << find(_side, 'r').at(0).second;
-
     return is_in_danger( _side, find(_side, 'r').at(0) );
 
 }
@@ -741,5 +736,55 @@ void chessboard::undo(const int _move_type, const coords _initial_pos, const coo
             break;
 
     }
+
+}
+template<typename Type>
+bool is(const piece data) {
+    
+    if (typeid(Type) == typeid(rook)) return std::tolower(data.get_alias()) == 't';
+    else if (typeid(Type) == typeid(knight)) return std::tolower(data.get_alias()) == 'c';
+    else if (typeid(Type) == typeid(bishop)) return std::tolower(data.get_alias()) == 'a';
+    else if (typeid(Type) == typeid(king)) return std::tolower(data.get_alias()) == 'r';
+    else if (typeid(Type) == typeid(queen)) return std::tolower(data.get_alias()) == 'd';
+    else if (typeid(Type) == typeid(pawn)) return std::tolower(data.get_alias()) == 'p';
+    else if (typeid(Type) == typeid(empty_tile)) return data.get_alias() == ' ';
+
+    throw illegal_type_exception();
+
+}
+
+coords operator+(const coords &_a, const coords &_b) { return std::make_pair(_a.first + _b.first, _a.second + _b.second); }
+
+bool operator==(const coords &_a, const coords &_b) { return _a.first == _b.first && _a.second == _b.second; }
+
+std::ostream& operator<<(std::ostream& _os, const chessboard &_board) {
+
+
+    _os << std::endl << "     --- --- --- --- --- --- --- --- ";
+
+    for (int i = 7; i >= 0; i--) {
+        _os << std::endl << i + 1 << "   ";
+
+        _os << "|";
+        for (unsigned int j = 0; j < 8; j++) {
+            _os << " " << _board.at(i, j) << " ";
+            if (j!=7)
+                _os << "|";
+        }
+        _os << "|" << std::endl << "    ";
+        
+        if (i!=0)
+            _os << " --- --- --- --- --- --- --- --- ";
+
+    }
+    
+    _os << " --- --- --- --- --- --- --- --- " << std::endl << std::endl << "     ";
+    
+    for (unsigned int i = 0; i < 8; i++)
+        _os << " " << (char) (i + 'A') << "  ";
+
+    _os << std::endl << std::endl;
+
+    return _os;
 
 }
