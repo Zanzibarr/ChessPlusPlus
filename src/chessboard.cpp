@@ -58,8 +58,10 @@ chessboard::chessboard(void) {
 //[?]*/
 chessboard::~chessboard(void) {
     
-    for (int i = 0; i < 8; i++) for (int j = 0; j < 8; j++)
-        delete board[i][j];
+    for(auto i : white_pieces)
+        delete piece_at_pos(i);
+    for(auto i : black_pieces)
+        delete piece_at_pos(i);
 
     history.clear();
     white_pieces.clear();
@@ -554,7 +556,7 @@ void chessboard::do_legit(const coords &_start, const coords &_end) {
 
     if (!is<empty_tile>(*eaten_piece)) {
         delete eaten_piece;
-        eaten_piece = new empty_tile();
+        eaten_piece = empty_piece;
     }
 
     piece* temp = board[_end.first][_end.second];
@@ -605,7 +607,7 @@ void chessboard::do_enpassant(const coords &_eat, const coords &_start, const co
 
     if (!is<empty_tile>(*eaten_piece)) {
         delete eaten_piece;
-        eaten_piece = new empty_tile();
+        eaten_piece = empty_piece;
     }
 
     temp = eaten_piece;
