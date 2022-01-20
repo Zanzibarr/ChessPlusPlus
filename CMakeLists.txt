@@ -30,6 +30,10 @@ add_executable(scacchiera
 	scacchiera.cpp
 )
 
+add_executable(replay
+	replay.cpp
+)
+
 target_link_libraries(
 	scacchiera
 	chessboard

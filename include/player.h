@@ -13,6 +13,7 @@ class player {
 
 	public:
 		virtual bool move() = 0;
+		virtual std::string get_name() const = 0;
 };
 
 class human : public player {
@@ -22,6 +23,7 @@ class human : public player {
 
 		//move decided by human input
 		virtual bool move();
+		virtual std::string get_name() const;
 };
 
 class bot : public player {
@@ -34,6 +36,18 @@ class bot : public player {
 		
 		//move decided by random value
 		virtual bool move();
+		virtual std::string get_name() const;
+};
+
+//TODO: SISTEMARE IL MOVE IN PLAYER.CPP
+class replayer {
+	protected:
+		chessboard *game_board;
+		std::string name;
+		set side;
+	public:
+		replayer(chessboard *board, set _side, std::string _name);
+		void move(std::string arg);
 };
 
 std::pair<char, int> matrix_to_chess(std::pair<int,int> matrix_coords);

@@ -311,6 +311,9 @@ void chessboard::do_promotion(const coords &_pos, const char &_piece) {
 
 }
 
+std::vector<std::pair<coords, coords>> chessboard::get_history() const {
+    return history;
+}
 
 
 //---------------------PRIVATE

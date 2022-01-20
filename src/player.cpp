@@ -1,5 +1,6 @@
 #include "../include/player.h"
 
+//START HUMAN IMPLEMENTATION
 human::human(chessboard *board, set _side, std::string _name) {
 	game_board = board;
 	side = _side;
@@ -93,6 +94,12 @@ bool human::move() {
 	return false;
 }
 
+std::string human::get_name() const {
+	return name;
+}
+//END HUMAN IMPLEMENTATION
+
+//START BOT IMPLEMENTATION
 std::string bot::get_random_name() {
 	static int prev_value = -1;
 	srand(time(0));
@@ -182,6 +189,11 @@ bool bot::move() {
 	return false;
 }
 
+std::string bot::get_name() const {
+	return name;
+}
+//END BOT IMPLEMENTATION
+
 std::pair<char, int> matrix_to_chess(std::pair<int,int> matrix_coords) {
 
 	char letter = matrix_coords.second + 'A';
@@ -189,3 +201,48 @@ std::pair<char, int> matrix_to_chess(std::pair<int,int> matrix_coords) {
 
 	return std::pair<char,int>{letter, number};
 };
+
+replayer::replayer (chessboard *board, set _side, std::string _name) {
+	game_board = board;
+	name = _name;
+	side = _side;
+}
+
+void replayer::move (std::string arg) {
+	std::regex move_expression("^([A-H-a-h]){1}([1-8]){1} ([A-H-a-h]){1}([1-8]){1}$"); //A5 B6
+	std::smatch match_container;
+
+	coords start;
+	coords end;
+
+	if(std::regex_search(arg, match_container, move_expression) && match_container.size() >=5) {
+		//coordinate iniziali
+		start.first = std::stoi(match_container.str(2)) -1;
+		start.second =  match_container.str(1)[0] - LETTER;
+
+		//coordinate finali					
+		end.first = std::stoi(match_container.str(4)) -1;
+		end.second =  match_container.str(3)[0] - LETTER;
+	}
+	std::pair<bool,bool> move_result;
+
+	if(move_result.first && move_result.second) { 
+		std::cout<<"Checkmate!";
+		return;
+	}
+	//check chessboard.h for true false condition
+	else if(move_result.first && !move_result.second) {
+		std::cout<<"Draw";
+		return;
+	}
+
+	if(game_board->is_promotion(end)){
+		char piece;
+		bool exit_cond;
+
+		//ADD PROMOTION CONDITION
+
+		game_board->do_promotion(end, piece);
+	}
+
+}

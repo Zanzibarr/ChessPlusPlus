@@ -96,6 +96,8 @@ class chessboard {
          * 
          */
         void do_promotion(const coords &_pos, const char &_piece);
+
+        std::vector<std::pair<coords, coords>> get_history() const;
         
 
     private:
