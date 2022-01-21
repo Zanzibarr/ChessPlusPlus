@@ -81,6 +81,7 @@ bool human::move() {
 					std::string in;
 					std::cin >> in;
 					piece = std::tolower(in[0]);
+					std::cin.ignore();
 
 					exit_cond = piece == 'a' || piece == 'c' || piece == 'd' || piece == 't';
 					
