@@ -76,6 +76,8 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		break;
 	}
 
+	std::cout << board;
+
 	std::string filename("match"+mode+".txt");
 	std::fstream myfile;
 	myfile.open(filename,std::ios::out);

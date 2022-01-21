@@ -97,6 +97,12 @@ class chessboard {
          */
         void do_promotion(const coords &_pos, const char &_piece);
 
+        /**
+         * @brief Get the history of the match
+         * 
+         * @return std::vector<std::pair<coords, coords>> Vector containing the history of the match (to call at the end of the match for the log)
+         * 
+         */
         std::vector<std::pair<coords, coords>> get_history() const;
         
 
