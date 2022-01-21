@@ -111,5 +111,7 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		}
 	}
 
+	myfile << "END";
+
 	return 0;
 }

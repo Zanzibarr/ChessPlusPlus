@@ -1,7 +1,6 @@
 #include"include/player.h"
 #include <iostream>
 #include <fstream>
-#include <unistd.h>
 
 int main(int argc, char *argv[]) {
 
@@ -53,11 +52,14 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 	while(in_file){
 		std::string instruction;
 		std::getline (in_file,instruction);
+		if (instruction.compare("END") == 0)
+			break;
 		players[turn_decider]->move(instruction);
 		std::cout << board;
-		sleep(2);
+		turn_decider = (turn_decider + 1)%2;
 	}
 	
+	std::cout << "Fine Replay";
 	
 	return 0;
 }

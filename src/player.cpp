@@ -118,6 +118,7 @@ bot::bot(chessboard *board, set _side) {
 	side = _side;
 	name = get_random_name();
 }
+
 bot::~bot() {
 	game_board = nullptr;
 	names.clear();
@@ -234,7 +235,7 @@ void replayer::move (std::string arg) {
 		end.first = std::stoi(match_container.str(4)) -1;
 		end.second =  match_container.str(3)[0] - LETTER;
 	}
-	std::pair<bool,bool> move_result;
+	std::pair<bool,bool> move_result = game_board->move(side, start, end);
 
 	if(move_result.first && move_result.second) { 
 		std::cout<<"Checkmate!";
