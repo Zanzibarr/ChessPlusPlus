@@ -48,6 +48,7 @@ class replayer {
 	public:
 		replayer(chessboard *board, set _side, std::string _name);
 		void move(std::string arg);
+		std::string get_name() const;
 };
 
 std::pair<char, int> matrix_to_chess(std::pair<int,int> matrix_coords);

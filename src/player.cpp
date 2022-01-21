@@ -213,6 +213,15 @@ void replayer::move (std::string arg) {
 	std::regex move_expression("^([A-H-a-h]){1}([1-8]){1} ([A-H-a-h]){1}([1-8]){1}$"); //A5 B6
 	std::smatch match_container;
 
+	if(arg[0]=='P'){
+		char piece = arg[2];
+		coords end;
+		end.first = arg[5]-1;
+		end.second = arg[4]-LETTER;
+		game_board->do_promotion(end, piece);
+		return;
+
+	}
 	coords start;
 	coords end;
 
@@ -237,13 +246,8 @@ void replayer::move (std::string arg) {
 		return;
 	}
 
-	if(game_board->is_promotion(end)){
-		char piece;
-		bool exit_cond;
+}
 
-		//ADD PROMOTION CONDITION
-
-		game_board->do_promotion(end, piece);
-	}
-
+std::string replayer::get_name() const{
+	return name; 
 }
