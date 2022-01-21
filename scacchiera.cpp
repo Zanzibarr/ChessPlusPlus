@@ -1,6 +1,7 @@
 #include "include/player.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 
 int main (int argc, char* argv[]) {
 	std::string mode;
@@ -78,9 +79,21 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 
 	std::cout << board;
 
-	std::string filename("match"+mode+".txt");
+	std::string white = players[0]->get_name().substr(0, 3);
+	std::string black = players[1]->get_name().substr(0, 3);
+	
+	std::string filename = "matches/" + white + "_vs_" + black + "_" + mode;
+	std::string suffiss;
 	std::fstream myfile;
-	myfile.open(filename,std::ios::out);
+
+	int counter = 1;
+
+	do {
+		suffiss = "(" + std::to_string(counter) + ").txt";
+		counter++;
+	} while((std::ifstream(filename + suffiss)).good());
+	
+	myfile.open(filename + suffiss, std::ios::out);
 
 	std::vector<std::pair<coords, coords>> history = board.get_history();
 
