@@ -13,6 +13,7 @@
 
 #include "pieces.h"
 #include <vector>
+#include <map>
 #include <iostream>
 #define LETTER 'A'
 
@@ -104,7 +105,26 @@ class chessboard {
          * 
          */
         std::vector<std::pair<coords, coords>> get_history() const;
-        
+
+        /**
+         * @brief Controls if the _side player is on check
+         * 
+         * @param _side The side of the player to control
+         * @return true If the player on _side is on check
+         * @return false If the player on _side isn't on check
+         * 
+         */
+        bool check(const set &_side) const;
+
+        /**
+         * @brief Controls if the _side player can ask for a draw
+         * 
+         * @param _side The side of the player that might ask for the draw
+         * @return true If the player on _side can ask for the draw
+         * @return false If the player on _side can't ask for the draw
+         * 
+         */
+        bool ask_draw(const set &_side) const;
 
     private:
 
@@ -117,6 +137,10 @@ class chessboard {
 
         piece* empty_piece;
         piece* eaten_piece;
+
+        int rule_50;
+
+        std::vector<std::string> board_pos_history;
 
         const std::pair<bool, bool> FAILED {false, false};
         const std::pair<bool, bool> SUCCESS {false, true};
@@ -132,6 +156,8 @@ class chessboard {
 
         bool contains(const set &_side, const char _piece_alias) const;
         std::vector<coords> find(const set &_side, const char _piece_alias) const;
+
+        std::string to_string() const;
 
         void edit_pos(const set _side, const coords _start, const coords _end);
         void eat_piece(const set &_side, const coords &_piece);
@@ -149,7 +175,6 @@ class chessboard {
         void do_enpassant(const coords &_eat, const coords &_start, const coords &_end);
 
         bool is_in_danger(const set &_side, const coords &_to_check) const;
-        bool check(const set &_side) const;
         bool checkmate(const set &_side);
         bool draw(const set &_side);
         bool draw_for_pieces() const;

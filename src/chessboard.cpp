@@ -53,6 +53,8 @@ chessboard::chessboard(void) {
 
     eaten_piece = new empty_tile();
 
+    rule_50 = 0;
+
 }
 
 //[?]*/
@@ -211,6 +213,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     std::pair<bool, coords> castling;
     std::pair<bool, coords> enpassant;
     bool legit;
+    bool eating = opposites(_start, _end);
     int special = 0;
     
     if (_turn != set::Empty && _turn != side)
@@ -218,9 +221,10 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
 
     //Can I make this move?
     castling = is_castling(_start, _end);
-    if (!castling.first)
+    if (!castling.first) {
         enpassant = is_enpassant(_start, _end);
-    if (!castling.first && !enpassant.first)
+        eating = true;
+    } if (!castling.first && !enpassant.first)
         legit = is_legit(_start, _end);
 
     //If I can, I execute it
@@ -247,14 +251,20 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
         undo(special, _start, _end, second_piece, side);
     
     //If I'm under check or I was inside the checkmate control method, I have to return now
-    if (is_on_check) {
+    if (is_on_check)
         return FAILED;
-    } else if (_turn == set::Empty)
+    else if (_turn == set::Empty)
         return SUCCESS;
 
     //Final updates of the chessboard
     piece_at_pos(_end)->moved();
     history.push_back(std::make_pair(_start, _end));
+
+    board_pos_history.push_back(to_string());
+    if (!is<pawn>(*piece1) || !eating)
+        rule_50++;
+    else
+        rule_50 = 0;
 
     //Checkmate control
     if (check(opposite_of(side)) && checkmate(opposite_of(side)))
@@ -312,7 +322,22 @@ void chessboard::do_promotion(const coords &_pos, const char &_piece) {
 }
 
 std::vector<std::pair<coords, coords>> chessboard::get_history() const {
+
     return history;
+
+}
+
+bool chessboard::ask_draw(const set &_side) const {
+
+    std::string board = to_string();
+    int equals_counter = 0;
+
+    for (int i = 0; i < board_pos_history.size(); i++)
+        if (board_pos_history.at(i).compare(board) == 0)
+            equals_counter++;
+
+    return equals_counter >= 3 || rule_50 >= 50;
+
 }
 
 
@@ -374,6 +399,18 @@ std::vector<coords> chessboard::find(const set &_side, const char _piece_alias) 
 
     return ret;
     
+}
+
+std::string chessboard::to_string() const {
+
+    std::string to_string{""};
+
+    for(int i = 0; i < 8; i++)
+        for (int j = 0; j < 8; j++)
+            to_string += piece_at_pos(i, j)->get_alias();
+
+    return to_string;
+
 }
 
 //[VV]*/
