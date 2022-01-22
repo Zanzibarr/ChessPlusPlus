@@ -18,6 +18,7 @@
  */
 
 typedef std::pair<int, int> coords;
+//possible path obtainable from any pieces
 enum class path { Horizontal, Vertical, Diagonal, L };
 class illegal_move_exception {};
 

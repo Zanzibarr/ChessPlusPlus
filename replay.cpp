@@ -55,6 +55,7 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		if (instruction.compare("END") == 0)
 			break;
 		players[turn_decider]->move(instruction);
+        if(instruction[0] == 'P') turn_decider--;
 		std::cout << board;
 		turn_decider = (turn_decider + 1)%2;
 	}

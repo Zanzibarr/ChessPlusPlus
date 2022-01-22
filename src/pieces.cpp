@@ -1,5 +1,17 @@
 #include "../include/pieces.h"
 
+/**
+ * 
+ * @file pieces.cpp
+ * @author Riccardo Modolo (riccardo.modolo.1@studenti.unipd.it)
+ * 
+ * @brief implementation of pieces.h
+ * 
+ * @version 0.4
+ * @date 2022-01-15
+ * 
+ */
+
 empty_tile::empty_tile() : piece(set::Empty) {
 	alias = ' ';
 	max_distance = 0;

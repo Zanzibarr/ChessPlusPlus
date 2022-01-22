@@ -1,5 +1,17 @@
 #include "../include/player.h"
 
+/**
+ * 
+ * @file player.cpp
+ * @author Riccardo Modolo (riccardo.modolo.1@studenti.unipd.it)
+ * 
+ * @brief implementation of pieces.h
+ * 
+ * @version 0.4
+ * @date 2022-01-15
+ * 
+ */
+
 //START HUMAN IMPLEMENTATION
 human::human(chessboard *board, set _side, std::string _name) {
 	game_board = board;
@@ -40,12 +52,10 @@ bool human::move() {
 
 		if(std::regex_search(input, match_container, move_expression) && match_container.size() >=5) {
 			//coordinate iniziali
-			start.first = std::stoi(match_container.str(2)) -1;
-			start.second =  match_container.str(1)[0] - LETTER;
-
-			//coordinate finali					
-			end.first = std::stoi(match_container.str(4)) -1;
-			end.second =  match_container.str(3)[0] - LETTER;
+			start = chess_to_matrix(std::make_pair(match_container.str(1), match_container.str(2)));
+			
+			//coordinate finali	
+			end = chess_to_matrix(std::make_pair(match_container.str(3), match_container.str(4)));
 		}
 
 		std::pair<bool,bool> move_result; //check chessboard.h for more information
@@ -99,6 +109,7 @@ std::string human::get_name() const {
 	return name;
 }
 //END HUMAN IMPLEMENTATION
+
 
 //START BOT IMPLEMENTATION
 std::string bot::get_random_name() {
@@ -196,13 +207,16 @@ std::string bot::get_name() const {
 }
 //END BOT IMPLEMENTATION
 
-std::pair<char, int> matrix_to_chess(std::pair<int,int> matrix_coords) {
-
-	char letter = matrix_coords.second + 'A';
-	int number = matrix_coords.first + 1;
-
-	return std::pair<char,int>{letter, number};
-};
+/**
+ * 
+ * @author Kabir Bertan (kabir.bertan@studenti.unipd.it)
+ * 
+ * @brief implementation of replayer class
+ * 
+ * @version 0.4
+ * @date 2022-01-15
+ * 
+ */
 
 replayer::replayer (chessboard *board, set _side, std::string _name) {
 	game_board = board;
@@ -212,12 +226,13 @@ replayer::replayer (chessboard *board, set _side, std::string _name) {
 
 void replayer::move (std::string arg) {
 	std::regex move_expression("^([A-H-a-h]){1}([1-8]){1} ([A-H-a-h]){1}([1-8]){1}$"); //A5 B6
+	char _side = (side == set::White) ? 'w' : 'B';
 	std::smatch match_container;
 
 	if(arg[0]=='P'){
 		char piece = arg[2];
 		coords end;
-		end.first = arg[5]-1;
+		end.first = arg[5]-49;
 		end.second = arg[4]-LETTER;
 		game_board->do_promotion(end, piece);
 		return;
@@ -228,14 +243,19 @@ void replayer::move (std::string arg) {
 
 	if(std::regex_search(arg, match_container, move_expression) && match_container.size() >=5) {
 		//coordinate iniziali
-		start.first = std::stoi(match_container.str(2)) -1;
-		start.second =  match_container.str(1)[0] - LETTER;
-
-		//coordinate finali					
-		end.first = std::stoi(match_container.str(4)) -1;
-		end.second =  match_container.str(3)[0] - LETTER;
+		start = chess_to_matrix(std::make_pair(match_container.str(1), match_container.str(2)));
+		
+		//coordinate finali	
+		end = chess_to_matrix(std::make_pair(match_container.str(3), match_container.str(4)));
 	}
 	std::pair<bool,bool> move_result = game_board->move(side, start, end);
+
+	std::pair<char, int> start_print = matrix_to_chess(start);
+	std::pair<char, int> end_print = matrix_to_chess(end);
+	
+	std::cout<<name<<" ["<<_side<<"]"<<" moved from ";
+	std::cout<<start_print.first<<start_print.second<<" to "<<end_print.first<<end_print.second<<std::endl;
+
 
 	if(move_result.first && move_result.second) { 
 		std::cout<<"Checkmate!";
@@ -251,4 +271,24 @@ void replayer::move (std::string arg) {
 
 std::string replayer::get_name() const{
 	return name; 
+}
+
+std::pair<char, int> matrix_to_chess(coords matrix_coords) {
+
+	char letter = matrix_coords.second + 'A';
+	int number = matrix_coords.first + 1;
+
+	return std::make_pair(letter, number);
+};
+
+//start = chess_to_matrix(std::make_pair(match_container.str(1), match_container.str(2)));
+coords chess_to_matrix(std::pair<std::string, std::string> chess_coords) {
+
+	//end.first = std::stoi(match_container.str(2)) -1;
+	//end.second =  match_container.str(1)[0] - LETTER;
+
+	int row = std::stoi(chess_coords.second) -1;
+	int col = chess_coords.first[0] - LETTER;
+
+	return std::make_pair(row, col);
 }

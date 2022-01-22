@@ -34,8 +34,15 @@ add_executable(replay
 	replay.cpp
 )
 
-target_link_libraries(
-	scacchiera
+target_link_libraries( scacchiera
+	chessboard
+	pieces
+	player
+	piece
+	path
+)
+
+target_link_libraries( replay
 	chessboard
 	pieces
 	player

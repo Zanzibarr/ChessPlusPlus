@@ -1,5 +1,17 @@
 #include "../include/path.h"
 
+/**
+ * 
+ * @file path.cpp
+ * @author Riccardo Modolo (riccardo.modolo.1@studenti.unipd.it)
+ * 
+ * @brief implementation of path.h
+ * 
+ * @version 0.4
+ * @date 2022-01-15
+ * 
+ */
+
 bool is_Horizontal(const coords &start, const coords &end) {
 	int row_distance = end.first - start.first;
 	int col_distance = end.second - start.second;

@@ -1,5 +1,17 @@
 #include "../include/piece.h"
 
+/**
+ * 
+ * @file piece.cpp
+ * @author Riccardo Modolo (riccardo.modolo.1@studenti.unipd.it)
+ * 
+ * @brief implementation of piece.h
+ * 
+ * @version 0.4
+ * @date 2022-01-15
+ * 
+ */
+
 set opposite_of(const set side) {
 	switch (side) {
 	case set::Black : return set::White;
