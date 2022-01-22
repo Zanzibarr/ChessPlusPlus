@@ -81,7 +81,6 @@ bool human::move() {
 		}
 
 		if(!failed) {
-			std::cout<<"move is valid.\n";
 			if(game_board->is_promotion(end)){
 				char piece;
 				bool exit_cond;

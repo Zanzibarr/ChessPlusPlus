@@ -73,6 +73,8 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		while(!end){
 			end = players[turn_decider]->move();
 			turn_decider = (turn_decider + 1)%2;
+			if (board.check(players[turn_decider]->get_side()))
+				std::cout << "Attento " << players[turn_decider]->get_name() << "... Sei sotto scacco.\n";
 		}
 		break;
 	}

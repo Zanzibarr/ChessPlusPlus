@@ -1,6 +1,7 @@
 #include"include/player.h"
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 int main(int argc, char *argv[]) {
 
@@ -30,14 +31,18 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		mode[i] = std::toupper(mode[i]);
 	}
 
+	bool read = false;
+
 	if(mode=="V"){
 		in_file.open(argv[2]);
+		read = true;
 	}
 
 	if(mode=="F"){
 		if(argc < 4) return -1;
 		in_file.open(argv[2]);
 		out_file.open(argv[3],std::ios::out);
+		out_file << board;
 	}
 
 	if(!in_file.is_open()){
@@ -49,6 +54,8 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 	std::getline (in_file,name);
 	players[1] = new replayer(&board,set::Black,name);
 
+	out_file << "\nTurn of " << players[turn_decider]->get_name() << "\n";
+
 	while(in_file){
 		std::string instruction;
 		std::getline (in_file,instruction);
@@ -57,17 +64,19 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 			break;
 		players[turn_decider]->move(instruction);
         if(instruction[0] == 'P') turn_decider--;
-		if(!out_file.is_open()){
+		if(read){
 			std::cout << board;
+			_sleep(1000);
 		}
 		else {
-			out_file<<board;
+			out_file << board << "\nTurn of " << players[(turn_decider+1)%2]->get_name() << "\n";
 		}
 		
 		turn_decider = (turn_decider + 1)%2;
 	}
 	
-	std::cout << "Fine Replay";
+	std::cout << "\nFine Replay";
+	out_file << "Fine Replay";
 	
 	return 0;
 }

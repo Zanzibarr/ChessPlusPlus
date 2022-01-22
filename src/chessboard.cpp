@@ -261,7 +261,7 @@ std::pair<bool, bool> chessboard::move(const set &_turn, const coords &_start, c
     history.push_back(std::make_pair(_start, _end));
 
     board_pos_history.push_back(to_string());
-    if (!is<pawn>(*piece1) || !eating)
+    if (!is<pawn>(*piece1) && !eating)
         rule_50++;
     else
         rule_50 = 0;
@@ -324,19 +324,6 @@ void chessboard::do_promotion(const coords &_pos, const char &_piece) {
 std::vector<std::pair<coords, coords>> chessboard::get_history() const {
 
     return history;
-
-}
-
-bool chessboard::ask_draw(const set &_side) const {
-
-    std::string board = to_string();
-    int equals_counter = 0;
-
-    for (int i = 0; i < board_pos_history.size(); i++)
-        if (board_pos_history.at(i).compare(board) == 0)
-            equals_counter++;
-
-    return equals_counter >= 3 || rule_50 >= 50;
 
 }
 
@@ -707,7 +694,7 @@ bool chessboard::checkmate(const set &_side) {
 //[VV]*/
 bool chessboard::draw(const set &_side) {
     
-    return (!check(_side) && checkmate(_side)) || draw_for_pieces();
+    return (!check(_side) && checkmate(_side)) || draw_for_pieces() || stall_draw(_side);
     
 }
 
@@ -738,6 +725,19 @@ bool chessboard::draw_for_pieces() const {
     ret |= (white_pieces.size() == 2 && black_pieces.size() == 1 && w_knight_found) || (black_pieces.size() == 2 && white_pieces.size() == 1 && b_knight_found);
 
     return ret;
+
+}
+
+bool chessboard::stall_draw(const set &_side) const {
+
+    std::string board = to_string();
+    int equals_counter = 0;
+
+    for (int i = 0; i < board_pos_history.size(); i++)
+        if (board_pos_history.at(i).compare(board) == 0)
+            equals_counter++;
+
+    return equals_counter >= 3 || rule_50 >= 50;
 
 }
 

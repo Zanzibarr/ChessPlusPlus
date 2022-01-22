@@ -27,6 +27,7 @@ class player {
 	public:
 		virtual bool move() = 0;
 		virtual std::string get_name() const = 0;
+		set get_side() const { return side; }
 };
 
 //human is a player controllable from a real person

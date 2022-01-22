@@ -116,16 +116,6 @@ class chessboard {
          */
         bool check(const set &_side) const;
 
-        /**
-         * @brief Controls if the _side player can ask for a draw
-         * 
-         * @param _side The side of the player that might ask for the draw
-         * @return true If the player on _side can ask for the draw
-         * @return false If the player on _side can't ask for the draw
-         * 
-         */
-        bool ask_draw(const set &_side) const;
-
     private:
 
         class illegal_coords_exception{};
@@ -178,6 +168,7 @@ class chessboard {
         bool checkmate(const set &_side);
         bool draw(const set &_side);
         bool draw_for_pieces() const;
+        bool stall_draw(const set &_side) const;
 
         void undo(const int _move_type, const coords _initial_pos, const coords _final_pos, const coords _oth_pos, const set _side);
         
