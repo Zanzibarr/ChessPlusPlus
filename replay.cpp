@@ -52,11 +52,18 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 	while(in_file){
 		std::string instruction;
 		std::getline (in_file,instruction);
+
 		if (instruction.compare("END") == 0)
 			break;
 		players[turn_decider]->move(instruction);
         if(instruction[0] == 'P') turn_decider--;
-		std::cout << board;
+		if(!out_file.is_open()){
+			std::cout << board;
+		}
+		else {
+			out_file<<board;
+		}
+		
 		turn_decider = (turn_decider + 1)%2;
 	}
 	
