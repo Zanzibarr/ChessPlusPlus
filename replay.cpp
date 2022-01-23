@@ -55,8 +55,6 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 	std::getline (in_file,name);
 	players[1] = new replayer(&board,set::Black,name);
 
-	out_file << "\nTurn of " << players[turn_decider]->get_name() << "\n";
-
 	while(in_file){
 		std::string instruction;
 		std::getline (in_file,instruction);
@@ -64,15 +62,17 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		if (instruction.compare("END") == 0)
 			break;
 		players[turn_decider]->move(instruction);
-        if(instruction[0] == 'P') turn_decider--;
 		if(read){
 			std::cout << board;
+			std::cout << players[turn_decider]->print_move();
 			std::this_thread::sleep_for(std::chrono::milliseconds(700));
 		}
 		else {
-			out_file << board << "\nTurn of " << players[(turn_decider+1)%2]->get_name() << "\n";
+			out_file << players[turn_decider]->print_move();
+			out_file << board;
 		}
 		
+        if(instruction[0] == 'P') turn_decider--;
 		turn_decider = (turn_decider + 1)%2;
 	}
 	

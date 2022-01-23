@@ -252,17 +252,16 @@ void replayer::move (std::string arg) {
 	std::pair<char, int> start_print = matrix_to_chess(start);
 	std::pair<char, int> end_print = matrix_to_chess(end);
 	
-	std::cout<<name<<" ["<<_side<<"]"<<" moved from ";
-	std::cout<<start_print.first<<start_print.second<<" to "<<end_print.first<<end_print.second<<std::endl;
+	last_move = name + " [" + _side +"] moved from " + start_print.first +""+ std::to_string(start_print.second) + " to " + end_print.first + std::to_string(end_print.second);
 
 
 	if(move_result.first && move_result.second) { 
-		std::cout<<"Checkmate!";
+		last_move = "Checkmate!";
 		return;
 	}
 	//check chessboard.h for true false condition
 	else if(move_result.first && !move_result.second) {
-		std::cout<<"Draw";
+		last_move = "Draw!";
 		return;
 	}
 
@@ -270,6 +269,10 @@ void replayer::move (std::string arg) {
 
 std::string replayer::get_name() const{
 	return name; 
+}
+
+std::string replayer::print_move() const {
+	return last_move;
 }
 
 std::pair<char, int> matrix_to_chess(coords matrix_coords) {

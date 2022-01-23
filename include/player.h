@@ -41,6 +41,8 @@ class human : public player {
 		virtual std::string get_name() const;
 };
 
+//made by: Kabir Bertan (kabir.bertan@studenti.unipd.it)
+//
 //bot is a player who choose random move in a range of possible moves
 class bot : public player {
 	private:
@@ -63,11 +65,13 @@ class replayer {
 	protected:
 		chessboard *game_board;
 		std::string name;
+		std::string last_move;
 		set side;
 	public:
 		replayer(chessboard *board, set _side, std::string _name);
 		void move(std::string arg);
 		std::string get_name() const;
+		std::string print_move() const;
 };
 
 //convert a matrix format coordinate [0 0] to  chess coordinate [A 1]
