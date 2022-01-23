@@ -25,7 +25,7 @@ human::~human() {
 
 bool human::move() {
 
-	std::regex move_expression("^([A-H-a-h]){1}([1-8]){1} ([A-H-a-h]){1}([1-8]){1}$"); //A5 B6
+	std::regex move_expression("^([A-H-a-h]){1}([1-8]){1}([A-H-a-h]){1}([1-8]){1}$"); //A5 B6
 	char _side = (side == set::White) ? 'w' : 'B';
 	std::smatch match_container;
 	std::string input;
@@ -36,15 +36,18 @@ bool human::move() {
 	while(failed) {
 		print = false;
 		draw_condition = false;
-		std::cout<<name<<" ["<<_side<<"]"<<" insert a move, or XX XX to view the board, DRAW to ask the draw: ";
+		std::cout<<name<<" ["<<_side<<"]"<<" insert a move, or XXXX to view the board, DRAW to ask the draw: ";
 		std::getline(std::cin, input);
 
 		//upperstring all input
 		for(int i = 0; i < input.length(); i++) { 
 			input[i] = std::toupper(input[i]); 
 		}
+
+		//REMOVE ALL SPACES
+		input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
 		
-		if(input.compare("XX XX") == 0) {
+		if(input.compare("XXXX") == 0) {
 			std::cout<<*game_board;
 			print = true;
 		}
