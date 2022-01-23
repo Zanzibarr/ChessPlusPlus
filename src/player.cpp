@@ -57,7 +57,7 @@ bool human::move() {
 			}
 			else {
 				std::cout<<"deny the draw\n";
-				draw = true;
+				draw_condition = true;
 			}
 		}
 
