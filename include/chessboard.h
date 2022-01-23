@@ -6,7 +6,6 @@
  * @file chessboard.h
  * @author Zanella Matteo (matteo.zanella.3@studenti.unipd.it)
  * @brief The interface of the chessboard
- * @version 0.1
  * @date 2021-12-26
  *  
  */
@@ -18,6 +17,7 @@
 #define LETTER 'A'
 
 typedef std::pair<int, int> coords;
+typedef std::pair<coords, coords> moves;
 
 class illegal_type_exception{};
 
@@ -101,10 +101,10 @@ class chessboard {
         /**
          * @brief Get the history of the match
          * 
-         * @return std::vector<std::pair<coords, coords>> Vector containing the history of the match (to call at the end of the match for the log)
+         * @return std::vector<moves> Vector containing the history of the match (to call at the end of the match for the log)
          * 
          */
-        std::vector<std::pair<coords, coords>> get_history() const;
+        std::vector<moves> get_history() const;
 
         /**
          * @brief Controls if the _side player is on check
@@ -121,7 +121,7 @@ class chessboard {
         class illegal_coords_exception{};
     
         piece *board[8][8];
-        std::vector<std::pair<coords, coords>> history;
+        std::vector<moves> history;
         std::vector<coords> white_pieces;
         std::vector<coords> black_pieces;
 
@@ -137,6 +137,8 @@ class chessboard {
         const std::pair<bool, bool> DRAW {true, false};
         const std::pair<bool, bool> CHECKMATE {true, true};
         const coords ILLEGAL_COORDS {-1, -1};
+
+
         
         bool is_out(const coords &_pos) const;
         bool opposites(const coords &_pos_1, const coords &_pos_2) const;
