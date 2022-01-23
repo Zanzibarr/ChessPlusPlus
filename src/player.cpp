@@ -34,7 +34,7 @@ bool human::move() {
 
 	while(failed) {
 		print = false;
-		std::cout<<name<<" ["<<_side<<"]"<<" insert a move, or XX XX to view the board: ";
+		std::cout<<name<<" ["<<_side<<"]"<<" insert a move, or XX XX to view the board, DRAW to ask the draw: ";
 		std::getline(std::cin, input);
 
 		//upperstring all input
@@ -45,7 +45,19 @@ bool human::move() {
 		if(input.compare("XX XX") == 0) {
 			std::cout<<*game_board;
 			print = true;
-		}	
+		}
+		else if(input.compare("DRAW") == 0) {
+			int draw = rand()%10;
+			std::cout<<"the enemy say: ";
+			if(draw == 0) {
+				std::cout<<"accept the draw";
+				return true;
+			}
+			else {
+				std::cout<<"deny the draw";
+				return false;
+			}
+		}
 
 		coords start;
 		coords end;

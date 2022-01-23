@@ -42,8 +42,7 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		in_file.open(argv[2]);
 		read = true;
 	}
-
-	if(mode=="F"){
+	else if(mode=="F"){
 		if(argc < 4) return -1;
 		in_file.open(argv[2]);
 		out_file.open(argv[3],std::ios::out);
