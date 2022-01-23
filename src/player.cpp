@@ -50,12 +50,11 @@ bool human::move() {
 			int draw = rand()%10;
 			std::cout<<"the enemy say: ";
 			if(draw == 0) {
-				std::cout<<"accept the draw";
+				std::cout<<"accept the draw\n";
 				return true;
 			}
 			else {
-				std::cout<<"deny the draw";
-				return false;
+				std::cout<<"deny the draw\n";
 			}
 		}
 
