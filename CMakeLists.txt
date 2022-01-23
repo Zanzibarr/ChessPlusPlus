@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 project(ChessPlusPlus VERSION 1.0)
 
+set(CMAKE_CXX_FLAGS, "-02")
+set(CMAKE_CXX_FLAGS_DEBUG, "-02")
+set(CMAKE_CXX_FLAGS_RELEASE, "-02")
+
 add_library(chessboard 
 	include/chessboard.h
 	src/chessboard.cpp

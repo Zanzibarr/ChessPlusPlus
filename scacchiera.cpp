@@ -84,7 +84,7 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 	std::string white = players[0]->get_name().substr(0, 3);
 	std::string black = players[1]->get_name().substr(0, 3);
 	
-	std::string filename = "matches/" + white + "_vs_" + black + "_" + mode;
+	std::string filename = white + "_vs_" + black + "_" + mode;
 	std::string suffiss;
 	std::fstream myfile;
 
@@ -114,6 +114,7 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 	}
 
 	myfile << "END";
+	myfile.close();
 
 	return 0;
 }
