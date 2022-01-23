@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 
+//Kabir Bertan (kabir.bertan@studenti.unipd.it)
 int main(int argc, char *argv[]) {
 
 	std::cout << R"(
@@ -24,7 +25,10 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 
 
 
-	if(argc <3) return -1;
+	if(argc <3){
+		std::cout<<"invalid number argument";
+		return -1;
+	} 
 
 	std::string mode = argv[1];
 
@@ -44,6 +48,10 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 		in_file.open(argv[2]);
 		out_file.open(argv[3],std::ios::out);
 		out_file << board;
+	}
+	else {
+		std::cout<<"Invalid Mode";
+		return -1;
 	}
 
 	if(!in_file.is_open()){
@@ -75,9 +83,11 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
         if(instruction[0] == 'P') turn_decider--;
 		turn_decider = (turn_decider + 1)%2;
 	}
-	
+		
 	std::cout << "\nFine Replay";
 	out_file << "Fine Replay";
-	
+	in_file.close();
+	out_file.close();
+
 	return 0;
 }
