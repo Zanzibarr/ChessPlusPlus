@@ -31,9 +31,11 @@ bool human::move() {
 	std::string input;
 	bool failed = true;
 	bool print = false;
+	bool draw = false;
 
 	while(failed) {
 		print = false;
+		draw = false;
 		std::cout<<name<<" ["<<_side<<"]"<<" insert a move, or XX XX to view the board, DRAW to ask the draw: ";
 		std::getline(std::cin, input);
 
@@ -55,6 +57,7 @@ bool human::move() {
 			}
 			else {
 				std::cout<<"deny the draw\n";
+				draw = true;
 			}
 		}
 
@@ -74,7 +77,7 @@ bool human::move() {
 		try {
 			move_result = game_board->move(side, start, end);
 		} catch (illegal_move_exception) {
-			if(!print)std::cout<<"Oh, you can't do that\n";
+			if(!print || !draw)std::cout<<"Oh, you can't do that\n";
 		}
 
 		//check chessboard.h for true true condition
