@@ -79,8 +79,8 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 			break;
 		players[turn_decider]->move(instruction);
 		if(read){
-			std::cout << board;
 			std::cout << players[turn_decider]->print_move();
+			std::cout << board;
 			std::this_thread::sleep_for(std::chrono::milliseconds(700));
 		}
 		else {
@@ -91,8 +91,8 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
         if(instruction[0] == 'P') turn_decider--;
 		turn_decider = (turn_decider + 1)%2;
 	}
-		
-	std::cout << "\nFine Replay";
+	
+	std::cout << "\nFine Replay\n";
 	out_file << "Fine Replay";
 	in_file.close();
 	out_file.close();
