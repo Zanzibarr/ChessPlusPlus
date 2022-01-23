@@ -5,7 +5,7 @@
  * @file player.cpp
  * @author Riccardo Modolo (riccardo.modolo.1@studenti.unipd.it)
  * 
- * @brief implementation of pieces.h
+ * @brief implementation of player.h
  * 
  * @version 0.4
  * @date 2022-01-15
@@ -123,6 +123,16 @@ std::string human::get_name() const {
 }
 //END HUMAN IMPLEMENTATION
 
+/**
+ * 
+ * @author Kabir Bertan (kabir.bertan@studenti.unipd.it)
+ * 
+ * @brief implementation of BOT; implementation of replayer class
+ * 
+ * @version 0.4
+ * @date 2022-01-15
+ * 
+ */
 
 //START BOT IMPLEMENTATION
 std::string bot::get_random_name() {
@@ -219,17 +229,6 @@ std::string bot::get_name() const {
 	return name;
 }
 //END BOT IMPLEMENTATION
-
-/**
- * 
- * @author Kabir Bertan (kabir.bertan@studenti.unipd.it)
- * 
- * @brief implementation of replayer class
- * 
- * @version 0.4
- * @date 2022-01-15
- * 
- */
 
 replayer::replayer (chessboard *board, set _side, std::string _name) {
 	game_board = board;

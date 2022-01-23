@@ -3,8 +3,17 @@
 #include <fstream>
 #include <chrono>
 #include <thread>
+/**
+ * 
+ * @author Kabir Bertan (kabir.bertan@studenti.unipd.it)
+ * 
+ * @brief Create replay of matches using log file
+ * 
+ * @version 0.4
+ * @date 2022-01-15
+ * 
+ */
 
-//Kabir Bertan (kabir.bertan@studenti.unipd.it)
 int main(int argc, char *argv[]) {
 
 	std::cout << R"(
