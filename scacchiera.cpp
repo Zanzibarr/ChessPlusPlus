@@ -81,6 +81,10 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 
 	std::cout << board;
 
+	std::vector<std::pair<coords, coords>> history = board.get_history();
+
+	if(history.size() == 0) return 0;
+
 	std::string white = players[0]->get_name().substr(0, 3);
 	std::string black = players[1]->get_name().substr(0, 3);
 	
@@ -97,7 +101,6 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
 	
 	myfile.open(filename + suffiss, std::ios::out);
 
-	std::vector<std::pair<coords, coords>> history = board.get_history();
 
 	myfile<<players[0]->get_name()<<"\n"<<players[1]->get_name()<<"\n";
 	for(int i = 0; i < history.size(); i++) {
