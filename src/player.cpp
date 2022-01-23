@@ -19,9 +19,9 @@ human::human(chessboard *board, set _side, std::string _name) {
 	name = _name;
 }
 
-/*human::~human() {
+human::~human() {
 	game_board = nullptr;
-}*/
+}
 
 bool human::move() {
 
@@ -129,10 +129,10 @@ bot::bot(chessboard *board, set _side) {
 	name = get_random_name();
 }
 
-/*bot::~bot() {
+bot::~bot() {
 	game_board = nullptr;
 	names.clear();
-}*/
+}
 
 bool bot::move() {
 	bool failed = true;
