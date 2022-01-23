@@ -34,7 +34,7 @@ class player {
 class human : public player {
 	public:
 		human(chessboard *board, set _side, std::string _name);
-		~human();
+		//~human();
 
 		//move decided by human input
 		virtual bool move();
@@ -48,7 +48,7 @@ class bot : public player {
 		std::string get_random_name();
 	public:
 		bot(chessboard *board, set _side);
-		~bot();
+		//~bot();
 		
 		//move decided by random value
 		virtual bool move();
