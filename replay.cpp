@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <thread>
 
 int main(int argc, char *argv[]) {
 
@@ -66,7 +67,7 @@ created by Riccardo Modolo, Matteo Zanella, Kabir Bertan)"<<"\n\n";
         if(instruction[0] == 'P') turn_decider--;
 		if(read){
 			std::cout << board;
-			_sleep(1000);
+			std::this_thread::sleep_for(std::chrono::milliseconds(700));
 		}
 		else {
 			out_file << board << "\nTurn of " << players[(turn_decider+1)%2]->get_name() << "\n";
