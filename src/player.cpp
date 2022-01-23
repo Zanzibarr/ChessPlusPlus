@@ -77,7 +77,7 @@ bool human::move() {
 		try {
 			move_result = game_board->move(side, start, end);
 		} catch (illegal_move_exception) {
-			if(!print || !draw_condition)std::cout<<"Oh, you can't do that\n";
+			if(!print && !draw_condition)std::cout<<"Oh, you can't do that\n";
 		}
 
 		//check chessboard.h for true true condition
