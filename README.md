@@ -6,6 +6,8 @@
 
 A simple chess game made in C++ for a univesity exam. 
 
+**final result: 10/10**
+
 ## Functionality
 - 2 play mode 
 	- **Computer vs Computer**
@@ -18,14 +20,29 @@ A simple chess game made in C++ for a univesity exam.
 	- **Put replay in file .txt** with all chessboard changes.
 	- **Step by Step view** with replay program
 
----
+## Pieces
+>*white pieces are lower case, black pieces are upper case*
 
-## Installation
+List of pieces (the letters are taken from the names of standard Italian pieces):
+- **A:** Bishop
+- **D:** Queen
+- **R:** King
+- **T:** Rook
+- **C:** Knight
+- **P:** Pawn
+
+## Installation (in Linux)
 **Note:** CMake is required!
 
+after installation, open folder in shell and write :
+```sh 
+$ make . ##you need root privilege
+```
+after which, some new files are created in the folder. Now it is necessary to create the dependencies:
+```sh 
+$ cmake --build . ##you need root privilege
+```
 
-
----
 
 ## How to Play
 
@@ -63,7 +80,9 @@ this is the layout of our virtual chessboard:
 
 A square coordinates composition is **{letter}{number}**
 
-when it's your turn, monitor display this message (Rick is my nick 😉):
+A move is composition of 2  coordinates **start_position end_position**
+
+When it's your turn, monitor display this message (Rick is my nick 😉):
 
 <p align="center">
 	<img src="docs/monitor_message.png">
@@ -72,18 +91,23 @@ when it's your turn, monitor display this message (Rick is my nick 😉):
 **what you can do?**
 - **DRAW:** you can request a draw and bot decide if accept o decline
 - **XXXX:** print the current status of virtual chessboard
-- **Write Move:** make your next move
+- **Insert a Move:** make your next move in form $start_postion $end_position
 
-
----
 
 ## How to Replay
+There are 2 mode of  view a match replay
+- **Put replay in file .txt** with all chessboard changes 
+<p align="center">
+	<img src="docs/export_replay.png">
+</p>
 
+- **Step by Step view** with replay program
+<p align="center">
+	<img src="docs/review_replay.png">
+</p>
 
-### Replay
+## Contrubutors
 
-- rimossi tutti gli spazi in tutte le istruzioni ad input => A2 A4 == A2A4 (not case sensitive)
-- le partite in cui il pg chiede patta in prima mossa (player = bianco) e viene accettata la partita non viene salvata.
-
-
-github : https://github.com/RickSrick/ChessPlusPlus
+- [Riccardo Modolo](mailto:riccardo.modolo.1@studenti.unipd.it)
+- [Matteo Zanella](mailto:matteo.zanella.3@studenti.unipd.it)
+- [Kabir Bertan](mailto:kabir.bertan@studenti.unipd.it)
