@@ -36,7 +36,7 @@ List of pieces (the letters are taken from the names of standard Italian pieces)
 
 after installation, open folder in shell and write :
 ```sh 
-$ make . ##you need root privilege
+$ cmake . ##you need root privilege
 ```
 after which, some new files are created in the folder. Now it is necessary to create the dependencies:
 ```sh 

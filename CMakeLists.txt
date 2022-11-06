@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS, "-02")
 set(CMAKE_CXX_FLAGS_DEBUG, "-02")
 set(CMAKE_CXX_FLAGS_RELEASE, "-02")
 
-add_library(chessboard 
+add_library(chsboard 
 	include/chessboard.h
 	src/chessboard.cpp
 )
@@ -30,7 +30,7 @@ add_library(player
 	src/player.cpp
 )
 
-add_executable(scacchiera
+add_executable(chessboard
 	scacchiera.cpp
 )
 
@@ -38,8 +38,8 @@ add_executable(replay
 	replay.cpp
 )
 
-target_link_libraries( scacchiera
-	chessboard
+target_link_libraries( chessboard
+	chsboard
 	pieces
 	player
 	piece
@@ -47,7 +47,7 @@ target_link_libraries( scacchiera
 )
 
 target_link_libraries( replay
-	chessboard
+	chsboard
 	pieces
 	player
 	piece
